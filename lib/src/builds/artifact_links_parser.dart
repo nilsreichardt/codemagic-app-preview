@@ -1,7 +1,7 @@
 import 'dart:convert';
 
+import '../environment_variable_accessor.dart';
 import 'build.dart';
-import 'environment_variable_accessor.dart';
 
 class ArtifactLinksParser {
   ArtifactLinksParser(this._environmentVariableAccessor);
