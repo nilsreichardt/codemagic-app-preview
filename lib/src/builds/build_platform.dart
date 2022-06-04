@@ -22,4 +22,16 @@ enum BuildPlatform {
         throw Exception('Unknown build platform type: $type');
     }
   }
+
+  /// Returns the name of the platform, e.g. "iOS" for [ios].
+  String get name {
+    switch (this) {
+      case android:
+        return 'Android';
+      case ios:
+        return 'iOS';
+    }
+
+    throw Exception('Unknown build platform: $this');
+  }
 }
