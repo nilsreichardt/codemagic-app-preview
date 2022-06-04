@@ -1,7 +1,7 @@
 import 'package:codemagic_app_preview/src/builds/artifact_links_parser.dart';
 import 'package:codemagic_app_preview/src/builds/build.dart';
 import 'package:codemagic_app_preview/src/builds/build_platform.dart';
-import 'package:codemagic_app_preview/src/environment_variable_accessor.dart';
+import 'package:codemagic_app_preview/src/environment_variable/environment_variable_accessor.dart';
 import 'package:test/test.dart';
 
 void main() {
