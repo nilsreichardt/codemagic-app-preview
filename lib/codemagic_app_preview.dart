@@ -1,0 +1,1 @@
+library codemagic_app_preview;

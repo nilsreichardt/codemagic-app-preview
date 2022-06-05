@@ -7,7 +7,11 @@ class CommentBuilder {
   final EnvironmentVariableAccessor _environmentVariableAccessor;
 
   /// Builds a message that can be used a comment on a pull request.
-  String build(List<Build> builds, {String? message}) {
+  String build(
+    List<Build> builds, {
+    String? jobId,
+    String? message,
+  }) {
     final comment = StringBuffer();
 
     final projectId = _environmentVariableAccessor.get('FCI_PROJECT_ID');
@@ -26,6 +30,9 @@ class CommentBuilder {
     }
 
     comment.writeln('\n\n$table');
+
+    comment.writeln(
+        '\n<!-- Codemagic App Preview; jobId: ${jobId ?? 'default'} -->');
 
     return '$comment';
   }

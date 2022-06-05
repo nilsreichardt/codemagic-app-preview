@@ -41,6 +41,8 @@ void main() {
 | ${builds[0].platform.name} | ${builds[1].platform.name} |
 |:-:|:-:|
 | ![image](https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${Uri.encodeComponent(builds[0].url)}) <br /> [Download link](${builds[0].url}) | ![image](https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${Uri.encodeComponent(builds[1].url)}) <br /> [Download link](${builds[1].url}) |
+
+<!-- Codemagic App Preview; jobId: default -->
 """);
     });
 

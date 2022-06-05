@@ -40,12 +40,12 @@ class GitHubApiRepository {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
       },
-      body: {
+      body: jsonEncode({
         'body': comment,
-      },
+      }),
     );
 
-    if (response.statusCode != 200) {
+    if (response.statusCode != 201) {
       throw Exception(
           'Failed to post comment: ${response.body} (${response.statusCode})');
     }
@@ -53,7 +53,7 @@ class GitHubApiRepository {
 
   /// Edits an existing comment.
   Future<void> editComment(int commentId, String comment) async {
-    final response = await httpClient.post(
+    final response = await httpClient.patch(
       Uri.parse(
         'https://api.github.com/repos/$owner/$repository/issues/comments/$commentId',
       ),
@@ -61,9 +61,9 @@ class GitHubApiRepository {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
       },
-      body: {
+      body: jsonEncode({
         'body': comment,
-      },
+      }),
     );
 
     if (response.statusCode != 200) {
