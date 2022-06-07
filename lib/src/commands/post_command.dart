@@ -10,17 +10,17 @@ import 'package:http/http.dart';
 
 class PostCommand extends Command {
   PostCommand({
-    this.httpClient,
+    Client? httpClient,
     this.environmentVariableAccessor =
         const SystemEnvironmentVariableAccessor(),
-  }) {
+  }) : this.httpClient = httpClient ?? Client() {
     argParser
       ..addOption('owner', abbr: 'o')
       ..addOption('repo', abbr: 'r')
       ..addOption('token', abbr: 't');
   }
 
-  final Client? httpClient;
+  final Client httpClient;
   final EnvironmentVariableAccessor environmentVariableAccessor;
 
   @override
@@ -44,7 +44,7 @@ class PostCommand extends Command {
     final comment = CommentBuilder(environmentVariableAccessor).build(builds);
     final gitHubApi = GitHubApiRepository(
       token: argResults!['token'],
-      httpClient: httpClient ?? Client(),
+      httpClient: httpClient,
       owner: argResults!['owner'],
       repository: argResults!['repo'],
     );
