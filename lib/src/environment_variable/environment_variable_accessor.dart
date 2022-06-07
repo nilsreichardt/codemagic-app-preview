@@ -9,6 +9,8 @@ abstract class EnvironmentVariableAccessor {
 /// An implementation of [EnvironmentVariableAccessor] that reads the
 /// environment variables from the current process.
 class SystemEnvironmentVariableAccessor implements EnvironmentVariableAccessor {
+  const SystemEnvironmentVariableAccessor();
+
   dynamic get(String name) => Platform.environment[name];
 }
 
