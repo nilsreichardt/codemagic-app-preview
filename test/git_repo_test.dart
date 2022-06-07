@@ -10,7 +10,7 @@ void main() {
     });
 
     // This test might not pass when you fork this repository, because the
-    // remote url will not be same. The test is expected a remote url like
+    // remote url will not be same. The test expects a remote url like
     // "https://github.com/nilsreichardt/codemagic-app-preview.git"
     test('.getOwner()', () async {
       final owner = await gitRepo.getOwner();
