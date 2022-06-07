@@ -5,6 +5,7 @@ import 'package:codemagic_app_preview/src/builds/artifact_links_parser.dart';
 import 'package:codemagic_app_preview/src/comment/comment_builder.dart';
 import 'package:codemagic_app_preview/src/comment/comment_poster.dart';
 import 'package:codemagic_app_preview/src/environment_variable/environment_variable_accessor.dart';
+import 'package:codemagic_app_preview/src/github/git_repo.dart';
 import 'package:codemagic_app_preview/src/github/github_api_repository.dart';
 import 'package:http/http.dart';
 
@@ -13,15 +14,14 @@ class PostCommand extends Command {
     Client? httpClient,
     this.environmentVariableAccessor =
         const SystemEnvironmentVariableAccessor(),
+    this.gitRepo = const GitRepo(),
   }) : this.httpClient = httpClient ?? Client() {
-    argParser
-      ..addOption('owner', abbr: 'o')
-      ..addOption('repo', abbr: 'r')
-      ..addOption('token', abbr: 't');
+    argParser..addOption('token', abbr: 't');
   }
 
   final Client httpClient;
   final EnvironmentVariableAccessor environmentVariableAccessor;
+  final GitRepo gitRepo;
 
   @override
   String get description =>
@@ -42,11 +42,13 @@ class PostCommand extends Command {
     final builds = ArtifactLinksParser(environmentVariableAccessor).getBuilds();
 
     final comment = CommentBuilder(environmentVariableAccessor).build(builds);
+    final owner = await gitRepo.getOwner();
+    final repoName = await gitRepo.getRepoName();
     final gitHubApi = GitHubApiRepository(
-      token: argResults!['token'],
+      token: token,
       httpClient: httpClient,
-      owner: argResults!['owner'],
-      repository: argResults!['repo'],
+      owner: owner,
+      repository: repoName,
     );
 
     final pullRequestId =
