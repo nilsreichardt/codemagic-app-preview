@@ -1,9 +1,17 @@
-## Local testing
-Set the following environment variables:
-```sh
-export FCI_PROJECT_ID='6274fcfc87c748ce531c7376';
-export FCI_BUILD_ID='62877273178d247b70405cb0';
-export FCI_COMMIT='50b04d910c6b73472f7dfc1fee38a67e7132bf32';
-export CM_PULL_REQUEST_NUMBER=24;
-export CM_ARTIFACT_LINKS='[{"name": "Codemagic_Release.ipa","type": "ipa","url": "https://api.codemagic.io/artifacts/2e7564b2-9ffa-40c2-b9e0-8980436ac717/81c5a723-b162-488a-854e-3f5f7fdfb22f/Codemagic_Release.ipa","md5": "d2884be6985dad3ffc4d6f85b3a3642a","versionName": "1.0.2","bundleId": "io.codemagic.app"}]'
+## Codemagic App Preview
+We all know testing manually the changes of a pull request is hard. With this package you only need to add 2 lines to your Codemagic configurations and you will get for every pull request QR codes. You can just scan these QR codes with your smartphone and test the changes.
+
+| <img src="https://user-images.githubusercontent.com/24459435/172502560-4948c727-af65-4e46-bb8f-9c8857f7a646.png" /> | <img src="https://user-images.githubusercontent.com/24459435/172503726-38b1ed63-0c93-4edc-8e5f-19a299cd93ad.gif" width=175 /> |
+| - | - |
+
+```yaml
+artifacts:
+  - build/**/outputs/apk/**/*.apk
+  - build/ios/ipa/*.ipa
+publishing:
+  scripts:
+     - name: Post App Preview
+       script: |
+         dart pub global activate codemagic_app_preview
+         app_preview post --token $GITHUB_PAT
 ```
