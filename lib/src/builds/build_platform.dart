@@ -31,7 +31,5 @@ enum BuildPlatform {
       case ios:
         return 'iOS';
     }
-
-    throw Exception('Unknown build platform: $this');
   }
 }
