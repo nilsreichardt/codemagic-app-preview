@@ -36,7 +36,7 @@ void main() {
       accessor.environmentVariables['FCI_COMMIT'] = commit;
 
       expect(builder.build(builds),
-          """⬇️ Generated builds by [Codemagic](https://codemagic.io/app/$projectId/build/$buildId) for commit \`$commit\` ⬇️
+          """⬇️ Generated builds by [Codemagic](https://codemagic.io/app/$projectId/build/$buildId) for commit $commit ⬇️
 
 | ${builds[0].platform.name} | ${builds[1].platform.name} |
 |:-:|:-:|
