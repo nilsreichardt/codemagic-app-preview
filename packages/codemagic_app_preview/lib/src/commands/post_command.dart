@@ -16,7 +16,7 @@ class PostCommand extends Command {
         const SystemEnvironmentVariableAccessor(),
     this.gitRepo = const GitRepo(),
   }) : this.httpClient = httpClient ?? Client() {
-    argParser..addOption('token', abbr: 't');
+    argParser..addOption('gh_token', abbr: 't');
   }
 
   final Client httpClient;
@@ -31,10 +31,10 @@ class PostCommand extends Command {
   String get name => 'post';
 
   Future<void> run() async {
-    final String? token = argResults?['token'];
-    if (token == null) {
+    final String? githubToken = argResults?['gh_token'];
+    if (githubToken == null) {
       stderr.writeln(
-          'The token for the GitHub API is not set. Please set the token with the --token option.');
+          'The GitHub access token is not set. Please set the token with the --gh_token option.');
       exitCode = 1;
       return;
     }
@@ -45,7 +45,7 @@ class PostCommand extends Command {
     final owner = await gitRepo.getOwner();
     final repoName = await gitRepo.getRepoName();
     final gitHubApi = GitHubApiRepository(
-      token: token,
+      token: githubToken,
       httpClient: httpClient,
       owner: owner,
       repository: repoName,
