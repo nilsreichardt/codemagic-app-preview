@@ -1,0 +1,17 @@
+name: codemagic_app_preview
+packages:
+  - "packages/**"
+repository: https://github.com/nilsreichardt/codemagic-app-preview
+
+scripts:
+  analyze:
+    run: melos exec -- "dart analyze --fatal-infos"
+    description: Run `dart analyze --fatal-infos` in all packages
+
+  format:
+    run: melos exec -- "dart format . --set-exit-if-changed"
+    description: Run `dart format .` in all packages
+
+  test:
+    run: melos exec --dir-exists=test -- "dart test"
+    description: Run `dart test` in all packages
