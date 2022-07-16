@@ -13,8 +13,8 @@ enum BuildPlatform {
 
 /// Extension methods for [BuildPlatform].
 ///
-/// When using Dart 2.17 as minimum version, should be refactored to enum class,
-/// like: https://github.com/nilsreichardt/codemagic-app-preview/blob/8996c2219af619acfb0a37df83e83041202653e4/packages/codemagic_app_preview/lib/src/builds/build_platform.dart
+/// When using Dart 2.17 as minimum version, should this be refactored to enum
+/// class, like: https://github.com/nilsreichardt/codemagic-app-preview/blob/8996c2219af619acfb0a37df83e83041202653e4/packages/codemagic_app_preview/lib/src/builds/build_platform.dart
 extension BuildPlatformExtension on BuildPlatform {
   /// Returns the name of the platform, e.g. "iOS" for [ios].
   String get name {
