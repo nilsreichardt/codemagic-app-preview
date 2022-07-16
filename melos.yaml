@@ -5,13 +5,13 @@ repository: https://github.com/nilsreichardt/codemagic-app-preview
 
 scripts:
   analyze:
-    run: melos exec -- "dart analyze --fatal-infos"
-    description: Run `dart analyze --fatal-infos` in all packages
+    run: melos exec -- "flutter analyze --fatal-infos"
+    description: Run `flutter analyze --fatal-infos` in all packages
 
   format:
-    run: melos exec -- "dart format . --set-exit-if-changed"
-    description: Run `dart format .` in all packages
+    run: melos exec -- "flutter format . --set-exit-if-changed"
+    description: Run `flutter format .` in all packages
 
   test:
-    run: melos exec --dir-exists=test -- "dart test"
-    description: Run `dart test` in all packages
+    run: melos exec --dir-exists=test -- "flutter test"
+    description: Run `flutter test` in all packages
