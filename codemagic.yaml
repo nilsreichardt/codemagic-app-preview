@@ -4,6 +4,10 @@ workflows:
     instance_type: mac_mini
     environment:
       flutter: default
+      groups:
+        # Adding environment group "github" which includes the GITHUB_PAT
+        # variable.
+        - "github"
     triggering:
       events:
         - pull_request
