@@ -8,7 +8,7 @@ enum BuildPlatform {
   /// The build is for the iOS platform.
   ///
   /// File formats are `.ipa`.
-  ios;
+  ios,
 }
 
 /// Extension methods for [BuildPlatform].
