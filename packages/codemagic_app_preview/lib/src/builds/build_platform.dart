@@ -17,7 +17,7 @@ enum BuildPlatform {
 /// class, like: https://github.com/nilsreichardt/codemagic-app-preview/blob/8996c2219af619acfb0a37df83e83041202653e4/packages/codemagic_app_preview/lib/src/builds/build_platform.dart
 extension BuildPlatformExtension on BuildPlatform {
   /// Returns the name of the platform, e.g. "iOS" for [ios].
-  String get name {
+  String get platformName {
     switch (this) {
       case BuildPlatform.android:
         return 'Android';
