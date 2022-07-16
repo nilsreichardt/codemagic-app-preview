@@ -21,8 +21,8 @@ void main() {
       when(() => gitHubApi.getComments('1')).thenAnswer(
         (_) async => [
           PostedComment(
-            123,
-            'random text <!-- Codemagic App Preview; jobId: default -->',
+            id: 123,
+            body: 'random text <!-- Codemagic App Preview; jobId: default -->',
           ),
         ],
       );
