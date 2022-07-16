@@ -15,3 +15,10 @@ publishing:
          dart pub global activate codemagic_app_preview
          app_preview post --gh_token $GITHUB_PAT
 ```
+
+## Supported platforms
+Currently, you can generate a preview only for the following platforms.
+
+| Android | iOS | MacOS | Web | Linux | Windows |
+| :-----: | :-: | :---: | :-: | :---: | :-----: |
+|   ✔️     | ✔️   |       |     |       |         |
