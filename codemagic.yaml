@@ -31,7 +31,7 @@ workflows:
         script: flutter pub get
       - name: Build APK (Android)
         script: flutter build apk
-      - name: Build iOS
+      - name: Build IPA (iOS)
         # Don't forget the "export-options" argument.
         script: flutter build ipa --export-options-plist=/Users/builder/export_options.plist
     # Add the paths to the APK.
