@@ -84,7 +84,7 @@ void main() {
 
       await runner.run([
         'post',
-        '--token',
+        '--gh_token',
         'token',
       ]);
 
