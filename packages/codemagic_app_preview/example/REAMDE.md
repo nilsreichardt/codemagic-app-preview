@@ -1,3 +1,7 @@
+Run `app_preview post --gh_token $GITHUB_PAT` after building your apps.
+
+Here is a full `codemagic.yaml` as an example:
+```yaml
 # This is example for using the codemagic_app_preview package in a
 # `codemagic.yaml`.
 
@@ -48,11 +52,6 @@ workflows:
             echo PATH="$PATH":"$FLUTTER_ROOT/bin" >> $CM_ENV
         - name: Post App Preview
           script: |
-            # You should use for app the following line instead of "dart pub
-            # global activate  -s path...":
-            # dart pub global activate codemagic_app_preview
-            
-            # Using local path to test changes and ensure everything is working
-            # when someone opens PR.
             dart pub global activate -s path ../codemagic_app_preview
             app_preview post --gh_token $GITHUB_PAT
+```
