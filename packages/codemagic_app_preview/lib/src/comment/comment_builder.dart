@@ -23,7 +23,7 @@ class CommentBuilder {
     final table = _buildTable(builds);
 
     comment.write(
-        '⬇️ Generated builds by [Codemagic]($codemagicBuildUrl) for commit \`$commit\` ⬇️');
+        '⬇️ Generated builds by [Codemagic]($codemagicBuildUrl) for commit $commit ⬇️');
 
     if (message != null) {
       comment.write('\n\n$message');
