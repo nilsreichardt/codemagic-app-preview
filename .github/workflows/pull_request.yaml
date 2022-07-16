@@ -10,11 +10,14 @@ jobs:
       - uses: actions/checkout@v3
       - uses: dart-lang/setup-dart@v1
 
-      - name: Install dependencies
-        run: dart pub get
+      - name: Install Melos
+        run: dart pub global activate melos
+
+      - name: Melos Bootstrap
+        run: melos bootstrap
 
       - name: Run tests
-        run: dart test
+        run: melos run test
 
   analyze:
     runs-on: ubuntu-latest
@@ -22,11 +25,14 @@ jobs:
       - uses: actions/checkout@v3
       - uses: dart-lang/setup-dart@v1
 
-      - name: Install dependencies
-        run: dart pub get
+      - name: Install Melos
+        run: dart pub global activate melos
+
+      - name: Melos Bootstrap
+        run: melos bootstrap
 
       - name: Run analyze
-        run: dart analyze --fatal-infos
+        run: melos run analyze
 
   format:
     runs-on: ubuntu-latest
@@ -34,8 +40,11 @@ jobs:
       - uses: actions/checkout@v3
       - uses: dart-lang/setup-dart@v1
 
-      - name: Install dependencies
-        run: dart pub get
+      - name: Install Melos
+        run: dart pub global activate melos
+
+      - name: Melos Bootstrap
+        run: melos bootstrap
 
       - name: Run format
-        run: dart format . --set-exit-if-changed
+        run: melos run format
