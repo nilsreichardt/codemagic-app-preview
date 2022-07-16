@@ -24,7 +24,7 @@ workflows:
       - name: Sign iOS
         script: |
           keychain initialize
-          app-store-connect fetch-signing-files "io.reichardt.appPreviewExample" --type IOS_APP_ADHOC --create
+          app-store-connect fetch-signing-files "io.nilsreichardt.codemagicapppreviewexample" --type IOS_APP_ADHOC --create
           keychain add-certificates
           xcode-project use-profiles
       - name: Fetch dependencies
