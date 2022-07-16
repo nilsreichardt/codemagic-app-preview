@@ -1,0 +1,32 @@
+workflows:
+  app_preview:
+    name: app_preview
+    instance_type: mac_mini
+    environment:
+      flutter: default
+      groups:
+        # Adding environment group "github" which includes the GITHUB_PAT
+        # variable.
+        - "github"
+    triggering:
+      events:
+        - pull_request
+      cancel_previous_builds: true
+    working_directory: packages/app_preview_example
+    scripts:
+      - name: Fetch dependencies
+        script: flutter pub get
+      - name: Build APK (Android)
+        script: flutter build apk
+    artifacts:
+      - build/**/outputs/apk/**/*.apk
+    publishing:
+      scripts:
+        - name: Add Dart SDK to PATH
+          script: |
+            echo PATH="$PATH":"$FLUTTER_ROOT/.pub-cache/bin" >> $CM_ENV
+            echo PATH="$PATH":"$FLUTTER_ROOT/bin" >> $CM_ENV
+        - name: Post App Preview
+          script: |
+            dart pub global activate -s path ../codemagic_app_preview
+            app_preview post --gh_token $GITHUB_PAT
