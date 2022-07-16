@@ -1,7 +1,7 @@
 # Codemagic App Preview
 We all know testing manually the changes of a pull request is hard. With this package you only need to add 2 lines to your Codemagic configurations and you will get for every pull request QR codes. You can just scan these QR codes with your smartphone and test the changes.
 
-| <img src="https://user-images.githubusercontent.com/24459435/172502560-4948c727-af65-4e46-bb8f-9c8857f7a646.png" /> | <img src="https://user-images.githubusercontent.com/24459435/172503726-38b1ed63-0c93-4edc-8e5f-19a299cd93ad.gif" width=175 /> |
+| <img width="920" alt="Demo of the app preview pull request comment" src="https://user-images.githubusercontent.com/24459435/179368696-87fe65e6-aba5-4a3d-be64-3eff5df8d309.png"> | <img alt="Demo of scanning the iOS app preview qr code" src="https://user-images.githubusercontent.com/24459435/179368786-c94ce9c2-2129-4c30-8677-b8ebf5633a2e.gif" width=175 /> |
 | - | - |
 
 ```yaml
