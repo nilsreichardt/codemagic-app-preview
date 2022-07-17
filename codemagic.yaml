@@ -19,25 +19,36 @@ workflows:
       cancel_previous_builds: true
     working_directory: packages/app_preview_example
     scripts:
-      # Sign with the type "IOS_APP_ADHOC". See more information about code
-      # signing: https://docs.codemagic.io/yaml-code-signing/signing-ios/
-      - name: Sign iOS
-        script: |
-          keychain initialize
-          app-store-connect fetch-signing-files "io.nilsreichardt.codemagicapppreviewexample" --type IOS_APP_ADHOC --create
-          keychain add-certificates
-          xcode-project use-profiles
       - name: Fetch dependencies
         script: flutter pub get
-      - name: Build APK (Android)
-        script: flutter build apk
-      - name: Build IPA (iOS)
-        # Don't forget the "export-options" argument.
-        script: flutter build ipa --export-options-plist=/Users/builder/export_options.plist
+      # - name: Build APK (Android)
+      #   script: flutter build apk
+      # # Sign with the type "IOS_APP_ADHOC". See more information about code
+      # # signing: https://docs.codemagic.io/yaml-code-signing/signing-ios/
+      # - name: Sign iOS
+      #   script: |
+      #     keychain initialize
+      #     app-store-connect fetch-signing-files "io.nilsreichardt.codemagicapppreviewexample" --type IOS_APP_ADHOC --create
+      #     keychain add-certificates
+      #     xcode-project use-profiles
+      # - name: Build IPA (iOS)
+      #   # Don't forget the "export-options" argument.
+      #   script: flutter build ipa --export-options-plist=/Users/builder/export_options.plist
+      # Sign with the type "MAC_APP_DIRECT". See more information about code
+      # signing: https://docs.codemagic.io/yaml-code-signing/signing-macos/
+      - name: Sign macOS
+        script: |
+          keychain initialize
+          app-store-connect fetch-signing-files "io.nilsreichardt.codemagicapppreviewexample" --type MAC_APP_DIRECT --platform MAC_OS --create
+          keychain add-certificates
+          xcode-project use-profiles
+      - name: Build macOS
+        script: flutter build macos
     # Add the paths to the APK.
     artifacts:
       - build/**/outputs/apk/**/*.apk
       - build/ios/ipa/*.ipa
+      - build/macos/Build/Products/Release/*.app
     publishing:
       scripts:
         # Adding the path to the Dart SDK to PATH to be able to use `dart`
