@@ -19,9 +19,9 @@ publishing:
 ## Supported platforms
 Currently, you can generate a preview only for the following platforms.
 
-| Android | iOS | MacOS | Web | Linux | Windows |
+| Android | iOS | macOS | Web | Linux | Windows |
 | :-----: | :-: | :---: | :-: | :---: | :-----: |
-|   ✔️     | ✔️   |       |     |       |         |
+|   ✔️     | ✔️   |   ✔️   |     |       |         |
 
 ## Disclaimer
 This is an unofficial package for [Codemagic](https://codemagic.io). It's *not* maintained by Codemagic.

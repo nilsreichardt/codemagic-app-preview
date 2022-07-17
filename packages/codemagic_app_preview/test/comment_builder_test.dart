@@ -26,6 +26,11 @@ void main() {
               'https://api.codemagic.io/artifacts/2e7564b2-9ffa-40c2-b9e0-8980436ac717/81c5a723-b162-488a-854e-3f5f7fdfb22f/Codemagic_Release.ipa',
           platform: BuildPlatform.ios,
         ),
+        Build(
+          url:
+              'https://api.codemagic.io/artifacts/2e7564b2-9ffa-40c2-b9e0-8980436ac717/81c5a723-b162-488a-854e-3f5f7fdfb22f/Codemagic_Release.zip',
+          platform: BuildPlatform.macos,
+        ),
       ];
 
       final projectId = '6274fcfc87c748ce531c7376';
@@ -38,9 +43,9 @@ void main() {
       expect(builder.build(builds),
           """⬇️ Generated builds by [Codemagic](https://codemagic.io/app/$projectId/build/$buildId) for commit $commit ⬇️
 
-| ${builds[0].platform.platformName} | ${builds[1].platform.platformName} |
-|:-:|:-:|
-| ![image](https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${Uri.encodeComponent(builds[0].url)}) <br /> [Download link](${builds[0].url}) | ![image](https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${Uri.encodeComponent(builds[1].url)}) <br /> [Download link](${builds[1].url}) |
+| ${builds[0].platform.platformName} | ${builds[1].platform.platformName} | ${builds[2].platform.platformName} |
+|:-:|:-:|:-:|
+| ![image](https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${Uri.encodeComponent(builds[0].url)}) <br /> [Download link](${builds[0].url}) | ![image](https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${Uri.encodeComponent(builds[1].url)}) <br /> [Download link](${builds[1].url}) | ![image](https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${Uri.encodeComponent(builds[2].url)}) <br /> [Download link](${builds[2].url}) |
 
 <!-- Codemagic App Preview; jobId: default -->
 """);

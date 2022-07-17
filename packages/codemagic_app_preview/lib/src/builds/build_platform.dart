@@ -9,6 +9,11 @@ enum BuildPlatform {
   ///
   /// File formats are `.ipa`.
   ios,
+
+  /// The build is for the macOS platform.
+  ///
+  /// File formats are `.app`
+  macos,
 }
 
 /// Extension methods for [BuildPlatform].
@@ -23,6 +28,8 @@ extension BuildPlatformExtension on BuildPlatform {
         return 'Android';
       case BuildPlatform.ios:
         return 'iOS';
+      case BuildPlatform.macos:
+        return 'macOS';
     }
   }
 }
@@ -35,6 +42,8 @@ BuildPlatform getBuildPlatform(String fileExtension) {
       return BuildPlatform.android;
     case 'ipa':
       return BuildPlatform.ios;
+    case 'app':
+      return BuildPlatform.macos;
     default:
       throw Exception('Unknown build platform file extension: $fileExtension');
   }
