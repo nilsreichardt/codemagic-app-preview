@@ -44,15 +44,14 @@ workflows:
           xcode-project use-profiles
       - name: Build macOS
         script: flutter build macos
-    # Add the paths to the APK.
     artifacts:
-      - build/**/outputs/apk/**/*.apk
-      - build/ios/ipa/*.ipa
-      - build/macos/Build/Products/Release/*.app
+      - build/**/outputs/apk/**/*.apk # Build output for Android
+      - build/ios/ipa/*.ipa # Build output for iOS
+      - build/macos/Build/Products/Release/*.app # Build output for macOS
     publishing:
       scripts:
         # Adding the path to the Dart SDK to PATH to be able to use `dart`
-        # commands and commands of Dart packages. 
+        # commands and commands of Dart packages.
         - name: Add Dart SDK to PATH
           script: |
             echo PATH="$PATH":"$FLUTTER_ROOT/.pub-cache/bin" >> $CM_ENV
@@ -62,7 +61,7 @@ workflows:
             # You should use for app the following line instead of "dart pub
             # global activate  -s path...":
             # dart pub global activate codemagic_app_preview
-            
+
             # Using local path to test changes and ensure everything is working
             # when someone opens PR.
             dart pub global activate -s path ../codemagic_app_preview
