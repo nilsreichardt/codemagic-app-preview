@@ -4,7 +4,7 @@ on:
   pull_request:
 
 env:
-  FLUTTER_VERSION: 2.5.0
+  FLUTTER_VERSION: 2.5.0 # Uses Dart SDK v2.14.0
 
 jobs:
   test:
