@@ -1,14 +1,14 @@
 /// A posted comment from GitHub.
 class PostedComment {
-  const PostedComment(
-    this.id,
-    this.body,
-  );
+  const PostedComment({
+    required this.id,
+    required this.body,
+  });
 
   factory PostedComment.fromJson(Map<String, dynamic> json) {
     return PostedComment(
-      json['id'],
-      json['body'],
+      id: json['id'],
+      body: json['body'],
     );
   }
 

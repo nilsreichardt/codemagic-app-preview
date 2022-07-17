@@ -1,4 +1,5 @@
 import 'package:codemagic_app_preview/src/builds/build.dart';
+import 'package:codemagic_app_preview/src/builds/build_platform.dart';
 import 'package:codemagic_app_preview/src/environment_variable/environment_variable_accessor.dart';
 
 class CommentBuilder {
@@ -50,7 +51,7 @@ class CommentBuilder {
 
     table.write('|');
     for (final build in builds) {
-      table.write(' ${build.platform.name} |');
+      table.write(' ${build.platform.platformName} |');
     }
 
     table.write('\n|');

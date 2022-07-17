@@ -8,4 +8,3 @@ linter:
     # The following lints are for a consistent code style.
     - sort_constructors_first
     - prefer_single_quotes
-    - use_super_parameters

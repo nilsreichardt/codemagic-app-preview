@@ -28,7 +28,7 @@ class Build {
   factory Build.fromJson(Map<String, dynamic> json) {
     return Build(
       url: json['url'],
-      platform: BuildPlatform.fromType(json['type']),
+      platform: getBuildPlatform(json['type']),
     );
   }
 
