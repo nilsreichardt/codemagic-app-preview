@@ -8,12 +8,17 @@ We all know testing manually the changes of a pull request is hard. With this pa
 artifacts:
   - build/**/outputs/apk/**/*.apk
   - build/ios/ipa/*.ipa
+  - build/macos/Build/Products/Release/*.app
 publishing:
   scripts:
-     - name: Post App Preview
-       script: |
-         dart pub global activate codemagic_app_preview
-         app_preview post --gh_token $GITHUB_PAT
+    - name: Add Dart SDK to PATH
+      script: |
+        echo PATH="$PATH":"$FLUTTER_ROOT/.pub-cache/bin" >> $CM_ENV
+        echo PATH="$PATH":"$FLUTTER_ROOT/bin" >> $CM_ENV
+    - name: Post App Preview
+      script: |
+        dart pub global activate codemagic_app_preview
+        app_preview post --gh_token $GITHUB_PAT
 ```
 
 ## Supported platforms
