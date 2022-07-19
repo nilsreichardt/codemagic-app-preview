@@ -4,7 +4,7 @@
 workflows:
   app_preview:
     name: app_preview
-    instance_type: mac_mini_m1
+    instance_type: mac_mini
     environment:
       flutter: default
       groups:
