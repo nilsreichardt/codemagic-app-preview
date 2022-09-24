@@ -17,6 +17,12 @@ class PostCommand extends Command {
     this.gitRepo = const GitRepo(),
   }) : this.httpClient = httpClient ?? Client() {
     argParser..addOption('gh_token', abbr: 't');
+    argParser
+      ..addOption(
+        'message',
+        abbr: 'm',
+        help: 'A custom message that can be added to the comment.',
+      );
   }
 
   final Client httpClient;
@@ -38,10 +44,14 @@ class PostCommand extends Command {
       exitCode = 1;
       return;
     }
+    final String? message = argResults?['message'];
 
     final builds = ArtifactLinksParser(environmentVariableAccessor).getBuilds();
 
-    final comment = CommentBuilder(environmentVariableAccessor).build(builds);
+    final comment = CommentBuilder(environmentVariableAccessor).build(
+      builds,
+      message: message,
+    );
     final owner = await gitRepo.getOwner();
     final repoName = await gitRepo.getRepoName();
     final gitHubApi = GitHubApiRepository(
