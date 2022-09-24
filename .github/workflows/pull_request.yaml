@@ -76,4 +76,5 @@ jobs:
         run: dart pub global activate pana
 
       - name: Verify Pub Score
+        working-directory: packages/codemagic_app_preview
         run: pana --exit-code-threshold 0 .
