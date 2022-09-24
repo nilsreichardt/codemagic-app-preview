@@ -8,7 +8,6 @@ Here is a full `codemagic.yaml` as an example:
 workflows:
   app_preview:
     name: app_preview
-    instance_type: mac_mini
     environment:
       flutter: default
       groups:
