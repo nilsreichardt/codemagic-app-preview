@@ -68,13 +68,13 @@ jobs:
       - uses: actions/checkout@v3
       - uses: dart-lang/setup-dart@v1.3
         with:
-          sdk: ${{ $DART_VERSION }}
+          sdk: ${{ env.DART_VERSION }}
 
       - name: Install pana
         run: dart pub global activate pana
 
       - name: Install dependencies
         run: dart pub get
-        
+
       - name: Verify Pub Score
         run: pana --exit-code-threshold 0 .
