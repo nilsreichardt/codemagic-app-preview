@@ -5,6 +5,7 @@ on:
 
 env:
   FLUTTER_VERSION: 2.5.0 # Uses Dart SDK v2.14.0
+  DART_VERSION: 2.14.0
 
 jobs:
   test:
@@ -57,3 +58,23 @@ jobs:
 
       - name: Run format
         run: melos run format
+
+  pana:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/codemagic_app_preview 
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dart-lang/setup-dart@v1.3
+        with:
+          sdk: ${{ env.DART_VERSION }}
+
+      - name: Install pana
+        run: dart pub global activate pana
+
+      - name: Install dependencies
+        run: dart pub get
+
+      - name: Verify Pub Score
+        run: pana --exit-code-threshold 0 .
