@@ -57,3 +57,23 @@ jobs:
 
       - name: Run format
         run: melos run format
+
+  pana:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+
+      - name: Install Melos
+        run: dart pub global activate melos
+
+      - name: Melos Bootstrap
+        run: melos bootstrap
+
+      - name: Install pana
+        run: dart pub global activate pana
+
+      - name: Verify Pub Score
+        run: pana --exit-code-threshold 0 .
