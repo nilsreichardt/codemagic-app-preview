@@ -1,7 +1,13 @@
-name: pull-request-ci
+name: ci
 
 on:
   pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+      - edited
 
 env:
   FLUTTER_VERSION: 2.5.0 # Uses Dart SDK v2.14.0
@@ -63,7 +69,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: packages/codemagic_app_preview 
+        working-directory: packages/codemagic_app_preview
     steps:
       - uses: actions/checkout@v3
       - uses: dart-lang/setup-dart@v1.3
@@ -77,4 +83,11 @@ jobs:
         run: dart pub get
 
       - name: Verify Pub Score
-        run: pana --exit-code-threshold 0 .
+        run: pana --exit-code-threshold 0
+
+  validate-pr-title:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: amannn/action-semantic-pull-request@v1.2.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
