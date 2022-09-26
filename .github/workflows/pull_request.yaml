@@ -1,7 +1,12 @@
-name: pull-request-ci
+name: ci
 
 on:
   pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
 
 env:
   FLUTTER_VERSION: 2.5.0 # Uses Dart SDK v2.14.0
@@ -63,7 +68,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: packages/codemagic_app_preview 
+        working-directory: packages/codemagic_app_preview
     steps:
       - uses: actions/checkout@v3
       - uses: dart-lang/setup-dart@v1.3
