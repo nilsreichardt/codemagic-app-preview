@@ -32,3 +32,5 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/labeler@a96e5aec3e3d5caaefde174986c02d40560a0b91
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
