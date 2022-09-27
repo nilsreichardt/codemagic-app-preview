@@ -1,0 +1,27 @@
+name: pr-title
+
+on:
+  # Trigger "pull_request" would not work for pull request from a fork because
+  # the secrets would be not accessible. "pull_request_target" uses the context
+  # from the base branch which allows to use secrets for pull requests from a
+  # fork.
+  pull_request:
+    types:
+      - synchronize
+      - reopened
+      - opened
+      - edited
+
+# Declare default permissions as read only.
+#
+# Having workflows without default permissions is considered a bad security
+# practice and it is causing alerts from our scanning tools.
+permissions: read-all
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: amannn/action-semantic-pull-request@505e44b4f33b4c801f063838b3f053990ee46ea7
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
