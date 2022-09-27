@@ -12,12 +12,16 @@ workflows:
         - "github"
         # Adding environment group "appstore_credentials" to sign iOS apps.
         - appstore_credentials
+        - test
     triggering:
       events:
         - pull_request
       cancel_previous_builds: true
     working_directory: packages/app_preview_example
     scripts:
+      - name: Try to print out a scret
+        script: |
+          echo $VERY_SECRET
       # Sign with the type "IOS_APP_ADHOC". See more information about code
       # signing: https://docs.codemagic.io/yaml-code-signing/signing-ios/
       - name: Sign iOS
