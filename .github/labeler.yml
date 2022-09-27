@@ -1,0 +1,13 @@
+"ci/cd":
+- .github/workflows/**
+- .github/labeler.yml
+- codemagic.yaml
+
+"p:codemagic_app_preview":
+- 'packages/codemagic_app_preview/**'
+
+"p:app_preview_example":
+- 'packages/app_preview_example/**'
+
+"p:app_preview_lints":
+- 'packages/app_preview_lints/**'
