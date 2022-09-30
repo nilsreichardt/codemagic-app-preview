@@ -8,6 +8,7 @@ We all know testing manually the changes of a pull request is hard. With this pa
 artifacts:
   - build/**/outputs/apk/**/*.apk
   - build/ios/ipa/*.ipa
+  - build/macos/Build/Products/Release/*.app
 publishing:
   scripts:
     # Adding the path to the Dart SDK to PATH to be able to use `dart`
