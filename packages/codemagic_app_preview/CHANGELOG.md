@@ -1,3 +1,12 @@
+## 0.0.4
+
+ - **REFACTOR**: remove `instance_type` from `codemagic.yaml` and `README.md` ([#42](https://github.com/nilsreichardt/codemagic-app-preview/issues/42)).
+ - **FEAT**: add macOS example ([#36](https://github.com/nilsreichardt/codemagic-app-preview/issues/36)).
+ - **FEAT**: add message parameter ([#41](https://github.com/nilsreichardt/codemagic-app-preview/issues/41)).
+ - **FEAT**: support platform macOS ([#38](https://github.com/nilsreichardt/codemagic-app-preview/issues/38)).
+ - **FEAT**: decrease Dart SDK minimum from 2.17 to 2.14 ([#34](https://github.com/nilsreichardt/codemagic-app-preview/issues/34)).
+ - **DOCS**: improve width for gif demo in `README.md`.
+
 ## 0.0.3
 
 * **FEAT:** Add `--message` parameter to specify a custom message in the PR comment ([#41](https://github.com/nilsreichardt/codemagic-app-preview/pull/41)) ([806c0d](https://github.com/nilsreichardt/codemagic-app-preview/commit/806c0d8be381aba973ca1811995782d7853155d2))

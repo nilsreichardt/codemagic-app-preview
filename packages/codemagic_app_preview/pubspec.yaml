@@ -1,7 +1,7 @@
 name: codemagic_app_preview
 description: Publish preview for your app for every pull request via Codemagic.
 repository: https://github.com/nilsreichardt/codemagic-app-preview/tree/main/packages/codemagic_app_preview
-version: 0.0.3
+version: 0.0.4
 
 environment:
   sdk: ">=2.14.0 <3.0.0"
