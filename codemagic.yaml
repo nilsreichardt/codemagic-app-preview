@@ -20,10 +20,12 @@ workflows:
     scripts:
       - name: Fetch dependencies
         script: flutter pub get
-      - name: Build APK (Android)
-        script: flutter build apk
+      # - name: Build APK (Android)
+        # script: flutter build apk
       # Sign with the type "IOS_APP_ADHOC". See more information about code
       # signing: https://docs.codemagic.io/yaml-code-signing/signing-ios/
+      - name: Build macOS
+        script: flutter build macos
       - name: Sign iOS
         script: |
           keychain initialize
@@ -35,16 +37,14 @@ workflows:
         script: flutter build ipa --export-options-plist=/Users/builder/export_options.plist
       # Sign with the type "MAC_APP_DIRECT". See more information about code
       # signing: https://docs.codemagic.io/yaml-code-signing/signing-macos/
-      - name: Sign macOS
-        script: |
-          keychain initialize
-          app-store-connect fetch-signing-files "io.nilsreichardt.codemagicapppreviewexample" --type MAC_APP_DISTRIBUTION --platform MAC_OS --create
-          app-store-connect list-certificates --type MAC_APP_DISTRIBUTION --save || \
-          app-store-connect create-certificate --type MAC_APP_DISTRIBUTION --save
-          keychain add-certificates
-          xcode-project use-profiles
-      - name: Build macOS
-        script: flutter build macos
+      # - name: Sign macOS
+        # script: |
+          # keychain initialize
+          # app-store-connect fetch-signing-files "io.nilsreichardt.codemagicapppreviewexample" --type MAC_APP_DISTRIBUTION --platform MAC_OS --create
+          # app-store-connect list-certificates --type MAC_APP_DISTRIBUTION --save || \
+          # app-store-connect create-certificate --type MAC_APP_DISTRIBUTION --save
+          # keychain add-certificates
+          # xcode-project use-profiles
     artifacts:
       - build/**/outputs/apk/**/*.apk # Build output for Android
       - build/ios/ipa/*.ipa # Build output for iOS
