@@ -39,6 +39,8 @@ workflows:
         script: |
           keychain initialize
           app-store-connect fetch-signing-files "io.nilsreichardt.codemagicapppreviewexample" --type MAC_APP_DISTRIBUTION --platform MAC_OS --create
+          app-store-connect list-certificates --type MAC_APP_DISTRIBUTION --save || \
+          app-store-connect create-certificate --type MAC_APP_DISTRIBUTION --save
           keychain add-certificates
           xcode-project use-profiles
       - name: Build macOS
