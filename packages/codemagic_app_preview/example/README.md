@@ -41,12 +41,6 @@ workflows:
       - build/macos/Build/Products/Release/*.app # Build output for macOS
     publishing:
       scripts:
-        # Adding the path to the Dart SDK to PATH to be able to use `dart`
-        # commands and commands of Dart packages.
-        - name: Add Dart SDK to PATH
-          script: |
-            echo PATH="$PATH":"$FLUTTER_ROOT/.pub-cache/bin" >> $CM_ENV
-            echo PATH="$PATH":"$FLUTTER_ROOT/bin" >> $CM_ENV
         - name: Post App Preview
           script: |
             dart pub global activate codemagic_app_preview
