@@ -31,7 +31,10 @@ class GitHubApiRepository {
   final String repository;
 
   /// Post a new comment.
-  Future<void> postComment(String pullRequestId, String comment) async {
+  Future<PostedComment> postComment(
+    String pullRequestId,
+    String comment,
+  ) async {
     final response = await httpClient.post(
       Uri.parse(
         'https://api.github.com/repos/$owner/$repository/issues/$pullRequestId/comments',
@@ -49,6 +52,8 @@ class GitHubApiRepository {
       throw Exception(
           'Failed to post comment: ${response.body} (${response.statusCode})');
     }
+
+    return PostedComment.fromJson(jsonDecode(response.body));
   }
 
   /// Edits an existing comment.

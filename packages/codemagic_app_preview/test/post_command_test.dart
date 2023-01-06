@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
@@ -77,7 +78,17 @@ void main() {
           },
           body: any(named: 'body'),
         ),
-      ).thenAnswer((_) async => Response('', 201));
+      ).thenAnswer(
+        (_) async => Response(
+          jsonEncode(
+            {
+              "id": 123,
+              "body": "comment",
+            },
+          ),
+          201,
+        ),
+      );
 
       final runner = CommandRunner('test', 'A test command runner.');
       runner.addCommand(postCommand);
