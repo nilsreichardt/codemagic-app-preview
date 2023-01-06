@@ -46,6 +46,8 @@ jobs:
         run: melos bootstrap
 
       - name: Run integration tests
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: melos run test-e2e
 
   analyze:
