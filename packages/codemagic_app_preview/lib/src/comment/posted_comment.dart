@@ -17,4 +17,17 @@ class PostedComment {
 
   /// The contents of the comment.
   final String body;
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is PostedComment && other.id == id && other.body == body;
+  }
+
+  @override
+  int get hashCode => id.hashCode ^ body.hashCode;
+
+  @override
+  String toString() => 'PostedComment(id: $id, body: $body)';
 }

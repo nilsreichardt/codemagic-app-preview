@@ -40,8 +40,9 @@ void main() {
     test('posts a new comment when there is no previous app preview comment',
         () async {
       when(() => gitHubApi.getComments('1')).thenAnswer((_) async => []);
-      when(() => gitHubApi.postComment('1', 'comment'))
-          .thenAnswer((_) async {});
+      when(() => gitHubApi.postComment('1', 'comment')).thenAnswer((_) async {
+        return PostedComment(id: 123, body: 'comment');
+      });
 
       await poster.post(
         comment: 'comment',

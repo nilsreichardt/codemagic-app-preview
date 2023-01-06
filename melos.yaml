@@ -15,3 +15,9 @@ scripts:
   test:
     run: melos exec --dir-exists=test -- "flutter test"
     description: Run `flutter test` in all packages
+  
+  # Run `export GITHUB_TOKEN=...` before using this command.
+  test-e2e:
+    run: |
+      cd packages/codemagic_app_preview
+      dart --define=GITHUB_TOKEN=$GITHUB_TOKEN test integration_test --use-data-isolate-strategy
