@@ -1,10 +1,11 @@
 import 'dart:convert';
 
 import 'package:codemagic_app_preview/src/comment/posted_comment.dart';
+import 'package:codemagic_app_preview/src/git/git_provider_repository.dart';
 import 'package:http/http.dart';
 import 'package:http/testing.dart';
 
-class GitHubApiRepository {
+class GitHubApiRepository implements GitProviderRepository {
   const GitHubApiRepository({
     required this.token,
     required this.httpClient,

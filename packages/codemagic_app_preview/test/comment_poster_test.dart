@@ -1,6 +1,6 @@
 import 'package:codemagic_app_preview/src/comment/comment_poster.dart';
 import 'package:codemagic_app_preview/src/comment/posted_comment.dart';
-import 'package:codemagic_app_preview/src/github/github_api_repository.dart';
+import 'package:codemagic_app_preview/src/git/github_api_repository.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 

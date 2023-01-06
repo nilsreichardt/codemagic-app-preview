@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:args/command_runner.dart';
 import 'package:codemagic_app_preview/src/commands/post_command.dart';
 import 'package:codemagic_app_preview/src/environment_variable/environment_variable_accessor.dart';
-import 'package:codemagic_app_preview/src/github/git_repo.dart';
+import 'package:codemagic_app_preview/src/git/git_repo.dart';
 import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';

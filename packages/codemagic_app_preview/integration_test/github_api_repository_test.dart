@@ -1,5 +1,5 @@
 import 'package:codemagic_app_preview/src/comment/posted_comment.dart';
-import 'package:codemagic_app_preview/src/github/github_api_repository.dart';
+import 'package:codemagic_app_preview/src/git/github_api_repository.dart';
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 

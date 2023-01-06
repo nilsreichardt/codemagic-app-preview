@@ -1,4 +1,4 @@
-import 'package:codemagic_app_preview/src/github/git_repo.dart';
+import 'package:codemagic_app_preview/src/git/git_repo.dart';
 import 'package:test/test.dart';
 
 void main() {
