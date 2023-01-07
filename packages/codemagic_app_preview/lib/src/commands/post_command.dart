@@ -29,7 +29,6 @@ class PostCommand extends Command {
     argParser
       ..addOption(
         'gl_token',
-        abbr: 't',
         help: 'Your personal access token to access the GitLab API.',
       );
     argParser
