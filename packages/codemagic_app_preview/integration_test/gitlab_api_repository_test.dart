@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:codemagic_app_preview/src/comment/posted_comment.dart';
 import 'package:codemagic_app_preview/src/git/gitlab_api_repository.dart';
 import 'package:http/http.dart' as http;
