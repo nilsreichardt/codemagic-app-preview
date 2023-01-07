@@ -11,6 +11,7 @@ class GitHubApiRepository implements GitProviderRepository {
     required this.httpClient,
     required this.owner,
     required this.repository,
+    required this.pullRequestId,
   });
 
   /// The client for http requests.
@@ -31,9 +32,12 @@ class GitHubApiRepository implements GitProviderRepository {
   /// The name of the GitHub repository.
   final String repository;
 
+  /// The ID of the pull request.
+  final String pullRequestId;
+
   /// Post a new comment.
+  @override
   Future<PostedComment> postComment(
-    String pullRequestId,
     String comment,
   ) async {
     final response = await httpClient.post(
@@ -58,6 +62,7 @@ class GitHubApiRepository implements GitProviderRepository {
   }
 
   /// Edits an existing comment.
+  @override
   Future<void> editComment(int commentId, String comment) async {
     final response = await httpClient.patch(
       Uri.parse(
@@ -79,7 +84,8 @@ class GitHubApiRepository implements GitProviderRepository {
   }
 
   /// Get all comments for a pull request.
-  Future<List<PostedComment>> getComments(String pullRequestId) async {
+  @override
+  Future<List<PostedComment>> getComments() async {
     final response = await httpClient.get(
       Uri.parse(
         'https://api.github.com/repos/$owner/$repository/issues/$pullRequestId/comments',

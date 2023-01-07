@@ -54,16 +54,16 @@ class PostCommand extends Command {
     );
     final owner = await gitRepo.getOwner();
     final repoName = await gitRepo.getRepoName();
+    final pullRequestId =
+        environmentVariableAccessor.get('CM_PULL_REQUEST_NUMBER');
     final gitHubApi = GitHubApiRepository(
       token: githubToken,
       httpClient: httpClient,
       owner: owner,
       repository: repoName,
+      pullRequestId: pullRequestId,
     );
 
-    final pullRequestId =
-        environmentVariableAccessor.get('CM_PULL_REQUEST_NUMBER');
-    await CommentPoster(gitHubApi)
-        .post(comment: comment, pullRequestId: pullRequestId);
+    await CommentPoster(gitHubApi).post(comment: comment);
   }
 }

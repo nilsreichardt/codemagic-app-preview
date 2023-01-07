@@ -10,10 +10,9 @@ class CommentPoster {
   /// Posts a new comment or edits an existing comment.
   Future<void> post({
     required String comment,
-    required String pullRequestId,
     String? jobId,
   }) async {
-    final comments = await _gitHubApi.getComments(pullRequestId);
+    final comments = await _gitHubApi.getComments();
 
     // When no job id is provided, 'default' is used as fallback.
     final previousComment = _getAppPreviewComment(comments, jobId ?? 'default');
@@ -22,7 +21,7 @@ class CommentPoster {
     if (shouldEdit) {
       await _gitHubApi.editComment(previousComment!.id, comment);
     } else {
-      await _gitHubApi.postComment(pullRequestId, comment);
+      await _gitHubApi.postComment(comment);
     }
   }
 
