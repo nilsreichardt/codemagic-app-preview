@@ -54,7 +54,7 @@ void main() {
   group('.getComments()', () {
     // Reading the comments from:
     // https://github.com/nilsreichardt/codemagic-app-preview/pull/1
-    test('returns "Hey! 👋" as comment', () async {
+    test('returns "Hey!" as comment', () async {
       final gitLabApiRepository = GitLabApiRepository(
         token: gitLabToken,
         httpClient: httpClient,
