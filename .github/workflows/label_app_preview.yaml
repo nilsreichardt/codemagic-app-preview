@@ -1,6 +1,9 @@
 # This is an example of how to use the app previews only when a PR is labeled
 # with "build-app-preview". This is useful if you want to save build minutes and
 # only build the app preview when you want to.
+#
+# When you use this option, you should remove the "triggering" section from the
+# codemagic.yaml. Otherwise, the app preview will be built twice.
 
 name: App Preview (only with with label)
 
@@ -46,6 +49,7 @@ jobs:
           PULL_REQUEST_NUMBER=$(echo $GITHUB_REF | cut -d / -f 3)
 
           curl --request POST 'https://api.codemagic.io/builds' \
+            -f \
             --header 'x-auth-token: '"$CODEMAGIC_TOKEN" \
             --header 'Content-Type: application/json' \
             --data-raw "{
