@@ -1,3 +1,7 @@
+# This is an example of how to use the app previews only when a PR is labeled
+# with "build-app-preview". This is useful if you want to save build minutes and
+# only build the app preview when you want to.
+
 name: App Preview (only with with label)
 
 on:
@@ -9,11 +13,31 @@ on:
 
 jobs:
   label_app_preview:
+    # Only run this job if the PR is labeled with "build-app-preview".
+    #
+    # You can use any label you want. Just make sure to change the label name in
+    # the if condition.
+    #
+    # Keep in mind that a new build will be triggered when the PR is labeled
+    # with any lable as long as the label "build-app-preview" is included in the
+    # list of labels. For example, if the PR is labeled with "build-app-preview"
+    # and "bug", the job will be triggered when the label "bug" is removed.
     if: contains(github.event.pull_request.labels.*.name, 'build-app-preview')
     runs-on: ubuntu-latest
     env:
+      # Access token for the Codemagic API.
+      #
+      # The access token is available in the Codemagic UI under Teams > Personal
+      # Account > Integrations > Codemagic API > Show.
       CODEMAGIC_TOKEN: ${{ secrets.CODEMAGIC_TOKEN }}
+      
+      # This is the ID of the app in Codemagic.
+      #
+      # You can find the ID of your app in the URL of the app in Codemagic.
       CODEMAGIC_APP_ID: "62d2f58c726fce097e34c0b4"
+
+      # This is the ID of the workflow in Codemagic. You might have a different
+      # workflow for building the app preview.
       CODEMAGIC_WORKFLOW_ID: "app_preview"
     steps:
       - name: Start Codemagic Build
@@ -22,7 +46,8 @@ jobs:
           PULL_REQUEST_NUMBER=$(echo $GITHUB_REF | cut -d / -f 3)
 
           curl --request POST 'https://api.codemagic.io/builds' \
-            --header 'x-auth-token: $CODEMAGIC_TOKEN' \
+            -f \
+            --header 'x-auth-token: '"$CODEMAGIC_TOKEN" \
             --header 'Content-Type: application/json' \
             --data-raw '{
                 "appId": $CODEMAGIC_APP_ID,
@@ -34,4 +59,3 @@ jobs:
                     }
                 }
             }' \
-            -f

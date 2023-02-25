@@ -18,12 +18,6 @@ workflows:
       cancel_previous_builds: true
     working_directory: packages/app_preview_example
     scripts:
-      - name: Variables
-        script: |
-          echo "CM_PULL_REQUEST_NUMBER: $CM_PULL_REQUEST_NUMBER"
-          echo "FCI_PROJECT_ID: $FCI_PROJECT_ID"
-          echo "FCI_BUILD_ID: $FCI_BUILD_ID"
-          echo "FCI_COMMIT: $FCI_COMMIT"
       - name: Fetch dependencies
         script: flutter pub get
       - name: Build APK (Android)
