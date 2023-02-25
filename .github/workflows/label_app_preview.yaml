@@ -1,4 +1,4 @@
-name: Label App Preview
+name: App Preview (only with with label)
 
 on:
   pull_request:
@@ -22,7 +22,7 @@ jobs:
           # Get the pull request number from the GITHUB_REF.
           PULL_REQUEST_NUMBER=$(echo $GITHUB_REF | cut -d / -f 3)
 
-          curl --location --request POST 'https://api.codemagic.io/builds' \
+          curl --request POST 'https://api.codemagic.io/builds' \
             --header 'x-auth-token: $CODEMAGIC_TOKEN' \
             --header 'Content-Type: application/json' \
             --data-raw '{
@@ -34,4 +34,5 @@ jobs:
                         "CM_PULL_REQUEST_NUMBER": $PULL_REQUEST_NUMBER,
                     }
                 }
-            }'
+            }' \
+            -f
