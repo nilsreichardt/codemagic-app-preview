@@ -1,0 +1,37 @@
+name: Label App Preview
+
+on:
+  pull_request:
+    types:
+      - labeled
+      - opened
+      - synchronize
+
+jobs:
+  label_app_preview:
+    # Only run this job if the label "build-app-preview" is added to the PR.
+    if: ${{ github.event.label.name == 'build-app-preview' }}
+    runs-on: ubuntu-latest
+    env:
+      CODEMAGIC_TOKEN: ${{ secrets.CODEMAGIC_TOKEN }}
+      CODEMAGIC_APP_ID: "62d2f58c726fce097e34c0b4"
+      CODEMAGIC_WORKFLOW_ID: "app_preview"
+    steps:
+      - name: Start Codemagic Build
+        run: |
+          # Get the pull request number from the GITHUB_REF.
+          PULL_REQUEST_NUMBER=$(echo $GITHUB_REF | cut -d / -f 3)
+
+          curl --location --request POST 'https://api.codemagic.io/builds' \
+            --header 'x-auth-token: $CODEMAGIC_TOKEN' \
+            --header 'Content-Type: application/json' \
+            --data-raw '{
+                "appId": $CODEMAGIC_APP_ID,
+                "branch": $GITHUB_HEAD_REF,
+                "workflowId": $CODEMAGIC_WORKFLOW_ID,
+                "environment": {
+                    "variables": {
+                        "CM_PULL_REQUEST_NUMBER": $PULL_REQUEST_NUMBER,
+                    }
+                }
+            }'
