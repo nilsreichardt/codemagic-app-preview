@@ -18,13 +18,12 @@ workflows:
       cancel_previous_builds: true
     working_directory: packages/app_preview_example
     scripts:
-      - name: Print GitHub Pull Request data
+      - name: Variables
         script: |
-          curl \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer $GITHUB_PAT"\
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            https://api.github.com/repos/nilsreichardt/codemagic-app-preview/pulls/59 |jq
+          echo "CM_PULL_REQUEST_NUMBER: $CM_PULL_REQUEST_NUMBER"
+          echo "FCI_PROJECT_ID: $FCI_PROJECT_ID"
+          echo "FCI_BUILD_ID: $FCI_BUILD_ID"
+          echo "FCI_COMMIT: $FCI_COMMIT"
       - name: Fetch dependencies
         script: flutter pub get
       - name: Build APK (Android)
