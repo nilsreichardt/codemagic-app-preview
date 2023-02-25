@@ -46,16 +46,15 @@ jobs:
           PULL_REQUEST_NUMBER=$(echo $GITHUB_REF | cut -d / -f 3)
 
           curl --request POST 'https://api.codemagic.io/builds' \
-            -f \
             --header 'x-auth-token: '"$CODEMAGIC_TOKEN" \
             --header 'Content-Type: application/json' \
-            --data-raw '{
-                "appId": $CODEMAGIC_APP_ID,
-                "branch": $GITHUB_HEAD_REF,
-                "workflowId": $CODEMAGIC_WORKFLOW_ID,
-                "environment": {
-                    "variables": {
-                        "CM_PULL_REQUEST_NUMBER": $PULL_REQUEST_NUMBER,
+            --data-raw "{
+                \"appId\": \"$CODEMAGIC_APP_ID\",
+                \"branch\": \"$GITHUB_HEAD_REF\",
+                \"workflowId\": \"$CODEMAGIC_WORKFLOW_ID\",
+                \"environment\": {
+                    \"variables\": {
+                        \"CM_PULL_REQUEST_NUMBER\": $PULL_REQUEST_NUMBER
                     }
                 }
-            }' \
+            }"
