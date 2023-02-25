@@ -9,8 +9,7 @@ on:
 
 jobs:
   label_app_preview:
-    # Only run this job if the label "build-app-preview" is added to the PR.
-    if: ${{ github.event.label.name == 'build-app-preview' }}
+    if: contains(github.event.pull_request.labels.*.name, 'build-app-preview')
     runs-on: ubuntu-latest
     env:
       CODEMAGIC_TOKEN: ${{ secrets.CODEMAGIC_TOKEN }}
