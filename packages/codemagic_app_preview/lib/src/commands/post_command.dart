@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
@@ -6,11 +5,8 @@ import 'package:codemagic_app_preview/src/builds/artifact_links_parser.dart';
 import 'package:codemagic_app_preview/src/comment/comment_builder.dart';
 import 'package:codemagic_app_preview/src/comment/comment_poster.dart';
 import 'package:codemagic_app_preview/src/environment_variable/environment_variable_accessor.dart';
-import 'package:codemagic_app_preview/src/git/git_provider.dart';
 import 'package:codemagic_app_preview/src/git/git_provider_repository.dart';
 import 'package:codemagic_app_preview/src/git/git_repo.dart';
-import 'package:codemagic_app_preview/src/git/github_api_repository.dart';
-import 'package:codemagic_app_preview/src/git/gitlab_api_repository.dart';
 import 'package:http/http.dart';
 
 class PostCommand extends Command {
@@ -25,11 +21,13 @@ class PostCommand extends Command {
         'gh_token',
         abbr: 't',
         help: 'Your personal access token to access the GitHub API.',
+        aliases: ['github_token'],
       );
     argParser
       ..addOption(
         'gl_token',
         help: 'Your personal access token to access the GitLab API.',
+        aliases: ['gitlab_token'],
       );
     argParser
       ..addOption(
@@ -52,8 +50,6 @@ class PostCommand extends Command {
 
   Future<GitProviderRepository?> _getGitProviderRepository(
       GitRepo gitRepo) async {
-    final gitProvider = await gitRepo.getProvider();
-
     // Set to Integer ID of the pull request for the Git provider (Bitbucket,
     // GitHub, etc.) if the current build is building a pull request, unset
     // otherwise.
@@ -62,65 +58,22 @@ class PostCommand extends Command {
     final pullRequestId =
         environmentVariableAccessor.get('CM_PULL_REQUEST_NUMBER');
 
-    switch (gitProvider) {
-      case GitProvider.github:
-        final String? githubToken = argResults?['gh_token'];
-        if (githubToken == null) {
-          stderr.writeln(
-              'The GitHub access token is not set. Please set the token with the --gh_token option.');
-          exitCode = 1;
-          return null;
-        }
+    final String? gitHubToken = argResults?['gh_token'];
+    final String? gitLabToken = argResults?['gl_token'];
 
-        final owner = await gitRepo.getOwner();
-        final repoName = await gitRepo.getRepoName();
-
-        return GitHubApiRepository(
-          token: githubToken,
-          httpClient: httpClient,
-          owner: owner,
-          repository: repoName,
-          pullRequestId: pullRequestId,
-        );
-      case GitProvider.gitlab:
-        final String? gitlabToken = argResults?['gl_token'];
-        if (gitlabToken == null) {
-          stderr.writeln(
-              'The GitLab access token is not set. Please set the token with the --gl_token option.');
-          exitCode = 1;
-          return null;
-        }
-
-        final projectId = await _getGitLabProjectId(gitRepo, gitlabToken);
-
-        return GitLabApiRepository(
-          token: gitlabToken,
-          httpClient: httpClient,
-          mergeRequestId: pullRequestId,
-          projectId: projectId,
-        );
+    try {
+      return GitProviderRepository.getGitProviderFrom(
+        gitRepo: gitRepo,
+        pullRequestId: pullRequestId,
+        gitLabToken: gitLabToken,
+        gitHubToken: gitHubToken,
+        httpClient: httpClient,
+      );
+    } on MissingGitProviderTokenException catch (e) {
+      stderr.writeln(e.message);
+      exitCode = 1;
+      return null;
     }
-  }
-
-  Future<int> _getGitLabProjectId(GitRepo gitRepo, String gitlabToken) async {
-    final owner = await gitRepo.getOwner();
-    final repoName = await gitRepo.getRepoName();
-
-    final response = await httpClient.get(
-      Uri.parse(
-        'https://gitlab.com/api/v4/projects/$owner%2F$repoName',
-      ),
-      headers: {
-        'Authorization': 'Bearer $gitlabToken',
-      },
-    );
-
-    if (response.statusCode != 204) {
-      throw Exception(
-          'Failed to delete comment: ${response.body} (${response.statusCode})');
-    }
-
-    return jsonDecode(response.body)['id'];
   }
 
   Future<void> run() async {
@@ -139,6 +92,7 @@ class PostCommand extends Command {
       builds,
       message: message,
     );
+
     final gitProviderRepository = await _getGitProviderRepository(gitRepo);
     if (gitProviderRepository == null) {
       // Error message is already printed.
