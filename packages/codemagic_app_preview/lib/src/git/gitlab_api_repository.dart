@@ -31,6 +31,8 @@ class GitLabApiRepository implements GitProviderRepository {
   /// The ID of the merge request.
   final String mergeRequestId;
 
+  static const String _baseUrl = 'https://gitlab.com/api/v4';
+
   /// Post a new comment.
   @override
   Future<PostedComment> postComment(
@@ -38,7 +40,7 @@ class GitLabApiRepository implements GitProviderRepository {
   ) async {
     final response = await httpClient.post(
       Uri.parse(
-        'https://gitlab.com/api/v4/projects/$projectId/merge_requests/$mergeRequestId/notes?body=$comment',
+        '$_baseUrl/api/v4/projects/$projectId/merge_requests/$mergeRequestId/notes?body=$comment',
       ),
       headers: {
         'Authorization': 'Bearer $token',
@@ -59,7 +61,7 @@ class GitLabApiRepository implements GitProviderRepository {
   Future<void> editComment(int commentId, String comment) async {
     final response = await httpClient.put(
       Uri.parse(
-        'https://gitlab.com/api/v4/projects/$projectId/merge_requests/$mergeRequestId/notes/$commentId?body=$comment',
+        '$_baseUrl/api/v4/projects/$projectId/merge_requests/$mergeRequestId/notes/$commentId?body=$comment',
       ),
       headers: {
         'Authorization': 'Bearer $token',
@@ -78,7 +80,7 @@ class GitLabApiRepository implements GitProviderRepository {
   Future<List<PostedComment>> getComments() async {
     final response = await httpClient.get(
       Uri.parse(
-        'https://gitlab.com/api/v4/projects/$projectId/merge_requests/$mergeRequestId/notes/',
+        '$_baseUrl/api/v4/projects/$projectId/merge_requests/$mergeRequestId/notes/',
       ),
       headers: {
         'Authorization': 'Bearer $token',
