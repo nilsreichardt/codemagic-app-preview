@@ -124,4 +124,17 @@ void main() {
       );
     });
   });
+
+  group('.getProjectId()', () {
+    test('should return the ID of the project', () async {
+      final actualProjectId = await GitLabApiRepository.getProjectId(
+        owner: 'nilsreichardt',
+        repoName: 'codemagic-app-preview-test',
+        gitLabToken: gitLabToken,
+        httpClient: httpClient,
+      );
+
+      expect(actualProjectId, projectId);
+    });
+  });
 }

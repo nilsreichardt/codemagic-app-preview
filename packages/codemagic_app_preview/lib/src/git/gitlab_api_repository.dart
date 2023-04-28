@@ -96,4 +96,27 @@ class GitLabApiRepository implements GitProviderRepository {
       (jsonDecode(response.body)).map((json) => PostedComment.fromJson(json)),
     );
   }
+
+  static Future<int> getProjectId({
+    required String owner,
+    required String repoName,
+    required String gitLabToken,
+    required Client httpClient,
+  }) async {
+    final response = await httpClient.get(
+      Uri.parse(
+        'https://gitlab.com/api/v4/projects/$owner%2F$repoName',
+      ),
+      headers: {
+        'Authorization': 'Bearer $gitLabToken',
+      },
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception(
+          'Failed to get project id: ${response.body} (${response.statusCode})');
+    }
+
+    return jsonDecode(response.body)['id'];
+  }
 }
