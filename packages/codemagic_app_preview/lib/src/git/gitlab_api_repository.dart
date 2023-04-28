@@ -31,7 +31,7 @@ class GitLabApiRepository implements GitProviderRepository {
   /// The ID of the merge request.
   final String mergeRequestId;
 
-  static const String _baseUrl = 'https://gitlab.com/api/v4';
+  static const String _baseUrl = 'https://gitlab.com';
 
   /// Post a new comment.
   @override
