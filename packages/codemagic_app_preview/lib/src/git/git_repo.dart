@@ -35,6 +35,10 @@ class GitRepo {
     return (result.stdout as String).trim();
   }
 
+  /// Returns the [GitProvider] of the Git repo.
+  ///
+  /// Throws an [UnsupportedGitProviderException] when the Git repo is not
+  /// supported as [GitProvider].
   Future<GitProvider> getProvider() async {
     final result =
         await _runGitCommand(['config', '--get', 'remote.origin.url']);
