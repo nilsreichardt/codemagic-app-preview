@@ -1,4 +1,4 @@
-Run `app_preview post --gh_token $GITHUB_PAT` after building your apps.
+Run `app_preview post --github_token $GITHUB_PAT` after building your apps.
 
 Here is a full `codemagic.yaml` as an example:
 ```yaml
@@ -44,5 +44,5 @@ workflows:
         - name: Post App Preview
           script: |
             dart pub global activate codemagic_app_preview
-            app_preview post --gh_token $GITHUB_PAT
+            app_preview post --github_token $GITHUB_PAT
 ```

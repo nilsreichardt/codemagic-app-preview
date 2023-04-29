@@ -35,7 +35,7 @@ abstract class GitProviderRepository {
       case GitProvider.github:
         if (gitHubToken == null) {
           throw MissingGitProviderTokenException(
-              'The GitHub access token is not set. Please set the token with the --gh_token option.');
+              'The GitHub access token is not set. Please set the token with the --github_token option.');
         }
 
         final owner = await gitRepo.getOwner();
@@ -51,7 +51,7 @@ abstract class GitProviderRepository {
       case GitProvider.gitlab:
         if (gitLabToken == null) {
           throw MissingGitProviderTokenException(
-              'The GitLab access token is not set. Please set the token with the --gl_token option.');
+              'The GitLab access token is not set. Please set the token with the --gitlab_token option.');
         }
 
         final projectId = await GitLabApiRepository.getProjectId(

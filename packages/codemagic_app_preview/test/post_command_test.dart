@@ -98,7 +98,7 @@ void main() {
 
       await runner.run([
         'post',
-        '--gh_token',
+        '--github_token',
         'token',
       ]);
 

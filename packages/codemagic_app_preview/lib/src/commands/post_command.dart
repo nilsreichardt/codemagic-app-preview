@@ -18,16 +18,16 @@ class PostCommand extends Command {
   }) : this.httpClient = httpClient ?? Client() {
     argParser
       ..addOption(
-        'gh_token',
+        'github_token',
         abbr: 't',
         help: 'Your personal access token to access the GitHub API.',
-        aliases: ['github_token'],
+        aliases: ['gh_token'],
       );
     argParser
       ..addOption(
-        'gl_token',
+        'gitlab_token',
         help: 'Your personal access token to access the GitLab API.',
-        aliases: ['gitlab_token'],
+        aliases: ['gl_token'],
       );
     argParser
       ..addOption(
@@ -58,8 +58,8 @@ class PostCommand extends Command {
     final pullRequestId =
         environmentVariableAccessor.get('CM_PULL_REQUEST_NUMBER');
 
-    final String? gitHubToken = argResults?['gh_token'];
-    final String? gitLabToken = argResults?['gl_token'];
+    final String? gitHubToken = argResults?['github_token'];
+    final String? gitLabToken = argResults?['gitlab_token'];
 
     try {
       return GitProviderRepository.getGitProviderFrom(
@@ -77,10 +77,10 @@ class PostCommand extends Command {
   }
 
   Future<void> run() async {
-    final String? githubToken = argResults?['gh_token'];
+    final String? githubToken = argResults?['github_token'];
     if (githubToken == null) {
       stderr.writeln(
-          'The GitHub access token is not set. Please set the token with the --gh_token option.');
+          'The GitHub access token is not set. Please set the token with the --github_token option.');
       exitCode = 1;
       return;
     }
