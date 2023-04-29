@@ -26,6 +26,12 @@ Currently, you can generate a preview only for the following platforms.
 | :-----: | :-: | :---: | :-: | :---: | :-----: |
 |   ✔️     | ✔️   |   ✔️   |     |       |         |
 
+## Supported Git providers
+
+| GitHub | GitLab | Bitbucket |
+| :----: | :----: | :-------: |
+|   ✔️    |   ✔️    |           |
+
 ## Disclaimer
 
 This is an unofficial package for [Codemagic](https://codemagic.io). It's *not* maintained by Codemagic.

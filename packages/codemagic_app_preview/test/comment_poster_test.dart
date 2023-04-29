@@ -1,6 +1,6 @@
 import 'package:codemagic_app_preview/src/comment/comment_poster.dart';
 import 'package:codemagic_app_preview/src/comment/posted_comment.dart';
-import 'package:codemagic_app_preview/src/github/github_api_repository.dart';
+import 'package:codemagic_app_preview/src/git/github_api_repository.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
@@ -18,7 +18,7 @@ void main() {
 
     test('edits the app preview comment when there is already an comment',
         () async {
-      when(() => gitHubApi.getComments('1')).thenAnswer(
+      when(() => gitHubApi.getComments()).thenAnswer(
         (_) async => [
           PostedComment(
             id: 123,
@@ -31,7 +31,6 @@ void main() {
 
       await poster.post(
         comment: 'comment',
-        pullRequestId: '1',
       );
 
       verify(() => gitHubApi.editComment(123, 'comment'));
@@ -39,17 +38,16 @@ void main() {
 
     test('posts a new comment when there is no previous app preview comment',
         () async {
-      when(() => gitHubApi.getComments('1')).thenAnswer((_) async => []);
-      when(() => gitHubApi.postComment('1', 'comment')).thenAnswer((_) async {
+      when(() => gitHubApi.getComments()).thenAnswer((_) async => []);
+      when(() => gitHubApi.postComment('comment')).thenAnswer((_) async {
         return PostedComment(id: 123, body: 'comment');
       });
 
       await poster.post(
         comment: 'comment',
-        pullRequestId: '1',
       );
 
-      verify(() => gitHubApi.postComment('1', 'comment'));
+      verify(() => gitHubApi.postComment('comment'));
     });
   });
 }

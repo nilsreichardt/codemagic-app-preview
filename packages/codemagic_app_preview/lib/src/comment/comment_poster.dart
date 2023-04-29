@@ -1,19 +1,18 @@
 import 'package:codemagic_app_preview/src/comment/posted_comment.dart';
-import 'package:codemagic_app_preview/src/github/github_api_repository.dart';
+import 'package:codemagic_app_preview/src/git/git_provider_repository.dart';
 
 class CommentPoster {
   const CommentPoster(this._gitHubApi);
 
-  /// The GitHub API repository.
-  final GitHubApiRepository _gitHubApi;
+  /// The API of the Git provider (like GitHub) repository.
+  final GitProviderRepository _gitHubApi;
 
   /// Posts a new comment or edits an existing comment.
   Future<void> post({
     required String comment,
-    required String pullRequestId,
     String? jobId,
   }) async {
-    final comments = await _gitHubApi.getComments(pullRequestId);
+    final comments = await _gitHubApi.getComments();
 
     // When no job id is provided, 'default' is used as fallback.
     final previousComment = _getAppPreviewComment(comments, jobId ?? 'default');
@@ -22,7 +21,7 @@ class CommentPoster {
     if (shouldEdit) {
       await _gitHubApi.editComment(previousComment!.id, comment);
     } else {
-      await _gitHubApi.postComment(pullRequestId, comment);
+      await _gitHubApi.postComment(comment);
     }
   }
 

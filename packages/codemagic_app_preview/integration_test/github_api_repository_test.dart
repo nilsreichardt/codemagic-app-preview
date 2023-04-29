@@ -1,5 +1,5 @@
 import 'package:codemagic_app_preview/src/comment/posted_comment.dart';
-import 'package:codemagic_app_preview/src/github/github_api_repository.dart';
+import 'package:codemagic_app_preview/src/git/github_api_repository.dart';
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 
@@ -14,7 +14,6 @@ void main() {
   /// At the moment, we need to use the `--use-data-isolate-strategy` flag
   /// because of https://github.com/dart-lang/test/issues/1794.
   const gitHubToken = String.fromEnvironment('GITHUB_TOKEN');
-  late GitHubApiRepository gitHubApiRepository;
   late http.Client httpClient;
 
   /// The owner of the repository to test against.
@@ -32,12 +31,6 @@ void main() {
 
   setUp(() {
     httpClient = http.Client();
-    gitHubApiRepository = GitHubApiRepository(
-      token: gitHubToken,
-      httpClient: httpClient,
-      owner: owner,
-      repository: repository,
-    );
   });
 
   Future<void> _deleteComment({
@@ -63,7 +56,15 @@ void main() {
     // Reading the comments from:
     // https://github.com/nilsreichardt/codemagic-app-preview/pull/1
     test('returns "Hey! 👋" as comment', () async {
-      final comments = await gitHubApiRepository.getComments('1');
+      final gitHubApiRepository = GitHubApiRepository(
+        token: gitHubToken,
+        httpClient: httpClient,
+        owner: owner,
+        repository: repository,
+        pullRequestId: '1',
+      );
+
+      final comments = await gitHubApiRepository.getComments();
 
       expect(
         comments,
@@ -77,10 +78,16 @@ void main() {
     // https://github.com/nilsreichardt/codemagic-app-preview/pull/16
     test('should post an comment to a PR', () async {
       const pullRequestId = '16';
+      final gitHubApiRepository = GitHubApiRepository(
+        token: gitHubToken,
+        httpClient: httpClient,
+        owner: owner,
+        repository: repository,
+        pullRequestId: pullRequestId,
+      );
       final randomText = DateTime.now().toIso8601String();
 
       final comment = await gitHubApiRepository.postComment(
-        pullRequestId,
         randomText,
       );
       // Remove the comment after the test to avoid having a pull request with
@@ -90,7 +97,7 @@ void main() {
             commentId: comment.id,
           ));
 
-      final allComments = await gitHubApiRepository.getComments(pullRequestId);
+      final allComments = await gitHubApiRepository.getComments();
       expect(
         allComments.contains(comment),
         true,
@@ -103,12 +110,19 @@ void main() {
     // https://github.com/nilsreichardt/codemagic-app-preview/pull/19
     test('should edit an comment on a PR', () async {
       const pullRequestId = '19';
+      final gitHubApiRepository = GitHubApiRepository(
+        token: gitHubToken,
+        httpClient: httpClient,
+        owner: owner,
+        repository: repository,
+        pullRequestId: pullRequestId,
+      );
       const commentId = 1374061528;
       final randomText = DateTime.now().toIso8601String();
 
       await gitHubApiRepository.editComment(commentId, randomText);
 
-      final allComments = await gitHubApiRepository.getComments(pullRequestId);
+      final allComments = await gitHubApiRepository.getComments();
       expect(
         allComments.contains(PostedComment(id: commentId, body: randomText)),
         true,

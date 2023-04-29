@@ -5,8 +5,8 @@ import 'package:codemagic_app_preview/src/builds/artifact_links_parser.dart';
 import 'package:codemagic_app_preview/src/comment/comment_builder.dart';
 import 'package:codemagic_app_preview/src/comment/comment_poster.dart';
 import 'package:codemagic_app_preview/src/environment_variable/environment_variable_accessor.dart';
-import 'package:codemagic_app_preview/src/github/git_repo.dart';
-import 'package:codemagic_app_preview/src/github/github_api_repository.dart';
+import 'package:codemagic_app_preview/src/git/git_provider_repository.dart';
+import 'package:codemagic_app_preview/src/git/git_repo.dart';
 import 'package:http/http.dart';
 
 class PostCommand extends Command {
@@ -16,7 +16,19 @@ class PostCommand extends Command {
         const SystemEnvironmentVariableAccessor(),
     this.gitRepo = const GitRepo(),
   }) : this.httpClient = httpClient ?? Client() {
-    argParser..addOption('gh_token', abbr: 't');
+    argParser
+      ..addOption(
+        'gh_token',
+        abbr: 't',
+        help: 'Your personal access token to access the GitHub API.',
+        aliases: ['github_token'],
+      );
+    argParser
+      ..addOption(
+        'gl_token',
+        help: 'Your personal access token to access the GitLab API.',
+        aliases: ['gitlab_token'],
+      );
     argParser
       ..addOption(
         'message',
@@ -36,6 +48,34 @@ class PostCommand extends Command {
   @override
   String get name => 'post';
 
+  Future<GitProviderRepository?> _getGitProviderRepository(
+      GitRepo gitRepo) async {
+    // Set to Integer ID of the pull request for the Git provider (Bitbucket,
+    // GitHub, etc.) if the current build is building a pull request, unset
+    // otherwise.
+    //
+    // https://docs.codemagic.io/flutter-configuration/built-in-variables/
+    final pullRequestId =
+        environmentVariableAccessor.get('CM_PULL_REQUEST_NUMBER');
+
+    final String? gitHubToken = argResults?['gh_token'];
+    final String? gitLabToken = argResults?['gl_token'];
+
+    try {
+      return GitProviderRepository.getGitProviderFrom(
+        gitRepo: gitRepo,
+        pullRequestId: pullRequestId,
+        gitLabToken: gitLabToken,
+        gitHubToken: gitHubToken,
+        httpClient: httpClient,
+      );
+    } on MissingGitProviderTokenException catch (e) {
+      stderr.writeln(e.message);
+      exitCode = 1;
+      return null;
+    }
+  }
+
   Future<void> run() async {
     final String? githubToken = argResults?['gh_token'];
     if (githubToken == null) {
@@ -52,18 +92,13 @@ class PostCommand extends Command {
       builds,
       message: message,
     );
-    final owner = await gitRepo.getOwner();
-    final repoName = await gitRepo.getRepoName();
-    final gitHubApi = GitHubApiRepository(
-      token: githubToken,
-      httpClient: httpClient,
-      owner: owner,
-      repository: repoName,
-    );
 
-    final pullRequestId =
-        environmentVariableAccessor.get('CM_PULL_REQUEST_NUMBER');
-    await CommentPoster(gitHubApi)
-        .post(comment: comment, pullRequestId: pullRequestId);
+    final gitProviderRepository = await _getGitProviderRepository(gitRepo);
+    if (gitProviderRepository == null) {
+      // Error message is already printed.
+      return;
+    }
+
+    await CommentPoster(gitProviderRepository).post(comment: comment);
   }
 }

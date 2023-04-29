@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:codemagic_app_preview/src/git/git_provider.dart';
+
 class GitRepo {
   const GitRepo();
 
@@ -32,4 +34,31 @@ class GitRepo {
     }
     return (result.stdout as String).trim();
   }
+
+  /// Returns the [GitProvider] of the Git repo.
+  ///
+  /// Throws an [UnsupportedGitProviderException] when the Git repo is not
+  /// supported as [GitProvider].
+  Future<GitProvider> getProvider() async {
+    final result =
+        await _runGitCommand(['config', '--get', 'remote.origin.url']);
+
+    if (result.toLowerCase().contains('github.com')) {
+      return GitProvider.github;
+    }
+
+    if (result.toLowerCase().contains('gitlab.com')) {
+      return GitProvider.gitlab;
+    }
+
+    throw UnsupportedGitProviderException();
+  }
+}
+
+class UnsupportedGitProviderException implements Exception {
+  UnsupportedGitProviderException();
+
+  @override
+  String toString() =>
+      'Unsupported git provider! Currently only ${GitProvider.values.map((e) => e.toString()).join(', ')} are supported.}';
 }

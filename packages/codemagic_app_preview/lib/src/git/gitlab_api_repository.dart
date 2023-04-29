@@ -1,15 +1,16 @@
 import 'dart:convert';
 
 import 'package:codemagic_app_preview/src/comment/posted_comment.dart';
+import 'package:codemagic_app_preview/src/git/git_provider_repository.dart';
 import 'package:http/http.dart';
 import 'package:http/testing.dart';
 
-class GitHubApiRepository {
-  const GitHubApiRepository({
+class GitLabApiRepository implements GitProviderRepository {
+  const GitLabApiRepository({
     required this.token,
     required this.httpClient,
-    required this.owner,
-    required this.repository,
+    required this.projectId,
+    required this.mergeRequestId,
   });
 
   /// The client for http requests.
@@ -22,30 +23,29 @@ class GitHubApiRepository {
   /// Typically this is a personal access token.
   final String token;
 
-  /// The owner of the GitHub repository.
+  /// The ID of the project.
   ///
-  /// This is usually an user or an organization.
-  final String owner;
+  /// Can be found in the settings of the project.
+  final int projectId;
 
-  /// The name of the GitHub repository.
-  final String repository;
+  /// The ID of the merge request.
+  final String mergeRequestId;
+
+  static const String _baseUrl = 'https://gitlab.com';
 
   /// Post a new comment.
+  @override
   Future<PostedComment> postComment(
-    String pullRequestId,
     String comment,
   ) async {
     final response = await httpClient.post(
       Uri.parse(
-        'https://api.github.com/repos/$owner/$repository/issues/$pullRequestId/comments',
+        '$_baseUrl/api/v4/projects/$projectId/merge_requests/$mergeRequestId/notes?body=$comment',
       ),
       headers: {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
       },
-      body: jsonEncode({
-        'body': comment,
-      }),
     );
 
     if (response.statusCode != 201) {
@@ -57,18 +57,16 @@ class GitHubApiRepository {
   }
 
   /// Edits an existing comment.
+  @override
   Future<void> editComment(int commentId, String comment) async {
-    final response = await httpClient.patch(
+    final response = await httpClient.put(
       Uri.parse(
-        'https://api.github.com/repos/$owner/$repository/issues/comments/$commentId',
+        '$_baseUrl/api/v4/projects/$projectId/merge_requests/$mergeRequestId/notes/$commentId?body=$comment',
       ),
       headers: {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
       },
-      body: jsonEncode({
-        'body': comment,
-      }),
     );
 
     if (response.statusCode != 200) {
@@ -78,10 +76,11 @@ class GitHubApiRepository {
   }
 
   /// Get all comments for a pull request.
-  Future<List<PostedComment>> getComments(String pullRequestId) async {
+  @override
+  Future<List<PostedComment>> getComments() async {
     final response = await httpClient.get(
       Uri.parse(
-        'https://api.github.com/repos/$owner/$repository/issues/$pullRequestId/comments',
+        '$_baseUrl/api/v4/projects/$projectId/merge_requests/$mergeRequestId/notes/',
       ),
       headers: {
         'Authorization': 'Bearer $token',
@@ -96,5 +95,28 @@ class GitHubApiRepository {
     return List.from(
       (jsonDecode(response.body)).map((json) => PostedComment.fromJson(json)),
     );
+  }
+
+  static Future<int> getProjectId({
+    required String owner,
+    required String repoName,
+    required String gitLabToken,
+    required Client httpClient,
+  }) async {
+    final response = await httpClient.get(
+      Uri.parse(
+        'https://gitlab.com/api/v4/projects/$owner%2F$repoName',
+      ),
+      headers: {
+        'Authorization': 'Bearer $gitLabToken',
+      },
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception(
+          'Failed to get project id: ${response.body} (${response.statusCode})');
+    }
+
+    return jsonDecode(response.body)['id'];
   }
 }
