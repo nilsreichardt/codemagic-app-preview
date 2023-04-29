@@ -62,7 +62,7 @@ class PostCommand extends Command {
     final String? gitLabToken = argResults?['gitlab_token'];
 
     try {
-      return GitProviderRepository.getGitProviderFrom(
+      return await GitProviderRepository.getGitProviderFrom(
         gitRepo: gitRepo,
         pullRequestId: pullRequestId,
         gitLabToken: gitLabToken,
@@ -77,15 +77,7 @@ class PostCommand extends Command {
   }
 
   Future<void> run() async {
-    final String? githubToken = argResults?['github_token'];
-    if (githubToken == null) {
-      stderr.writeln(
-          'The GitHub access token is not set. Please set the token with the --github_token option.');
-      exitCode = 1;
-      return;
-    }
     final String? message = argResults?['message'];
-
     final builds = ArtifactLinksParser(environmentVariableAccessor).getBuilds();
 
     final comment = CommentBuilder(environmentVariableAccessor).build(

@@ -39,6 +39,12 @@ void main() {
     });
 
     test('sets exit code to 1 when not setting the token', () async {
+      const pullRequestId = '24';
+      environmentVariableAccessor
+          .environmentVariables['CM_PULL_REQUEST_NUMBER'] = pullRequestId;
+      when(() => gitRepo.getProvider())
+          .thenAnswer((_) async => GitProvider.github);
+
       final runner = CommandRunner('test', 'A test command runner.');
       runner.addCommand(postCommand);
 
