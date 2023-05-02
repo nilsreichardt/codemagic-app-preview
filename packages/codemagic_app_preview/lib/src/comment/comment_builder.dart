@@ -61,9 +61,9 @@ class CommentBuilder {
 
     table.write('\n|');
     for (final build in builds) {
-      final qrCodeUrl = _getQrCodeUrl(build.url);
+      final qrCodeUrl = _getQrCodeUrl(build.privateUrl);
       table.write(
-          ' ![image]($qrCodeUrl) <br /> [Download link](${build.url}) |');
+          ' ![image]($qrCodeUrl) <br /> [Download link](${build.privateUrl}) |');
     }
 
     return '$table';

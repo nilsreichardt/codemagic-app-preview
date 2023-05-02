@@ -8,6 +8,7 @@ environment:
 
 dependencies:
   args: ^2.3.1
+  clock: ^1.1.1
   duration: ^3.0.12
   http: ^0.13.4
 

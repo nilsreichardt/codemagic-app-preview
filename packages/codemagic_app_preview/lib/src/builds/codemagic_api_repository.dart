@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:clock/clock.dart';
 import 'package:http/http.dart';
 
 class CodemagicApiRepository {
@@ -25,7 +26,7 @@ class CodemagicApiRepository {
   ///
   /// Codemagic API documentation:
   /// https://docs.codemagic.io/rest-api/artifacts/#step-2-create-a-public-download-url-using-the-url-obtained-in-step-1
-  Future<String> getPublicArtifactUrl({
+  Future<PublicArtifactResponse> getPublicArtifactUrl({
     required String privateUrl,
     required Duration expiresIn,
     DateTime? now,
@@ -53,6 +54,23 @@ class CodemagicApiRepository {
     }
 
     final json = jsonDecode(response.body) as Map<String, dynamic>;
-    return json['url'] as String;
+
+    final url = json['url'] as String;
+    final expiresAt = DateTime.parse(json['expiresAt']);
+
+    return PublicArtifactResponse(
+      url: url,
+      expiresAt: expiresAt,
+    );
   }
+}
+
+class PublicArtifactResponse {
+  final DateTime expiresAt;
+  final String url;
+
+  const PublicArtifactResponse({
+    required this.url,
+    required this.expiresAt,
+  });
 }

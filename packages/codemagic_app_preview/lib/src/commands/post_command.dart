@@ -2,20 +2,23 @@ import 'dart:io';
 
 import 'package:args/command_runner.dart';
 import 'package:codemagic_app_preview/src/builds/artifact_links_parser.dart';
+import 'package:codemagic_app_preview/src/builds/build.dart';
+import 'package:codemagic_app_preview/src/builds/codemagic_api_repository.dart';
 import 'package:codemagic_app_preview/src/comment/comment_builder.dart';
 import 'package:codemagic_app_preview/src/comment/comment_poster.dart';
 import 'package:codemagic_app_preview/src/environment_variable/environment_variable_accessor.dart';
 import 'package:codemagic_app_preview/src/git/git_provider_repository.dart';
 import 'package:codemagic_app_preview/src/git/git_repo.dart';
 import 'package:http/http.dart';
+import 'package:duration/duration.dart';
 
 class PostCommand extends Command {
   PostCommand({
-    Client? httpClient,
+    required this.httpClient,
     this.environmentVariableAccessor =
         const SystemEnvironmentVariableAccessor(),
     this.gitRepo = const GitRepo(),
-  }) : this.httpClient = httpClient ?? Client() {
+  }) {
     argParser
       ..addOption(
         'github_token',
@@ -31,9 +34,21 @@ class PostCommand extends Command {
       );
     argParser
       ..addOption(
+        'codemagic_token',
+        help: 'Token to access the Codemagic API',
+      );
+    argParser
+      ..addOption(
         'message',
         abbr: 'm',
         help: 'A custom message that can be added to the comment.',
+      );
+    argParser
+      ..addOption(
+        'expires_in',
+        help:
+            'Defines the duration for which the URLs to the builds are valid. The default value is 365 days. Example values: "2w 5d 23h 59m 59s 999ms 999us" or "365d"',
+        defaultsTo: '365d',
       );
   }
 
@@ -76,10 +91,41 @@ class PostCommand extends Command {
     }
   }
 
-  Future<void> run() async {
-    final String? message = argResults?['message'];
-    final builds = ArtifactLinksParser(environmentVariableAccessor).getBuilds();
+  Future<List<Build>?> _parseBuilds({DateTime? now}) async {
+    final String? apiToken = argResults?['codemagic_token'];
+    if (apiToken == null) {
+      stderr.writeln(
+          'Codemagic API token is not provided. Please set the token with the --codemagic_token option.');
+      exitCode = 1;
+      return null;
+    }
 
+    final codemagicRepository = CodemagicApiRepository(
+      httpClient: httpClient,
+      apiToken: apiToken,
+    );
+    final parser = ArtifactLinksParser(
+      codemagicRepository: codemagicRepository,
+      environmentVariableAccessor: environmentVariableAccessor,
+    );
+
+    final expiresIn = parseDuration(argResults?['expires_in']);
+
+    final builds = await parser.getBuilds(
+      expiresIn: expiresIn,
+      now: now,
+    );
+    return builds;
+  }
+
+  Future<void> run({DateTime? now}) async {
+    final builds = await _parseBuilds(now: now);
+    if (builds == null) {
+      // Error message is already printed.
+      return;
+    }
+
+    final String? message = argResults?['message'];
     final comment = CommentBuilder(environmentVariableAccessor).build(
       builds,
       message: message,

@@ -63,9 +63,34 @@ void main() {
           '50b04d910c6b73472f7dfc1fee38a67e7132bf32';
       environmentVariableAccessor
           .environmentVariables['CM_PULL_REQUEST_NUMBER'] = pullRequestId;
+      final privateUrl =
+          'https://api.codemagic.io/artifacts/2e7564b2-9ffa-40c2-b9e0-8980436ac717/81c5a723-b162-488a-854e-3f5f7fdfb22f/Codemagic_Release.ipa';
       environmentVariableAccessor.environmentVariables['CM_ARTIFACT_LINKS'] =
-          '[{"name": "Codemagic_Release.ipa","type": "ipa","url": "https://api.codemagic.io/artifacts/2e7564b2-9ffa-40c2-b9e0-8980436ac717/81c5a723-b162-488a-854e-3f5f7fdfb22f/Codemagic_Release.ipa","md5": "d2884be6985dad3ffc4d6f85b3a3642a","versionName": "1.0.2","bundleId": "io.codemagic.app"}]';
+          '[{"name": "Codemagic_Release.ipa","type": "ipa","url": "$privateUrl","md5": "d2884be6985dad3ffc4d6f85b3a3642a","versionName": "1.0.2","bundleId": "io.codemagic.app"}]';
 
+      final gitHubToken = "GITHUB_TOKEN";
+      final codemagicToken = "CODEMAGIC_TOKEN";
+
+      when(
+        () => httpClient.post(
+          Uri.parse('$privateUrl/public-url'),
+          body: any(named: 'body'),
+          headers: {
+            'Content-Type': 'application/json',
+            'x-auth-token': codemagicToken,
+          },
+        ),
+      ).thenAnswer(
+        (_) async => Response(
+            jsonEncode(
+              {
+                'url':
+                    'https://api.codemagic.io/artifacts/.eJwVwcuyQzAAANB_6d4MwqhFF15N03oEtyk2d1BNES2qhK-_c8_ZUeOf2f6Q03BqbHwTOTI0zad4Oi909c7GNgCZETEJq6e6RZkzRE47rOz9YaaAEMDG7cTG7qLYEbTx0cOBPoKiufcBoeqncKU5iOejsyLlC0F4rdkjhgsoM2UJ7Jcz83Xop0wUmoAb_EuWUva9_B37sJEGPTsjSV_V8KkUKLm8YNWS2NcsO_X0Dlu2qeGCTXtPc5G95TIIR1pzp3-1aJ8KYnJVVMCrzgnD6OGNRLi77_LaR5NcLxTT2szVy5fdchi1hEs-_U1drVHmh5XoktWN2lpO0E8rejjs_gANHmGQ.uhTyoMdEjaLVwyJr_1GWP-oMqQI',
+                'expiresAt': '2024-04-29T13:59:09+00:00'
+              },
+            ),
+            200),
+      );
       when(
         () => httpClient.get(
           Uri.parse(
@@ -105,7 +130,9 @@ void main() {
       await runner.run([
         'post',
         '--github_token',
-        'token',
+        gitHubToken,
+        '--codemagic_token',
+        codemagicToken,
       ]);
 
       verify(
@@ -113,7 +140,7 @@ void main() {
           Uri.parse(
               'https://api.github.com/repos/$repoOwner/$repoName/issues/$pullRequestId/comments'),
           headers: {
-            'Authorization': 'Bearer token',
+            'Authorization': 'Bearer $gitHubToken',
             'Content-Type': 'application/json',
           },
           body: any(named: 'body'),
