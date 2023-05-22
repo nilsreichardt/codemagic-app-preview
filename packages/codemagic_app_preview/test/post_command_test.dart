@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
+import 'package:clock/clock.dart';
 import 'package:codemagic_app_preview/src/commands/post_command.dart';
 import 'package:codemagic_app_preview/src/environment_variable/environment_variable_accessor.dart';
 import 'package:codemagic_app_preview/src/git/git_provider.dart';
@@ -14,12 +15,15 @@ class MockHttpClient extends Mock implements Client {}
 
 class MockGitRepo extends Mock implements GitRepo {}
 
+class MockClock extends Mock implements Clock {}
+
 void main() {
   group('PostCommand', () {
     late PostCommand postCommand;
     late MockEnvironmentVariableAccessor environmentVariableAccessor;
     late MockHttpClient httpClient;
     late MockGitRepo gitRepo;
+    late Clock clock;
 
     const repoOwner = 'nilsreichardt';
     const repoName = 'codemagic-app-preview';
@@ -28,7 +32,9 @@ void main() {
       environmentVariableAccessor = MockEnvironmentVariableAccessor();
       httpClient = MockHttpClient();
       gitRepo = MockGitRepo();
+      clock = Clock();
       postCommand = PostCommand(
+        clock: clock,
         httpClient: httpClient,
         environmentVariableAccessor: environmentVariableAccessor,
         gitRepo: gitRepo,
@@ -133,6 +139,8 @@ void main() {
         gitHubToken,
         '--codemagic_token',
         codemagicToken,
+        '--expires_in',
+        '1d',
       ]);
 
       verify(

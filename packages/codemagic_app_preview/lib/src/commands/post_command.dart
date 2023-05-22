@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
+import 'package:clock/clock.dart';
 import 'package:codemagic_app_preview/src/builds/artifact_links_parser.dart';
 import 'package:codemagic_app_preview/src/builds/build.dart';
 import 'package:codemagic_app_preview/src/builds/codemagic_api_repository.dart';
@@ -15,6 +16,7 @@ import 'package:duration/duration.dart';
 class PostCommand extends Command {
   PostCommand({
     required this.httpClient,
+    required this.clock,
     this.environmentVariableAccessor =
         const SystemEnvironmentVariableAccessor(),
     this.gitRepo = const GitRepo(),
@@ -46,15 +48,17 @@ class PostCommand extends Command {
     argParser
       ..addOption(
         'expires_in',
+        // TODO: Add link to Codemagic Docs about the expiration date.
         help:
-            'Defines the duration for which the URLs to the builds are valid. The default value is 365 days. Example values: "2w 5d 23h 59m 59s 999ms 999us" or "365d"',
-        defaultsTo: '365d',
+            'Defines the duration for which the URLs to the builds are valid. The default value is 30 days. Example values: "2w 5d 23h 59m 59s 999ms 999us" or "365d"',
+        defaultsTo: '30d',
       );
   }
 
   final Client httpClient;
   final EnvironmentVariableAccessor environmentVariableAccessor;
   final GitRepo gitRepo;
+  final Clock clock;
 
   @override
   String get description =>
@@ -107,14 +111,12 @@ class PostCommand extends Command {
     final parser = ArtifactLinksParser(
       codemagicRepository: codemagicRepository,
       environmentVariableAccessor: environmentVariableAccessor,
+      clock: clock,
     );
 
     final expiresIn = parseDuration(argResults?['expires_in']);
 
-    final builds = await parser.getBuilds(
-      expiresIn: expiresIn,
-      now: now,
-    );
+    final builds = await parser.getBuilds(expiresIn: expiresIn);
     return builds;
   }
 
