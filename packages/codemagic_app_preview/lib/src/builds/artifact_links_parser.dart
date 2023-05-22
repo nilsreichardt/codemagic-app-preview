@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:clock/clock.dart';
 import 'package:codemagic_app_preview/src/builds/build_platform.dart';
 import 'package:codemagic_app_preview/src/builds/codemagic_api_repository.dart';
 
@@ -10,10 +11,12 @@ class ArtifactLinksParser {
   const ArtifactLinksParser({
     required this.environmentVariableAccessor,
     required this.codemagicRepository,
+    required this.clock,
   });
 
   final EnvironmentVariableAccessor environmentVariableAccessor;
   final CodemagicApiRepository codemagicRepository;
+  final Clock clock;
 
   /// Returns the builds from the environment variable "CM_ARTIFACT_LINKS" and
   /// gets the public URL for the artifacts.
@@ -21,7 +24,6 @@ class ArtifactLinksParser {
   /// [expiresIn] is the duration for which the public URL is valid.
   Future<List<Build>> getBuilds({
     required Duration expiresIn,
-    DateTime? now,
   }) async {
     final json = environmentVariableAccessor.get('CM_ARTIFACT_LINKS');
     if (json == null) {
@@ -50,16 +52,21 @@ class ArtifactLinksParser {
       final privateUrl = json['url'];
       final platform = getBuildPlatform(json['type']);
 
+      final now = clock.now();
+      final expiresAt = now.add(expiresIn);
+
       final publicArtifact = await codemagicRepository.getPublicArtifactUrl(
         privateUrl: privateUrl,
-        expiresIn: expiresIn,
-        now: now,
+        expiresAt: expiresAt,
       );
 
       final build = Build(
         platform: platform,
         privateUrl: privateUrl,
         publicUrl: publicArtifact.url,
+        // We are not using our [expiresAt] because [publicArtifact.expiresAt]
+        // is expiresAt that has been set by Codemagic and therefore it's the
+        // source of truth.
         expiresAt: publicArtifact.expiresAt,
       );
       builds.add(build);
