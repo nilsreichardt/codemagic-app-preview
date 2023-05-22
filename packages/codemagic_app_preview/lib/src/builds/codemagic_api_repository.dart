@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:clock/clock.dart';
 import 'package:http/http.dart';
 
 class CodemagicApiRepository {
@@ -9,6 +8,7 @@ class CodemagicApiRepository {
   /// Can be accessed via Codemagic UI -> Team -> Integration -> API.
   final String apiToken;
 
+  /// The HTTP client for making requests.
   final Client httpClient;
 
   const CodemagicApiRepository({
@@ -21,25 +21,17 @@ class CodemagicApiRepository {
   /// [privateUrl] is the private URL for the artifact. [expiresIn] is the
   /// duration for which the public URL is valid.
   ///
-  /// [now] is the current time. If it is not provided, [DateTime.now()] is
-  /// used. This is useful for testing.
-  ///
   /// Codemagic API documentation:
   /// https://docs.codemagic.io/rest-api/artifacts/#step-2-create-a-public-download-url-using-the-url-obtained-in-step-1
   Future<PublicArtifactResponse> getPublicArtifactUrl({
     required String privateUrl,
-    required Duration expiresIn,
-    DateTime? now,
+    required DateTime expiresAt,
   }) async {
-    if (now == null) {
-      now = DateTime.now();
-    }
-
     final response = await httpClient.post(
       Uri.parse('$privateUrl/public-url'),
       body: jsonEncode({
         // Convert DateTime to seconds since epoch (Unix timestamp).
-        'expiresAt': now.add(expiresIn).millisecondsSinceEpoch ~/ 1000,
+        'expiresAt': expiresAt.millisecondsSinceEpoch ~/ 1000,
       }),
       headers: {
         'Content-Type': 'application/json',
@@ -56,11 +48,13 @@ class CodemagicApiRepository {
     final json = jsonDecode(response.body) as Map<String, dynamic>;
 
     final url = json['url'] as String;
-    final expiresAt = DateTime.parse(json['expiresAt']);
+    // The expire date that is set by Codemagic. Technically, it could be a
+    // slightly different date than [expiresAt] is.
+    final actualExpiresAt = DateTime.parse(json['expiresAt']);
 
     return PublicArtifactResponse(
       url: url,
-      expiresAt: expiresAt,
+      expiresAt: actualExpiresAt,
     );
   }
 }

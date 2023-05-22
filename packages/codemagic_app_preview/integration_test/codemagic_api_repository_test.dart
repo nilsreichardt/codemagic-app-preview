@@ -38,9 +38,12 @@ void main() {
       final privateUrl =
           'https://api.codemagic.io/artifacts/97f7f910-df52-4adc-8762-c110698ab6ca/e3fada79-c349-4852-89bd-568c2490ac92/app_preview_example.ipa';
 
+      final now = DateTime.now();
+      final expiresAt = now.add(Duration(minutes: 5));
+
       final publicUrl = await codemagicApiRepository.getPublicArtifactUrl(
         privateUrl: privateUrl,
-        expiresIn: Duration(minutes: 5),
+        expiresAt: expiresAt,
       );
 
       expect(publicUrl, startsWith('https://api.codemagic.io/artifacts/'));
