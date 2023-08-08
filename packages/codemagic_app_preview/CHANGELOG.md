@@ -1,3 +1,7 @@
+## 0.1.0
+
+* **BREAKING FIX:** Make build links accessible by using Codemagic Build API. ([#63](https://github.com/nilsreichardt/codemagic-app-preview/pull/63))
+
 ## 0.0.4
 
  - **REFACTOR**: remove `instance_type` from `codemagic.yaml` and `README.md` ([#42](https://github.com/nilsreichardt/codemagic-app-preview/issues/42)).
