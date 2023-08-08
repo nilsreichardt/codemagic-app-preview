@@ -17,19 +17,28 @@ void main() {
     test('returns the expected comment for the given builds', () {
       final builds = [
         Build(
-          url:
+          privateUrl:
               'https://api.codemagic.io/artifacts/2e7564b2-9ffa-40c2-b9e0-8980436ac717/81c5a723-b162-488a-854e-3f5f7fdfb22f/Codemagic_Release.apk',
+          publicUrl:
+              'https://api.codemagic.io/artifacts/.eJwVwclygjAAANB_6d0ZCMaYgweNIiA7RAgXRtayGEzBGv6-0_e-2uO_0xDHKHPPKUZUipUTp0IajU8P-JPMRJnxqy3kG2X268VZjBz8zKqFSzHtTxG79ngEaFI4k4kso8VYrrC3OlM3pi2p6zkCa6xnuuVWuBIV6bAz253m5foFNbm6gbuS8n57MwB1JCuay9j0-YKP-RpClrVq-G7eJlSN86cAoxfWSR0C-Bs4vqLoN7d87kTRFQG9R8NG1WKMqbV31NSmU8jtIeXQk4zjRCVCy2awT_zIRsW3SY7ump6roC3Bh3wsvxu8RygFgOaIdpdbe19SNvlTINrD4esPvxBgaQ.b3oiUFXA3GHsUEEPj5VINUO-7x4',
           platform: BuildPlatform.android,
+          expiresAt: DateTime.now(),
         ),
         Build(
-          url:
+          privateUrl:
               'https://api.codemagic.io/artifacts/2e7564b2-9ffa-40c2-b9e0-8980436ac717/81c5a723-b162-488a-854e-3f5f7fdfb22f/Codemagic_Release.ipa',
+          publicUrl:
+              'https://api.codemagic.io/artifacts/.eJwVwcuyQzAAANB_6d4MwqhFF15N03oEtyk2d1BNES2qhK-_c8_ZUeOf2f6Q03BqbHwTOTI0zad4Oi909c7GNgCZETEJq6e6RZkzRE47rOz9YaaAEMDG7cTG7qLYEbTx0cOBPoKiufcBoeqncKU5iOejsyLlC0F4rdkjhgsoM2UJ7Jcz83Xop0wUmoAb_EuWUva9_B37sJEGPTsjSV_V8KkUKLm8YNWS2NcsO_X0Dlu2qeGCTXtPc5G95TIIR1pzp3-1aJ8KYnJVVMCrzgnD6OGNRLi77_LaR5NcLxTT2szVy5fdchi1hEs-_U1drVHmh5XoktWN2lpO0E8rejjs_gANHmGQ.uhTyoMdEjaLVwyJr_1GWP-oMqQI',
           platform: BuildPlatform.ios,
+          expiresAt: DateTime.now(),
         ),
         Build(
-          url:
+          privateUrl:
               'https://api.codemagic.io/artifacts/2e7564b2-9ffa-40c2-b9e0-8980436ac717/81c5a723-b162-488a-854e-3f5f7fdfb22f/Codemagic_Release.zip',
+          publicUrl:
+              'https://api.codemagic.io/artifacts/.eJwVwUmSgjAAAMC_eLdKJYPMYQ4sgspODAiXlKISDJAoASKvt6Z7Uen_DHpK97YmirWd8Rtawq1NpiVLEeNPLorcxmwYtg80d58Hx2osxLjjHmYnaBSeScHYVEqfHXuzjBsEz-Fr1fpBBA_O7OzlriVpeLVW9_pdR6HkJDz6Zq5hIUTJDCXRpCcCxb989tSJfX8titMYdhaYzW5Q2b1ryaS5VnYv6K9nb245qzKbgCWFicG98jY0eXKgV6RIl55lx0SuRnKT6GkAscrKAllUVk4wywRPYHg1bTaK5wbUCIBJn-Eaj2UgnuJ6cX-QB_u3jqa8oiNPIodJzUMuCYtA1AQTJ26ivpoudcP-Fl_c8m33.PYYoVvVlhhyKci-G_61hxCmaccE',
           platform: BuildPlatform.macos,
+          expiresAt: DateTime.now(),
         ),
       ];
 
@@ -45,7 +54,7 @@ void main() {
 
 | ${builds[0].platform.platformName} | ${builds[1].platform.platformName} | ${builds[2].platform.platformName} |
 |:-:|:-:|:-:|
-| ![image](https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${Uri.encodeComponent(builds[0].url)}) <br /> [Download link](${builds[0].url}) | ![image](https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${Uri.encodeComponent(builds[1].url)}) <br /> [Download link](${builds[1].url}) | ![image](https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${Uri.encodeComponent(builds[2].url)}) <br /> [Download link](${builds[2].url}) |
+| ![image](https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${Uri.encodeComponent(builds[0].publicUrl)}) <br /> [Download link](${builds[0].publicUrl}) | ![image](https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${Uri.encodeComponent(builds[1].publicUrl)}) <br /> [Download link](${builds[1].publicUrl}) | ![image](https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${Uri.encodeComponent(builds[2].publicUrl)}) <br /> [Download link](${builds[2].publicUrl}) |
 
 <!-- Codemagic App Preview; jobId: default -->
 """);
@@ -54,9 +63,12 @@ void main() {
     test('includes the message into the comment', () {
       final builds = [
         Build(
-          url:
+          privateUrl:
               'https://api.codemagic.io/artifacts/2e7564b2-9ffa-40c2-b9e0-8980436ac717/81c5a723-b162-488a-854e-3f5f7fdfb22f/Codemagic_Release.apk',
+          publicUrl:
+              'https://api.codemagic.io/artifacts/.eJwVwcuyQzAAANB_6d4MwqhFF15N03oEtyk2d1BNES2qhK-_c8_ZUeOf2f6Q03BqbHwTOTI0zad4Oi909c7GNgCZETEJq6e6RZkzRE47rOz9YaaAEMDG7cTG7qLYEbTx0cOBPoKiufcBoeqncKU5iOejsyLlC0F4rdkjhgsoM2UJ7Jcz83Xop0wUmoAb_EuWUva9_B37sJEGPTsjSV_V8KkUKLm8YNWS2NcsO_X0Dlu2qeGCTXtPc5G95TIIR1pzp3-1aJ8KYnJVVMCrzgnD6OGNRLi77_LaR5NcLxTT2szVy5fdchi1hEs-_U1drVHmh5XoktWN2lpO0E8rejjs_gANHmGQ.uhTyoMdEjaLVwyJr_1GWP-oMqQI',
           platform: BuildPlatform.android,
+          expiresAt: DateTime.now(),
         ),
       ];
       final message = 'this is a custom message';
