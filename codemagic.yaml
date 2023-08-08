@@ -10,6 +10,9 @@ workflows:
         # Adding environment group "github" which includes the GITHUB_PAT
         # variable.
         - "github"
+        # Adding environment group "codemagic" which includes the CODEMAGIC_TOKEN
+        # variable.
+        - "codemagic"
         # Adding environment group "appstore_credentials" to sign iOS apps.
         - appstore_credentials
     triggering:
@@ -50,4 +53,7 @@ workflows:
             # Using local path to test changes and ensure everything is working
             # when someone opens PR.
             dart pub global activate -s path ../codemagic_app_preview
-            app_preview post --github_token $GITHUB_PAT --message "This is a custom message."
+            app_preview post \
+              --github_token $GITHUB_PAT \
+              --codemagic_token $CODEMAGIC_TOKEN \
+              --message "This is a custom message."
