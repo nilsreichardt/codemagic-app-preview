@@ -22,5 +22,6 @@ scripts:
       cd packages/codemagic_app_preview
       dart --define=GITHUB_TOKEN=$GITHUB_TOKEN \
         --define=GITLAB_TOKEN=$GITLAB_TOKEN \
+        --define=CODEMAGIC_TOKEN=$CODEMAGIC_TOKEN \
         test integration_test \
         --use-data-isolate-strategy
