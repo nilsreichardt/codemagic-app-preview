@@ -15,7 +15,9 @@ publishing:
      - name: Post App Preview
        script: |
          dart pub global activate codemagic_app_preview
-         app_preview post --github_token $GITHUB_PAT
+         app_preview post \
+          --github_token $GITHUB_PAT \
+          --codemagic_token $CODEMAGIC_TOKEN
 ```
 
 ## Supported platforms
