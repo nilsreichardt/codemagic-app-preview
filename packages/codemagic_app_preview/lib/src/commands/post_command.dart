@@ -37,7 +37,8 @@ class PostCommand extends Command {
     argParser
       ..addOption(
         'codemagic_token',
-        help: 'Token to access the Codemagic API',
+        help:
+            'Token to access the Codemagic API. Is available at: Teams > Personal Account > Integrations > Codemagic API > Show. See https://docs.codemagic.io/rest-api/codemagic-rest-api/.',
       );
     argParser
       ..addOption(
