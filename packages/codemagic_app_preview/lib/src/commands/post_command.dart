@@ -48,9 +48,8 @@ class PostCommand extends Command {
     argParser
       ..addOption(
         'expires_in',
-        // TODO: Add link to Codemagic Docs about the expiration date.
         help:
-            'Defines the duration for which the URLs to the builds are valid. The default value is 30 days. Example values: "2w 5d 23h 59m 59s 999ms 999us" or "365d"',
+            'Defines the duration for which the URLs to the builds are valid. The maxium duration depends on your account type, see: https://docs.codemagic.io/billing/pricing/#build-history-and-artifact-storage. The default value is 30 days. Example values: "2w 5d 23h 59m 59s 999ms 999us" or "365d"',
         defaultsTo: '30d',
       );
   }
