@@ -102,7 +102,7 @@ void main() {
           Uri.parse(
               'https://api.github.com/repos/$repoOwner/$repoName/issues/$pullRequestId/comments'),
           headers: {
-            'Authorization': 'Bearer token',
+            'Authorization': 'Bearer $gitHubToken',
           },
         ),
       ).thenAnswer((_) async => Response('[]', 200));
@@ -111,7 +111,7 @@ void main() {
           Uri.parse(
               'https://api.github.com/repos/$repoOwner/$repoName/issues/$pullRequestId/comments'),
           headers: {
-            'Authorization': 'Bearer token',
+            'Authorization': 'Bearer $gitHubToken',
             'Content-Type': 'application/json',
           },
           body: any(named: 'body'),
