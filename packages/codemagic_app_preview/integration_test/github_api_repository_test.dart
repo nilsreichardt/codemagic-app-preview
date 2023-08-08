@@ -8,7 +8,7 @@ void main() {
   ///
   /// Use the following command to use the environment variable:
   /// ```sh
-  /// dart --define=GITHUB_TOKEN=... test integration_test --use-data-isolate-strategy
+  /// dart --define=GITHUB_TOKEN=$GITHUB_TOKEN test integration_test/github_api_repository_test.dart --use-data-isolate-strategy
   /// ```
   ///
   /// At the moment, we need to use the `--use-data-isolate-strategy` flag
