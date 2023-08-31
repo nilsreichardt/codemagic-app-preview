@@ -12,10 +12,6 @@ artifacts:
   - build/macos/Build/Products/Release/*.app
 publishing:
   scripts:
-    - name: Add Dart SDK to PATH
-      script: |
-        echo PATH="$PATH":"$FLUTTER_ROOT/.pub-cache/bin" >> $CM_ENV
-        echo PATH="$PATH":"$FLUTTER_ROOT/bin" >> $CM_ENV
     - name: Post App Preview
       script: |
          app_preview post \
