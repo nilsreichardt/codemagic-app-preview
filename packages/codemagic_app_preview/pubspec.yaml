@@ -21,3 +21,7 @@ dev_dependencies:
 executables:
   app_preview: codemagic_app_preview
   codemagic_app_preview: codemagic_app_preview
+
+topics:
+  - ci
+  - codemagic 
