@@ -27,30 +27,26 @@ class PostCommand extends Command {
         abbr: 't',
         help: 'Your personal access token to access the GitHub API.',
         aliases: ['gh_token'],
-      );
-    argParser
+      )
       ..addOption(
         'gitlab_token',
         help: 'Your personal access token to access the GitLab API.',
         aliases: ['gl_token'],
-      );
-    argParser
+      )
       ..addOption(
         'codemagic_token',
         help:
             'Token to access the Codemagic API. Is available at: Teams > Personal Account > Integrations > Codemagic API > Show. See https://docs.codemagic.io/rest-api/codemagic-rest-api/.',
-      );
-    argParser
+      )
       ..addOption(
         'message',
         abbr: 'm',
         help: 'A custom message that can be added to the comment.',
-      );
-    argParser
+      )
       ..addOption(
         'expires_in',
         help:
-            'Defines the duration for which the URLs to the builds are valid. The maxium duration depends on your account type, see: https://docs.codemagic.io/billing/pricing/#build-history-and-artifact-storage. The default value is 30 days. Example values: "2w 5d 23h 59m 59s 999ms 999us" or "365d"',
+            'Defines the duration for which the URLs to the builds are valid. The maximum duration depends on your account type, see: https://docs.codemagic.io/billing/pricing/#build-history-and-artifact-storage. The default value is 30 days. Example values: "2w 5d 23h 59m 59s 999ms 999us" or "365d"',
         defaultsTo: '30d',
       );
   }
