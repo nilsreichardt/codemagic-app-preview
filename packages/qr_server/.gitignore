@@ -7,5 +7,3 @@ node_modules/
 
 firebase-debug.log
 ui-debug.log
-
-test_e2e/e2e.env
