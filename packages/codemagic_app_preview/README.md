@@ -1,5 +1,3 @@
-# Codemagic App Preview
-
 Simplify your pull request reviews by automatically generating QR codes linked to your app builds for Android, iOS, and macOS with Codemagic App Preview CLI. This CLI allows code reviewers to easily download and test the app in a real-world environment, making the review process more effective and efficient.
 
 In other words: It's like the Firebase Hosting GitHub Action [`action-hosting-deploy`](https://github.com/FirebaseExtended/action-hosting-deploy) to create web app preview URLs for pull requests but for Android, iOS, and macOS builds.
