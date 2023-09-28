@@ -1,0 +1,11 @@
+# Compiled JavaScript files
+lib/**/*.js
+lib/**/*.js.map
+
+# Node.js dependency directory
+node_modules/
+
+firebase-debug.log
+ui-debug.log
+
+test_e2e/e2e.env
