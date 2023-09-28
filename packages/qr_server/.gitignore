@@ -1,0 +1,9 @@
+# Compiled JavaScript files
+lib/**/*.js
+lib/**/*.js.map
+
+# Node.js dependency directory
+node_modules/
+
+firebase-debug.log
+ui-debug.log
