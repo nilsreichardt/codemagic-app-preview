@@ -48,6 +48,11 @@ class PostCommand extends Command {
         help:
             'Defines the duration for which the URLs to the builds are valid. The maximum duration depends on your account type, see: https://docs.codemagic.io/billing/pricing/#build-history-and-artifact-storage. The default value is 30 days. Example values: "2w 5d 23h 59m 59s 999ms 999us" or "365d"',
         defaultsTo: '30d',
+      )
+      ..addOption(
+        'app-name',
+        help:
+            'The name of the app. This is helpful if you have multiple apps in the same repository. If not provided, the name "default" is used. Using different names for different apps allows you to post multiple comments in the same pull request.',
       );
   }
 
@@ -135,6 +140,9 @@ class PostCommand extends Command {
       return;
     }
 
-    await CommentPoster(gitProviderRepository).post(comment: comment);
+    await CommentPoster(gitProviderRepository).post(
+      comment: comment,
+      appName: argResults?['app-name'],
+    );
   }
 }

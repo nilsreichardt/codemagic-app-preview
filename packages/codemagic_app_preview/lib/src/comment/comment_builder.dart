@@ -10,7 +10,7 @@ class CommentBuilder {
   /// Builds a message that can be used a comment on a pull request.
   String build(
     List<Build> builds, {
-    String? jobId,
+    String? appName,
     String? message,
   }) {
     final comment = StringBuffer();
@@ -33,7 +33,7 @@ class CommentBuilder {
     comment.writeln('\n\n$table');
 
     comment.writeln(
-        '\n<!-- Codemagic App Preview; jobId: ${jobId ?? 'default'} -->');
+        '\n<!-- Codemagic App Preview; appName: ${appName ?? 'default'} -->');
 
     return '$comment';
   }

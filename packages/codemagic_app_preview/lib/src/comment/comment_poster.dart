@@ -10,12 +10,13 @@ class CommentPoster {
   /// Posts a new comment or edits an existing comment.
   Future<void> post({
     required String comment,
-    String? jobId,
+    String? appName,
   }) async {
     final comments = await _gitHubApi.getComments();
 
     // When no job id is provided, 'default' is used as fallback.
-    final previousComment = _getAppPreviewComment(comments, jobId ?? 'default');
+    final previousComment =
+        _getAppPreviewComment(comments, appName ?? 'default');
     final shouldEdit = previousComment != null;
 
     if (shouldEdit) {
@@ -30,11 +31,11 @@ class CommentPoster {
   /// Returns null, if there is no app preview comment yet.
   PostedComment? _getAppPreviewComment(
     List<PostedComment> comments,
-    String jobId,
+    String appName,
   ) {
     for (final comment in comments) {
       if (comment.body
-          .contains('<!-- Codemagic App Preview; jobId: $jobId -->')) {
+          .contains('<!-- Codemagic App Preview; appName: $appName -->')) {
         return comment;
       }
     }
