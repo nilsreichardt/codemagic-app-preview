@@ -62,7 +62,7 @@ function generateQrCode(data: string, size: number) {
 
 async function logAnalytics(platform: string, groupId: string) {
   const firestore = admin.firestore();
-  await firestore.collection("analytics").add({
+  await firestore.collection("qr_analytics").add({
     createdAt: new Date(),
     platform: platform,
     groupId: groupId,
