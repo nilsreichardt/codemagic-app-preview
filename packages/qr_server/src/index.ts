@@ -47,7 +47,7 @@ exports.createQrCode = functions.https.onRequest(async (req, res) => {
       generateQrCode(data, size),
       logAnalytics(platform, groupId),
     ]);
-    
+
     const qrPng = result[0];
     res.type("image/png").send(qrPng);
   } catch (err) {

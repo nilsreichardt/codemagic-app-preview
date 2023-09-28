@@ -33,7 +33,7 @@ jobs:
       # The access token is available in the Codemagic UI under Teams > Personal
       # Account > Integrations > Codemagic API > Show.
       CODEMAGIC_TOKEN: ${{ secrets.CODEMAGIC_TOKEN }}
-      
+
       # This is the ID of the app in Codemagic.
       #
       # You can find the ID of your app in the URL of the app in Codemagic.
