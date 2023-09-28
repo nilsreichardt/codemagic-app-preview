@@ -20,6 +20,15 @@ workflows:
         - pull_request
       cancel_previous_builds: true
     working_directory: packages/app_preview_example
+    when:
+      changeset:
+        includes:
+          - "codemagic.yaml"
+          - "packages/app_preview_example/**"
+          - "packages/app_preview_lints/**"
+          - "packages/codemagic_app_preview/**"
+        excludes:
+          - "**/*.md"
     scripts:
       - name: Fetch dependencies
         script: flutter pub get
