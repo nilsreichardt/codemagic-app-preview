@@ -56,7 +56,7 @@ void main() {
 |:-:|:-:|:-:|
 | ![image](https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${Uri.encodeComponent(builds[0].publicUrl)}) <br /> [Download link](${builds[0].publicUrl}) | ![image](https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${Uri.encodeComponent(builds[1].publicUrl)}) <br /> [Download link](${builds[1].publicUrl}) | ![image](https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${Uri.encodeComponent(builds[2].publicUrl)}) <br /> [Download link](${builds[2].publicUrl}) |
 
-<!-- Codemagic App Preview; jobId: default -->
+<!-- Codemagic App Preview; appName: default -->
 """);
     });
 

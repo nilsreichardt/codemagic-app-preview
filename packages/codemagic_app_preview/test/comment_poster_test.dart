@@ -22,7 +22,8 @@ void main() {
         (_) async => [
           PostedComment(
             id: 123,
-            body: 'random text <!-- Codemagic App Preview; jobId: default -->',
+            body:
+                'random text <!-- Codemagic App Preview; appName: default -->',
           ),
         ],
       );
