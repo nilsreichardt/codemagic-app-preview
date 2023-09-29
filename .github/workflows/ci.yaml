@@ -3,7 +3,7 @@ name: ci
 on:
   workflow_dispatch: # Allows to manually trigger the workflow
   schedule:
-    - cron: '0 0 * * *' # Runs every day at 00:00 UTC to ensure that the packages are compatible with the latest Dart SDK
+    - cron: "0 0 */3 * *" # Runs every 3 days at 00:00 UTC to ensure that the packages are compatible with the latest Dart SDK
   pull_request:
     types:
       - opened
