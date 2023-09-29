@@ -71,8 +71,6 @@ void main() {
           '50b04d910c6b73472f7dfc1fee38a67e7132bf32';
       environmentVariableAccessor
           .environmentVariables['CM_PULL_REQUEST_NUMBER'] = pullRequestId;
-      final privateUrl =
-          'https://api.codemagic.io/artifacts/2e7564b2-9ffa-40c2-b9e0-8980436ac717/81c5a723-b162-488a-854e-3f5f7fdfb22f/Codemagic_Release.ipa';
       environmentVariableAccessor.environmentVariables['CM_ARTIFACT_LINKS'] =
           '[]'; // no artifacts
 
