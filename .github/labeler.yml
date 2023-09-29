@@ -11,3 +11,6 @@
 
 "p:app_preview_lints":
 - 'packages/app_preview_lints/**'
+
+"p:qr_server":
+- 'packages/qr_server/**'
