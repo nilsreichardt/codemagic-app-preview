@@ -29,6 +29,7 @@ workflows:
           - "packages/codemagic_app_preview/**"
         excludes:
           - "**/*.md"
+      condition: (not event.pull_request.draft) and (event.pull_request.labels[0].name == "build-app-preview")
     scripts:
       - name: Fetch dependencies
         script: flutter pub get
