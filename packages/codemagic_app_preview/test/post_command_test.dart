@@ -58,6 +58,36 @@ void main() {
       expect(exitCode, 1);
     });
 
+    test('sets exit code to 1 when there no artifacts are available', () async {
+      const pullRequestId = '24';
+      environmentVariableAccessor
+          .environmentVariables['CM_PULL_REQUEST_NUMBER'] = pullRequestId;
+      when(() => gitRepo.getHost()).thenAnswer((_) async => GitHost.github);
+      environmentVariableAccessor.environmentVariables['FCI_PROJECT_ID'] =
+          '6274fcfc87c748ce531c7376';
+      environmentVariableAccessor.environmentVariables['FCI_BUILD_ID'] =
+          '62877273178d247b70405cb0';
+      environmentVariableAccessor.environmentVariables['FCI_COMMIT'] =
+          '50b04d910c6b73472f7dfc1fee38a67e7132bf32';
+      environmentVariableAccessor
+          .environmentVariables['CM_PULL_REQUEST_NUMBER'] = pullRequestId;
+      environmentVariableAccessor.environmentVariables['CM_ARTIFACT_LINKS'] =
+          '[]'; // no artifacts
+
+      final runner = CommandRunner('test', 'A test command runner.');
+      runner.addCommand(postCommand);
+
+      await runner.run([
+        'post',
+        '--github_token',
+        'GITHUB_TOKEN',
+        '--codemagic_token',
+        'CODEMAGIC_TOKEN',
+      ]);
+
+      expect(exitCode, 1);
+    });
+
     test('posts comment with the builds', () async {
       const pullRequestId = '24';
       environmentVariableAccessor.environmentVariables['FCI_PROJECT_ID'] =

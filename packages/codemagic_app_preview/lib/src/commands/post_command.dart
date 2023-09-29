@@ -121,6 +121,13 @@ class PostCommand extends Command {
     final expiresIn = parseDuration(argResults?['expires_in']);
 
     final builds = await parser.getBuilds(expiresIn: expiresIn);
+    if (builds.isEmpty) {
+      stderr.writeln(
+          'No artifacts found. Make sure to set the "artifacts" option in your codemagic.yaml file.');
+      exitCode = 1;
+      return null;
+    }
+
     return builds;
   }
 
