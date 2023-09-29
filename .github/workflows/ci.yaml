@@ -1,0 +1,194 @@
+name: ci
+
+on:
+  workflow_dispatch: # Allows to manually trigger the workflow
+  schedule:
+    - cron: "0 0 */3 * *" # Runs every 3 days at 00:00 UTC to ensure that the packages are compatible with the latest Dart SDK
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+      - edited
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # The minimum Flutter version that is supported by the packages.
+  #
+  # Uses Dart SDK v2.14.0 because it is the minimum version that supports
+  MIN_FLUTTER_VERSION: 2.5.0
+  # The minimum Dart version that is supported by the packages.
+  #
+  # Is also used in the Dart SDK matrix (needs to be updated there too, can't
+  # use env var - see: https://stackoverflow.com/a/74073435/8358501)
+  MIN_DART_VERSION: 2.14.0
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dart-lang/setup-dart@v1.5.1
+        with:
+          sdk: ${{ env.MIN_DART_VERSION }}
+
+      - name: Install Melos
+        run: dart pub global activate melos
+
+      - name: Melos Bootstrap
+        run: melos bootstrap --no-flutter
+
+      - name: Run tests
+        run: melos run test
+
+  test-e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dart-lang/setup-dart@v1.5.1
+        with:
+          sdk: ${{ env.MIN_DART_VERSION }}
+
+      - name: Install Melos
+        run: dart pub global activate melos
+
+      - name: Melos Bootstrap
+        run: melos bootstrap --no-flutter
+
+      - name: Run integration tests
+        env:
+          CODEMAGIC_TOKEN: ${{ secrets.CODEMAGIC_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+        run: melos run test-e2e
+
+  test-installation:
+    runs-on: ${{ matrix.os }}
+    # Testing on all platforms, the minium Dart SDK, the lastest stable SDK and
+    # the latest beta SDK to ensure that the packages are compatible with all
+    # Dart SDKs.
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        sdk: [stable, beta, 2.14.0]
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dart-lang/setup-dart@v1.5.1
+        with:
+          sdk: ${{ matrix.sdk }}
+
+      - name: Install Codemagic App Preview CLI
+        run: dart pub global activate --source path packages/codemagic_app_preview
+
+      - name: Verify Codemagic App Preview CLI Installation (macOS / Linux)
+        if: runner.os != 'Windows'
+        run: |
+          if [[ $(app_preview --help) =~ "A command line tool to post a comment to" ]]; then          
+            echo '✅ Codemagic App Preview CLI is installed!'
+          else
+            echo '❌ Codemagic App Preview CLI is not installed.'
+          exit 1
+          fi
+        shell: bash
+
+      - name: Verify Codemagic App Preview CLI Installation (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          $app_preview_help = app_preview --help
+          if ($app_preview_help -match "A command line tool to post a comment to") {
+            Write-Output "✅ Codemagic App Preview CLI is installed!"
+          } else {
+            Write-Output "❌ Codemagic App Preview CLI is not installed."
+            exit 1
+          }
+        shell: pwsh
+
+  # Should only execute the Flutter packages.
+  #
+  # However, because we are using a too old version of Dart SDK a Melos version
+  # is installed, that not supports the filter for only executing Flutter
+  # packages.
+  analyze-flutter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: ${{ env.MIN_FLUTTER_VERSION }}
+
+      - name: Install Melos
+        run: dart pub global activate melos
+
+      - name: Melos Bootstrap
+        run: melos bootstrap
+
+      - name: Run analyze
+        run: melos run analyze:flutter
+
+  analyze-dart:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dart-lang/setup-dart@v1.5.1
+        with:
+          # We need to use Dart SDK 2.18 to be able to get Melos v3 which is
+          # need to run "melos run analyze:dart --no-select".
+          sdk: 2.18.0
+
+      - name: Install Melos
+        run: dart pub global activate melos
+
+      - name: Melos Bootstrap
+        run: melos bootstrap --no-flutter
+
+      - name: Run analyze
+        run: melos run analyze:dart --no-select
+
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Prettier
+        run: npm install -g prettier
+
+      - name: Run Prettier
+        run: prettier . --check
+
+      - uses: dart-lang/setup-dart@v1.5.1
+        with:
+          sdk: ${{ env.MIN_DART_VERSION }}
+
+      - name: Install Melos
+        run: dart pub global activate melos
+
+      - name: Melos Bootstrap
+        run: melos bootstrap --no-flutter
+
+      - name: Run format
+        run: melos run format
+
+  pana:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/codemagic_app_preview
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dart-lang/setup-dart@v1.5.1
+        with:
+          sdk: ${{ env.MIN_DART_VERSION }}
+
+      - name: Install pana
+        run: dart pub global activate pana
+
+      - name: Install dependencies
+        run: dart pub get
+
+      - name: Verify Pub Score
+        run: pana --exit-code-threshold 0

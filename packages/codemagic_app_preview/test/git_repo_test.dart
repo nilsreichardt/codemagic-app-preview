@@ -1,4 +1,4 @@
-import 'package:codemagic_app_preview/src/git/git_provider.dart';
+import 'package:codemagic_app_preview/src/git/git_host.dart';
 import 'package:codemagic_app_preview/src/git/git_repo.dart';
 import 'package:test/test.dart';
 
@@ -23,9 +23,9 @@ void main() {
       expect(owner, 'codemagic-app-preview');
     });
 
-    test('.getGitProvider(', () async {
-      final provider = await gitRepo.getProvider();
-      expect(provider, GitProvider.github);
+    test('.getGitHost(', () async {
+      final host = await gitRepo.getHost();
+      expect(host, GitHost.github);
     });
   });
 }

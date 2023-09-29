@@ -8,7 +8,7 @@ import 'package:codemagic_app_preview/src/builds/codemagic_api_repository.dart';
 import 'package:codemagic_app_preview/src/comment/comment_builder.dart';
 import 'package:codemagic_app_preview/src/comment/comment_poster.dart';
 import 'package:codemagic_app_preview/src/environment_variable/environment_variable_accessor.dart';
-import 'package:codemagic_app_preview/src/git/git_provider_repository.dart';
+import 'package:codemagic_app_preview/src/git/git_host_repository.dart';
 import 'package:codemagic_app_preview/src/git/git_repo.dart';
 import 'package:http/http.dart';
 import 'package:duration/duration.dart';
@@ -68,32 +68,29 @@ class PostCommand extends Command {
   @override
   String get name => 'post';
 
-  Future<GitProviderRepository?> _getGitProviderRepository(
-      GitRepo gitRepo) async {
-    // Set to Integer ID of the pull request for the Git provider (Bitbucket,
-    // GitHub, etc.) if the current build is building a pull request, unset
-    // otherwise.
-    //
-    // https://docs.codemagic.io/flutter-configuration/built-in-variables/
-    final pullRequestId =
-        environmentVariableAccessor.get('CM_PULL_REQUEST_NUMBER');
-
-    final String? gitHubToken = argResults?['github_token'];
-    final String? gitLabToken = argResults?['gitlab_token'];
-
-    try {
-      return await GitProviderRepository.getGitProviderFrom(
-        gitRepo: gitRepo,
-        pullRequestId: pullRequestId,
-        gitLabToken: gitLabToken,
-        gitHubToken: gitHubToken,
-        httpClient: httpClient,
-      );
-    } on MissingGitProviderTokenException catch (e) {
-      stderr.writeln(e.message);
-      exitCode = 1;
-      return null;
+  Future<void> run({DateTime? now}) async {
+    final builds = await _parseBuilds(now: now);
+    if (builds == null) {
+      // Error message is already printed.
+      return;
     }
+
+    final String? message = argResults?['message'];
+    final comment = CommentBuilder(environmentVariableAccessor).build(
+      builds,
+      message: message,
+    );
+
+    final gitHostRepository = await _getGitHostRepository(gitRepo);
+    if (gitHostRepository == null) {
+      // Error message is already printed.
+      return;
+    }
+
+    await CommentPoster(gitHostRepository).post(
+      comment: comment,
+      appName: argResults?['app-name'],
+    );
   }
 
   Future<List<Build>?> _parseBuilds({DateTime? now}) async {
@@ -121,28 +118,30 @@ class PostCommand extends Command {
     return builds;
   }
 
-  Future<void> run({DateTime? now}) async {
-    final builds = await _parseBuilds(now: now);
-    if (builds == null) {
-      // Error message is already printed.
-      return;
+  Future<GitHostRepository?> _getGitHostRepository(GitRepo gitRepo) async {
+    // Set to Integer ID of the pull request for the Git host (Bitbucket,
+    // GitHub, etc.) if the current build is building a pull request, unset
+    // otherwise.
+    //
+    // https://docs.codemagic.io/flutter-configuration/built-in-variables/
+    final pullRequestId =
+        environmentVariableAccessor.get('CM_PULL_REQUEST_NUMBER');
+
+    final String? gitHubToken = argResults?['github_token'];
+    final String? gitLabToken = argResults?['gitlab_token'];
+
+    try {
+      return await GitHostRepository.getGitHostFrom(
+        gitRepo: gitRepo,
+        pullRequestId: pullRequestId,
+        gitLabToken: gitLabToken,
+        gitHubToken: gitHubToken,
+        httpClient: httpClient,
+      );
+    } on MissingGitHostTokenException catch (e) {
+      stderr.writeln(e.message);
+      exitCode = 1;
+      return null;
     }
-
-    final String? message = argResults?['message'];
-    final comment = CommentBuilder(environmentVariableAccessor).build(
-      builds,
-      message: message,
-    );
-
-    final gitProviderRepository = await _getGitProviderRepository(gitRepo);
-    if (gitProviderRepository == null) {
-      // Error message is already printed.
-      return;
-    }
-
-    await CommentPoster(gitProviderRepository).post(
-      comment: comment,
-      appName: argResults?['app-name'],
-    );
   }
 }
