@@ -84,7 +84,7 @@ jobs:
         run: melos bootstrap --no-flutter
 
       - name: Run analyze
-        run: melos run analyze:dart
+        run: melos run analyze:dart --no-select
 
   format:
     runs-on: ubuntu-latest
