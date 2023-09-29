@@ -9,7 +9,9 @@ scripts:
     description: Run `flutter analyze --fatal-infos` in all packages
 
   format:
-    run: melos exec -- "flutter format . --set-exit-if-changed"
+    run: |
+      prettier . --write
+      melos exec -- "flutter format . --set-exit-if-changed"
     description: Run `flutter format .` in all packages
 
   test:
