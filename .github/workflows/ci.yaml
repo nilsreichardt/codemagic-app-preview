@@ -9,15 +9,19 @@ on:
       - ready_for_review
       - edited
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   # The minimum Flutter version that is supported by the packages.
-  # 
+  #
   # Uses Dart SDK v2.14.0 because it is the minimum version that supports
   MIN_FLUTTER_VERSION: 2.5.0
   # The minimum Dart version that is supported by the packages.
   #
   # Is also used in the Dart SDK matrix (needs to be updated there too, can't
-  # use env var - see: https://stackoverflow.com/a/74073435/8358501) 
+  # use env var - see: https://stackoverflow.com/a/74073435/8358501)
   MIN_DART_VERSION: 2.14.0
 
 jobs:
