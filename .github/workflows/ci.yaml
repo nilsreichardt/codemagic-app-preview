@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: dart-lang/setup-dart@v1.3
+      - uses: dart-lang/setup-dart@v1.5.1
         with:
           sdk: ${{ env.DART_VERSION }}
 
@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: dart-lang/setup-dart@v1.3
+      - uses: dart-lang/setup-dart@v1.5.1
         with:
           sdk: ${{ env.DART_VERSION }}
 
@@ -78,7 +78,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: dart-lang/setup-dart@v1.3
+      - uses: dart-lang/setup-dart@v1.5.1
         with:
           # We need to use Dart SDK 2.18 to be able to get Melos v3 which is
           # need to run "melos run analyze:dart --no-select".
@@ -104,7 +104,7 @@ jobs:
       - name: Run Prettier
         run: prettier . --check
 
-      - uses: dart-lang/setup-dart@v1.3
+      - uses: dart-lang/setup-dart@v1.5.1
         with:
           sdk: ${{ env.DART_VERSION }}
 
@@ -124,7 +124,7 @@ jobs:
         working-directory: packages/codemagic_app_preview
     steps:
       - uses: actions/checkout@v3
-      - uses: dart-lang/setup-dart@v1.3
+      - uses: dart-lang/setup-dart@v1.5.1
         with:
           sdk: ${{ env.DART_VERSION }}
 
