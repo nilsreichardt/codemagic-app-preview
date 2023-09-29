@@ -52,6 +52,11 @@ jobs:
           GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
         run: melos run test-e2e
 
+  # Should only execute the Flutter packages.
+  #
+  # However, because we are using a too old version of Dart SDK a Melos version
+  # is installed, that not supports the filter for only executing Flutter
+  # packages.
   analyze-flutter:
     runs-on: ubuntu-latest
     steps:
