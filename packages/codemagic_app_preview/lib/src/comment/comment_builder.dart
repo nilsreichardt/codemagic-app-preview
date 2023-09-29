@@ -73,8 +73,13 @@ class CommentBuilder {
         groupId: groupId,
         platform: build.platform,
       );
-      table.write(
-          ' ![image]($qrCodeUrl) <br /> [Download link](${build.publicUrl}) |');
+      if (build.platform == BuildPlatform.macos) {
+        table.write(
+            ' <a href="${build.publicUrl}"><picture><source media="(prefers-color-scheme: dark)" srcset="https://app-preview.nils.re/download-icon-white"><img alt="Download icon" src="https://app-preview.nils.re/download-icon-black"></picture></a> <br /> [Download link](${build.publicUrl}) |');
+      } else {
+        table.write(
+            ' ![image]($qrCodeUrl) <br /> [Download link](${build.publicUrl}) |');
+      }
     }
 
     return '$table';
