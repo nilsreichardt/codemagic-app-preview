@@ -18,15 +18,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: subosito/flutter-action@v1
+      - uses: dart-lang/setup-dart@v1.3
         with:
-          flutter-version: ${{ env.FLUTTER_VERSION }}
+          sdk: ${{ env.DART_VERSION }}
 
       - name: Install Melos
         run: dart pub global activate melos
 
       - name: Melos Bootstrap
-        run: melos bootstrap
+        run: melos bootstrap --no-flutter
 
       - name: Run tests
         run: melos run test
@@ -35,15 +35,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: subosito/flutter-action@v1
+      - uses: dart-lang/setup-dart@v1.3
         with:
-          flutter-version: ${{ env.FLUTTER_VERSION }}
+          sdk: ${{ env.DART_VERSION }}
 
       - name: Install Melos
         run: dart pub global activate melos
 
       - name: Melos Bootstrap
-        run: melos bootstrap
+        run: melos bootstrap --no-flutter
 
       - name: Run integration tests
         env:
@@ -52,7 +52,12 @@ jobs:
           GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
         run: melos run test-e2e
 
-  analyze:
+  # Should only execute the Flutter packages.
+  #
+  # However, because we are using a too old version of Dart SDK a Melos version
+  # is installed, that not supports the filter for only executing Flutter
+  # packages.
+  analyze-flutter:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -67,7 +72,26 @@ jobs:
         run: melos bootstrap
 
       - name: Run analyze
-        run: melos run analyze
+        run: melos run analyze:flutter
+
+  analyze-dart:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dart-lang/setup-dart@v1.3
+        with:
+          # We need to use Dart SDK 2.18 to be able to get Melos v3 which is
+          # need to run "melos run analyze:dart --no-select".
+          sdk: 2.18.0
+
+      - name: Install Melos
+        run: dart pub global activate melos
+
+      - name: Melos Bootstrap
+        run: melos bootstrap --no-flutter
+
+      - name: Run analyze
+        run: melos run analyze:dart --no-select
 
   format:
     runs-on: ubuntu-latest
@@ -80,15 +104,15 @@ jobs:
       - name: Run Prettier
         run: prettier . --check
 
-      - uses: subosito/flutter-action@v1
+      - uses: dart-lang/setup-dart@v1.3
         with:
-          flutter-version: ${{ env.FLUTTER_VERSION }}
+          sdk: ${{ env.DART_VERSION }}
 
       - name: Install Melos
         run: dart pub global activate melos
 
       - name: Melos Bootstrap
-        run: melos bootstrap
+        run: melos bootstrap --no-flutter
 
       - name: Run format
         run: melos run format
