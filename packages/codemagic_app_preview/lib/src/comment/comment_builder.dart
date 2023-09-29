@@ -1,11 +1,17 @@
+import 'dart:math';
+
 import 'package:codemagic_app_preview/src/builds/build.dart';
 import 'package:codemagic_app_preview/src/builds/build_platform.dart';
 import 'package:codemagic_app_preview/src/environment_variable/environment_variable_accessor.dart';
 
 class CommentBuilder {
-  const CommentBuilder(this._environmentVariableAccessor);
+  CommentBuilder(this._environmentVariableAccessor, {Random? random})
+      : _random = random ?? Random();
 
   final EnvironmentVariableAccessor _environmentVariableAccessor;
+
+  /// Used to generate a random group id for the builds.
+  final Random _random;
 
   /// Builds a message that can be used a comment on a pull request.
   String build(
@@ -44,7 +50,7 @@ class CommentBuilder {
   /// ```
   /// | Android | iOS |
   /// |:-:|:-:|
-  /// | ![image](https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=$LINK) <br /> [Download link]($LINK) | ![image](https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=$ENCODED_IPA_LINK) <br /> [Download link]($LINK)
+  /// | ![image](https://app-preview-qr.nils.re/?size=150x150&data=$LINK) <br /> [Download link]($LINK) | ![image](https://app-preview-qr.nils.re/?size=150x150&data=$ENCODED_IPA_LINK) <br /> [Download link]($LINK)
   /// ```
   String _buildTable(List<Build> builds) {
     final table = StringBuffer();
@@ -60,8 +66,13 @@ class CommentBuilder {
     }
 
     table.write('\n|');
+    final groupId = _generateGroupId();
     for (final build in builds) {
-      final qrCodeUrl = _getQrCodeUrl(build.publicUrl);
+      final qrCodeUrl = _getQrCodeUrl(
+        url: build.publicUrl,
+        groupId: groupId,
+        platform: build.platform,
+      );
       table.write(
           ' ![image]($qrCodeUrl) <br /> [Download link](${build.publicUrl}) |');
     }
@@ -69,17 +80,36 @@ class CommentBuilder {
     return '$table';
   }
 
-  /// Returns a url that renders the [url] as a qr code when using this as a
-  /// image for a GitHub comment.
+  /// Generates a random group id for the builds.
   ///
-  /// Encodes the url to make it safe to use as a url component.
+  /// The group id is used for analytics to identify which qr codes belong to
+  /// the same build. We don't use the build id for this because the build id
+  /// not fully anonymous (in case you would have access to Codemagic database
+  /// you could query by the build id).
+  ///
+  /// The group id is a random 4 byte hex string. Example: `2e7564b2`.
+  String _generateGroupId() {
+    final bytes = List<int>.generate(4, (i) => _random.nextInt(256));
+    return bytes.map((b) => b.toRadixString(16).padLeft(2, '0')).join();
+  }
+
+  /// Returns a url that renders the [url] as a qr code when using this as a
+  /// image for a pull request comment.
+  ///
+  /// Encodes the url to make it safe to use as a url component and adds the
+  /// [groupId] and [platform] as query parameters. The [groupId] and [platform]
+  /// are used for analytics.
   ///
   /// Example when using the url
   /// `https://api.codemagic.io/artifacts/2e7564b2-9ffa-40c2-b9e0-8980436ac717/81c5a723-b162-488a-854e-3f5f7fdfb22f/Codemagic_Release.ipa`:
-  /// `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https%3A%2F%2Fapi.codemagic.io%2Fartifacts%2F2e7564b2-9ffa-40c2-b9e0-8980436ac717%2F81c5a723-b162-488a-854e-3f5f7fdfb22f%2FCodemagic_Release.ipa`
-  String _getQrCodeUrl(String url) {
+  /// `https://app-preview-qr.nils.re/?size=150x150&data=https%3A%2F%2Fapi.codemagic.io%2Fartifacts%2F2e7564b2-9ffa-40c2-b9e0-8980436ac717%2F81c5a723-b162-488a-854e-3f5f7fdfb22f%2FCodemagic_Release.ipa&groupId=2e7564b2&platform=ios`
+  String _getQrCodeUrl({
+    required String url,
+    required String groupId,
+    required BuildPlatform platform,
+  }) {
     // The url needs to be encoded to make it safe to use as a url component.
     final encodedUrl = Uri.encodeComponent(url);
-    return 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=$encodedUrl';
+    return 'https://app-preview-qr.nils.re/?size=150x150&data=$encodedUrl&platform=${platform.platformIdentifier}&groupId=$groupId';
   }
 }

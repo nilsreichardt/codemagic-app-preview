@@ -32,6 +32,20 @@ extension BuildPlatformExtension on BuildPlatform {
         return 'macOS';
     }
   }
+
+  /// Returns the identifier of the platform, e.g. "ios" for [ios].
+  ///
+  /// Can be removed when using Dart 2.17 as minimum version.
+  String get platformIdentifier {
+    switch (this) {
+      case BuildPlatform.android:
+        return 'android';
+      case BuildPlatform.ios:
+        return 'ios';
+      case BuildPlatform.macos:
+        return 'macos';
+    }
+  }
 }
 
 /// Returns the [BuildPlatform] for the given [fileExtension].
