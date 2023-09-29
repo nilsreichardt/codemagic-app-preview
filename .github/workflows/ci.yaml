@@ -18,9 +18,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: subosito/flutter-action@v1
+      - uses: dart-lang/setup-dart@v1.3
         with:
-          flutter-version: ${{ env.FLUTTER_VERSION }}
+          sdk: ${{ env.DART_VERSION }}
 
       - name: Install Melos
         run: dart pub global activate melos
@@ -35,9 +35,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: subosito/flutter-action@v1
+      - uses: dart-lang/setup-dart@v1.3
         with:
-          flutter-version: ${{ env.FLUTTER_VERSION }}
+          sdk: ${{ env.DART_VERSION }}
 
       - name: Install Melos
         run: dart pub global activate melos
@@ -52,7 +52,7 @@ jobs:
           GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
         run: melos run test-e2e
 
-  analyze:
+  analyze-flutter:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -67,7 +67,24 @@ jobs:
         run: melos bootstrap
 
       - name: Run analyze
-        run: melos run analyze
+        run: melos run analyze:flutter
+
+  analyze-dart:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dart-lang/setup-dart@v1.3
+        with:
+          sdk: ${{ env.DART_VERSION }}
+
+      - name: Install Melos
+        run: dart pub global activate melos
+
+      - name: Melos Bootstrap
+        run: melos bootstrap
+
+      - name: Run analyze
+        run: melos run analyze:dart
 
   format:
     runs-on: ubuntu-latest
@@ -80,9 +97,9 @@ jobs:
       - name: Run Prettier
         run: prettier . --check
 
-      - uses: subosito/flutter-action@v1
+      - uses: dart-lang/setup-dart@v1.3
         with:
-          flutter-version: ${{ env.FLUTTER_VERSION }}
+          sdk: ${{ env.DART_VERSION }}
 
       - name: Install Melos
         run: dart pub global activate melos

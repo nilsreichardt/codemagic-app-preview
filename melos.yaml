@@ -5,14 +5,26 @@ repository: https://github.com/nilsreichardt/codemagic-app-preview
 
 scripts:
   analyze:
-    run: melos exec -- "flutter analyze --fatal-infos"
+    run: melos run analyze:dart --no-select && melos run analyze:flutter --no-select
+    description: Run `dart analyze` & `flutter analyze` in all packages
+
+  analyze:dart:
+    description: Run `dart analyze --fatal-infos` in all packages
+    exec: dart analyze --fatal-infos
+    packageFilters:
+      flutter: false
+
+  analyze:flutter:
     description: Run `flutter analyze --fatal-infos` in all packages
+    exec: flutter analyze --fatal-infos
+    packageFilters:
+      flutter: true
 
   format:
     run: |
       prettier . --write
-      melos exec -- "flutter format . --set-exit-if-changed"
-    description: Run `flutter format .` in all packages
+      melos exec -- "dart format . --set-exit-if-changed"
+    description: Run `dart format .` in all packages
 
   test:
     run: melos exec --dir-exists=test -- "flutter test"
