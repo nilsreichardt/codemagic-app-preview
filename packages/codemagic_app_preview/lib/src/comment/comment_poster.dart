@@ -1,11 +1,11 @@
 import 'package:codemagic_app_preview/src/comment/posted_comment.dart';
-import 'package:codemagic_app_preview/src/git/git_provider_repository.dart';
+import 'package:codemagic_app_preview/src/git/git_host_repository.dart';
 
 class CommentPoster {
   const CommentPoster(this._gitHubApi);
 
-  /// The API of the Git provider (like GitHub) repository.
-  final GitProviderRepository _gitHubApi;
+  /// The API of the Git host (like GitHub) repository.
+  final GitHostRepository _gitHubApi;
 
   /// Posts a new comment or edits an existing comment.
   Future<void> post({

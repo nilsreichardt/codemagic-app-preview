@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:codemagic_app_preview/src/git/git_provider.dart';
+import 'package:codemagic_app_preview/src/git/git_host.dart';
 
 class GitRepo {
   const GitRepo();
@@ -35,30 +35,30 @@ class GitRepo {
     return (result.stdout as String).trim();
   }
 
-  /// Returns the [GitProvider] of the Git repo.
+  /// Returns the [GitHost] of the Git repo.
   ///
-  /// Throws an [UnsupportedGitProviderException] when the Git repo is not
-  /// supported as [GitProvider].
-  Future<GitProvider> getProvider() async {
+  /// Throws an [UnsupportedGitHostException] when the Git repo is not
+  /// supported as [GitHost].
+  Future<GitHost> getHost() async {
     final result =
         await _runGitCommand(['config', '--get', 'remote.origin.url']);
 
     if (result.toLowerCase().contains('github.com')) {
-      return GitProvider.github;
+      return GitHost.github;
     }
 
     if (result.toLowerCase().contains('gitlab.com')) {
-      return GitProvider.gitlab;
+      return GitHost.gitlab;
     }
 
-    throw UnsupportedGitProviderException();
+    throw UnsupportedGitHostException();
   }
 }
 
-class UnsupportedGitProviderException implements Exception {
-  UnsupportedGitProviderException();
+class UnsupportedGitHostException implements Exception {
+  UnsupportedGitHostException();
 
   @override
   String toString() =>
-      'Unsupported git provider! Currently only ${GitProvider.values.map((e) => e.toString()).join(', ')} are supported.}';
+      'Unsupported git host! Currently only ${GitHost.values.map((e) => e.toString()).join(', ')} are supported.}';
 }

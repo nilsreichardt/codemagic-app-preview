@@ -1,14 +1,14 @@
 import 'package:codemagic_app_preview/src/comment/posted_comment.dart';
-import 'package:codemagic_app_preview/src/git/git_provider.dart';
+import 'package:codemagic_app_preview/src/git/git_host.dart';
 import 'package:codemagic_app_preview/src/git/git_repo.dart';
 import 'package:codemagic_app_preview/src/git/github_api_repository.dart';
 import 'package:codemagic_app_preview/src/git/gitlab_api_repository.dart';
 import 'package:http/http.dart';
 
-/// A repository for a Git provider.
+/// A repository for a Git host.
 ///
-/// Git providers are GitHub, GitLab, Bitbucket, etc.
-abstract class GitProviderRepository {
+/// Git hosts are GitHub, GitLab, Bitbucket, etc.
+abstract class GitHostRepository {
   /// Post a new comment.
   Future<PostedComment> postComment(String comment);
 
@@ -18,23 +18,23 @@ abstract class GitProviderRepository {
   /// Get all comments for a pull request.
   Future<List<PostedComment>> getComments();
 
-  /// Returns the Git provider repository for the current [gitRepo].
+  /// Returns the Git host repository for the current [gitRepo].
   ///
-  /// [pullRequestId] is the ID of the pull request for the Git provider. For
+  /// [pullRequestId] is the ID of the pull request for the Git host. For
   /// GitLab, it is the merge request ID.
-  static Future<GitProviderRepository> getGitProviderFrom({
+  static Future<GitHostRepository> getGitHostFrom({
     required GitRepo gitRepo,
     required String pullRequestId,
     required String? gitLabToken,
     required String? gitHubToken,
     required Client httpClient,
   }) async {
-    final gitProvider = await gitRepo.getProvider();
+    final gitHost = await gitRepo.getHost();
 
-    switch (gitProvider) {
-      case GitProvider.github:
+    switch (gitHost) {
+      case GitHost.github:
         if (gitHubToken == null) {
-          throw MissingGitProviderTokenException(
+          throw MissingGitHostTokenException(
               'The GitHub access token is not set. Please set the token with the --github_token option.');
         }
 
@@ -48,9 +48,9 @@ abstract class GitProviderRepository {
           repository: repoName,
           pullRequestId: pullRequestId,
         );
-      case GitProvider.gitlab:
+      case GitHost.gitlab:
         if (gitLabToken == null) {
-          throw MissingGitProviderTokenException(
+          throw MissingGitHostTokenException(
               'The GitLab access token is not set. Please set the token with the --gitlab_token option.');
         }
 
@@ -71,10 +71,10 @@ abstract class GitProviderRepository {
   }
 }
 
-class MissingGitProviderTokenException implements Exception {
+class MissingGitHostTokenException implements Exception {
   final String message;
 
-  MissingGitProviderTokenException(this.message);
+  MissingGitHostTokenException(this.message);
 
   @override
   String toString() => message;
