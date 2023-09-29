@@ -62,7 +62,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
         run: melos run test-e2e
-  
+
   test-installation:
     runs-on: ${{ matrix.os }}
     # Testing on all platforms, the minium Dart SDK, the lastest stable SDK and
