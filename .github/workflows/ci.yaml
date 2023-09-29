@@ -26,7 +26,7 @@ jobs:
         run: dart pub global activate melos
 
       - name: Melos Bootstrap
-        run: melos bootstrap
+        run: melos bootstrap --no-flutter
 
       - name: Run tests
         run: melos run test
@@ -43,7 +43,7 @@ jobs:
         run: dart pub global activate melos
 
       - name: Melos Bootstrap
-        run: melos bootstrap
+        run: melos bootstrap --no-flutter
 
       - name: Run integration tests
         env:
@@ -81,7 +81,7 @@ jobs:
         run: dart pub global activate melos
 
       - name: Melos Bootstrap
-        run: melos bootstrap
+        run: melos bootstrap --no-flutter
 
       - name: Run analyze
         run: melos run analyze:dart
@@ -105,7 +105,7 @@ jobs:
         run: dart pub global activate melos
 
       - name: Melos Bootstrap
-        run: melos bootstrap
+        run: melos bootstrap --no-flutter
 
       - name: Run format
         run: melos run format
