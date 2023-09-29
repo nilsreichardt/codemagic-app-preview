@@ -91,18 +91,18 @@ async function logAnalytics(
   // might be faster because it's a single round trip to Firestore.
   const batch = firestore.batch();
 
-  const qrActivitiesRef = firestore.collection("qr_activities").doc();
+  const qrActivitiesRef = firestore.collection("QrActivities").doc();
   batch.set(qrActivitiesRef, {
     createdAt: now,
     platform: platform,
     groupId: groupId,
   });
 
-  const summaryRef = firestore.collection("analytics").doc("summary");
+  const summaryRef = firestore.collection("Analytics").doc("summary");
   batch.set(
     summaryRef,
     {
-      qr_analytics: {
+      qrAnalytics: {
         platform: {
           [platform]: FieldValue.increment(1),
         },
