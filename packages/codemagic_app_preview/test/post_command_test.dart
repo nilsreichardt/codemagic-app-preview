@@ -5,7 +5,7 @@ import 'package:args/command_runner.dart';
 import 'package:clock/clock.dart';
 import 'package:codemagic_app_preview/src/commands/post_command.dart';
 import 'package:codemagic_app_preview/src/environment_variable/environment_variable_accessor.dart';
-import 'package:codemagic_app_preview/src/git/git_provider.dart';
+import 'package:codemagic_app_preview/src/git/git_host.dart';
 import 'package:codemagic_app_preview/src/git/git_repo.dart';
 import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
@@ -48,8 +48,7 @@ void main() {
       const pullRequestId = '24';
       environmentVariableAccessor
           .environmentVariables['CM_PULL_REQUEST_NUMBER'] = pullRequestId;
-      when(() => gitRepo.getProvider())
-          .thenAnswer((_) async => GitProvider.github);
+      when(() => gitRepo.getHost()).thenAnswer((_) async => GitHost.github);
 
       final runner = CommandRunner('test', 'A test command runner.');
       runner.addCommand(postCommand);
@@ -127,8 +126,7 @@ void main() {
           201,
         ),
       );
-      when(() => gitRepo.getProvider())
-          .thenAnswer((_) async => GitProvider.github);
+      when(() => gitRepo.getHost()).thenAnswer((_) async => GitHost.github);
 
       final runner = CommandRunner('test', 'A test command runner.');
       runner.addCommand(postCommand);
