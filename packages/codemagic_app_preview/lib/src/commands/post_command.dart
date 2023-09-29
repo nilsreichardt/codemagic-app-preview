@@ -69,16 +69,22 @@ class PostCommand extends Command {
   String get name => 'post';
 
   Future<void> run({DateTime? now}) async {
+    if (!_isPullRequest()) {
+      stderr.writeln(
+          '"CM_PULL_REQUEST" is not set to "true". Seems like the current build is not building a pull request. Aborting.');
+      exitCode = 1;
+      return;
+    }
+
     final builds = await _parseBuilds(now: now);
     if (builds == null) {
       // Error message is already printed.
       return;
     }
 
-    final String? message = argResults?['message'];
     final comment = CommentBuilder(environmentVariableAccessor).build(
       builds,
-      message: message,
+      message: argResults?['message'],
     );
 
     final gitHostRepository = await _getGitHostRepository(gitRepo);
@@ -123,6 +129,17 @@ class PostCommand extends Command {
     }
 
     return builds;
+  }
+
+  /// Returns `true` if the current build is building a pull request, `false`
+  /// otherwise.
+  bool _isPullRequest() {
+    // Set to "true" if the current build is building a pull request, "false"
+    // otherwise.
+    //
+    // https://docs.codemagic.io/flutter-configuration/built-in-variables/
+    final isPullRequest = environmentVariableAccessor.get('CM_PULL_REQUEST');
+    return isPullRequest == 'true';
   }
 
   Future<GitHostRepository?> _getGitHostRepository(GitRepo gitRepo) async {
