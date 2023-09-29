@@ -1,40 +1,40 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "app_preview_example",
-            "cwd": "packages/app_preview_example",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "app_preview_example (profile mode)",
-            "cwd": "packages/app_preview_example",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "profile"
-        },
-        {
-            "name": "app_preview_example (release mode)",
-            "cwd": "packages/app_preview_example",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "release"
-        },
-        {
-            "name": "app_preview_lints",
-            "cwd": "packages/app_preview_lints",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "codemagic_app_preview",
-            "cwd": "packages/codemagic_app_preview",
-            "request": "launch",
-            "type": "dart"
-        }
-    ]
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "app_preview_example",
+      "cwd": "packages/app_preview_example",
+      "request": "launch",
+      "type": "dart"
+    },
+    {
+      "name": "app_preview_example (profile mode)",
+      "cwd": "packages/app_preview_example",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "profile"
+    },
+    {
+      "name": "app_preview_example (release mode)",
+      "cwd": "packages/app_preview_example",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "release"
+    },
+    {
+      "name": "app_preview_lints",
+      "cwd": "packages/app_preview_lints",
+      "request": "launch",
+      "type": "dart"
+    },
+    {
+      "name": "codemagic_app_preview",
+      "cwd": "packages/codemagic_app_preview",
+      "request": "launch",
+      "type": "dart"
+    }
+  ]
 }
