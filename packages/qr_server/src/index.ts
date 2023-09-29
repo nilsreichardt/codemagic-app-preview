@@ -1,9 +1,14 @@
+import * as admin from "firebase-admin";
 import * as functions from "firebase-functions/v2";
 import * as QRCode from "qrcode";
-import * as admin from "firebase-admin";
+// Using the import because of https://stackoverflow.com/q/73079648/8358501.
+import { FieldValue } from "firebase-admin/firestore";
+import { logger } from "firebase-functions/v2";
 
 admin.initializeApp();
 
+// Using "europe-west3" even it's more expensive because it might be faster
+// because Firestore is set to "europe-west3" as well.
 functions.setGlobalOptions({
   region: "europe-west3",
 });
@@ -16,10 +21,10 @@ functions.setGlobalOptions({
  * @param {Object} req - The HTTP request object, containing query parameters.
  *  - @param {string} req.query.data - The data to be encoded in the QR code.
  *  - @param {string} req.query.size - The size of the generated QR code image.
- *  - @param {string} req.query.platform - The platform identifier for analytics
- *    (e.g., "android" or "ios").
- *  - @param {string} req.query.groupId - The group ID to identify QR codes from
- *    the same build.
+ *  - @param {string} req.query.platform (optional) - The platform identifier
+ *    for analytics (e.g., "android" or "ios").
+ *  - @param {string} req.query.groupId (optional) - The group ID to identify QR
+ *    codes from the same build.
  * @param {Object} res - The HTTP response object.
  * @returns {void} Sends a QR code image in response to a valid request, or an
  * error message for invalid parameters or internal server errors.
@@ -35,10 +40,10 @@ exports.createQrCode = functions.https.onRequest(async (req, res) => {
   try {
     const size = parseInt(req.query.size as string);
     const data = req.query.data as string;
-    const platform = req.query.platform as string;
-    const groupId = req.query.groupId as string;
+    const platform = req.query.platform as string | undefined;
+    const groupId = req.query.groupId as string | undefined;
 
-    if (isNaN(size) || !data || !platform || !groupId) {
+    if (isNaN(size) || !data) {
       res.status(400).send("Invalid parameters");
       return;
     }
@@ -48,10 +53,20 @@ exports.createQrCode = functions.https.onRequest(async (req, res) => {
       logAnalytics(platform, groupId),
     ]);
 
+    logger.info("QR code generated successfully", {
+      size: size,
+      platform: platform,
+      groupId: groupId,
+    });
+
     const qrPng = result[0];
     res.type("image/png").send(qrPng);
   } catch (err) {
-    console.error(err);
+    console.error("Error while generating QR code", {
+      error: err,
+      platform: req.query.platform,
+      groupId: req.query.groupId,
+    });
     res.status(500).send("Internal Server Error");
   }
 });
@@ -60,11 +75,43 @@ function generateQrCode(data: string, size: number) {
   return QRCode.toBuffer(data, { type: "png", width: size });
 }
 
-async function logAnalytics(platform: string, groupId: string) {
+async function logAnalytics(
+  platform: string | undefined,
+  groupId: string | undefined,
+) {
+  if (!platform || !groupId) {
+    // Don't log analytics if the platform or groupId is not provided.
+    return;
+  }
+
   const firestore = admin.firestore();
-  await firestore.collection("qr_analytics").add({
-    createdAt: new Date(),
+  const now = new Date();
+
+  // Using a WriteBatch to ensure that the analytics data is consistent and it
+  // might be faster because it's a single round trip to Firestore.
+  const batch = firestore.batch();
+
+  const qrActivitiesRef = firestore.collection("qr_activities").doc();
+  batch.set(qrActivitiesRef, {
+    createdAt: now,
     platform: platform,
     groupId: groupId,
   });
+
+  const summaryRef = firestore.collection("analytics").doc("summary");
+  batch.set(
+    summaryRef,
+    {
+      qr_analytics: {
+        platform: {
+          [platform]: FieldValue.increment(1),
+        },
+        total: FieldValue.increment(1),
+      },
+      lastUpdatedAt: now,
+    },
+    { merge: true },
+  );
+
+  await batch.commit();
 }
