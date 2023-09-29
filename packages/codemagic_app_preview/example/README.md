@@ -1,6 +1,7 @@
 Run `app_preview post --github_token $GITHUB_PAT` after building your apps.
 
 Here is a full `codemagic.yaml` as an example:
+
 ```yaml
 workflows:
   app_preview:

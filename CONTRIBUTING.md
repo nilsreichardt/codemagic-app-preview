@@ -1,5 +1,7 @@
 ## Local testing
+
 When you run the command locally, set the following environment variables:
+
 ```sh
 export FCI_PROJECT_ID='6274fcfc87c748ce531c7376';
 export FCI_BUILD_ID='62877273178d247b70405cb0';

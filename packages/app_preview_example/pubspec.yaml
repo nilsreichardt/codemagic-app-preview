@@ -1,6 +1,6 @@
 name: app_preview_example
 description: An example project to demonstrate the use of the codemagic_app_preview package.
-publish_to: 'none' 
+publish_to: "none"
 version: 1.0.0+1
 
 environment:
