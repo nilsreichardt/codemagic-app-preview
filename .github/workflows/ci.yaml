@@ -26,6 +26,44 @@ env:
 
 jobs:
   test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dart-lang/setup-dart@v1.5.1
+        with:
+          sdk: ${{ env.MIN_DART_VERSION }}
+
+      - name: Install Melos
+        run: dart pub global activate melos
+
+      - name: Melos Bootstrap
+        run: melos bootstrap --no-flutter
+
+      - name: Run tests
+        run: melos run test
+
+  test-e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dart-lang/setup-dart@v1.5.1
+        with:
+          sdk: ${{ env.MIN_DART_VERSION }}
+
+      - name: Install Melos
+        run: dart pub global activate melos
+
+      - name: Melos Bootstrap
+        run: melos bootstrap --no-flutter
+
+      - name: Run integration tests
+        env:
+          CODEMAGIC_TOKEN: ${{ secrets.CODEMAGIC_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+        run: melos run test-e2e
+  
+  test-installation:
     runs-on: ${{ matrix.os }}
     # Testing on all platforms, the minium Dart SDK, the lastest stable SDK and
     # the latest beta SDK to ensure that the packages are compatible with all
@@ -41,41 +79,31 @@ jobs:
         with:
           sdk: ${{ matrix.sdk }}
 
-      - name: Install Melos
-        run: dart pub global activate melos
+      - name: Install Codemagic App Preview CLI
+        run: dart pub global activate --source path packages/codemagic_app_preview_cli
 
-      - name: Melos Bootstrap
-        run: melos bootstrap --no-flutter
+      - name: Verify Codemagic App Preview CLI Installation (macOS / Linux)
+        if: runner.os != 'Windows'
+        run: |
+          if [[ $(app_preview --help) =~ A command line tool to post a comment to" ]]; then          
+            echo '✅ Codemagic App Preview CLI is installed!'
+          else
+            echo '❌ Codemagic App Preview CLI is not installed.'
+          exit 1
+          fi
+        shell: bash
 
-      - name: Run tests
-        run: melos run test
-
-  test-e2e:
-    runs-on: ubuntu-latest
-    # See comment above for "test" job.
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        sdk: [stable, beta, 2.14.0]
-      fail-fast: false
-    steps:
-      - uses: actions/checkout@v3
-      - uses: dart-lang/setup-dart@v1.5.1
-        with:
-          sdk: ${{ matrix.sdk }}
-
-      - name: Install Melos
-        run: dart pub global activate melos
-
-      - name: Melos Bootstrap
-        run: melos bootstrap --no-flutter
-
-      - name: Run integration tests
-        env:
-          CODEMAGIC_TOKEN: ${{ secrets.CODEMAGIC_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
-        run: melos run test-e2e
+      - name: Verify Codemagic App Preview CLI Installation (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          $app_preview_help = app_preview --help
+          if ($app_preview_help -match A command line tool to post a comment to") {
+            Write-Output "✅ Codemagic App Preview CLI is installed!"
+          } else {
+            Write-Output "❌ Codemagic App Preview CLI is not installed."
+            exit 1
+          }
+        shell: pwsh
 
   # Should only execute the Flutter packages.
   #
