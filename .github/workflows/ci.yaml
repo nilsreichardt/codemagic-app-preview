@@ -85,7 +85,7 @@ jobs:
       - name: Verify Codemagic App Preview CLI Installation (macOS / Linux)
         if: runner.os != 'Windows'
         run: |
-          if [[ $(app_preview --help) =~ A command line tool to post a comment to" ]]; then          
+          if [[ $(app_preview --help) =~ "A command line tool to post a comment to" ]]; then          
             echo '✅ Codemagic App Preview CLI is installed!'
           else
             echo '❌ Codemagic App Preview CLI is not installed.'
@@ -97,7 +97,7 @@ jobs:
         if: runner.os == 'Windows'
         run: |
           $app_preview_help = app_preview --help
-          if ($app_preview_help -match A command line tool to post a comment to") {
+          if ($app_preview_help -match "A command line tool to post a comment to") {
             Write-Output "✅ Codemagic App Preview CLI is installed!"
           } else {
             Write-Output "❌ Codemagic App Preview CLI is not installed."
