@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:codemagic_app_preview/src/builds/build.dart';
 import 'package:codemagic_app_preview/src/builds/build_platform.dart';
 import 'package:codemagic_app_preview/src/environment_variable/environment_variable_accessor.dart';
@@ -11,7 +13,7 @@ void main() {
 
     setUp(() {
       accessor = MockEnvironmentVariableAccessor();
-      builder = CommentBuilder(accessor);
+      builder = CommentBuilder(accessor, random: Random(42));
     });
 
     test('returns the expected comment for the given builds', () {
@@ -49,12 +51,15 @@ void main() {
       final commit = '50b04d910c6b73472f7dfc1fee38a67e7132bf32';
       accessor.environmentVariables['FCI_COMMIT'] = commit;
 
+      // The group id that is generated when using 42 as seed.
+      const groupId = "33aec45d";
+
       expect(builder.build(builds),
           """⬇️ Generated builds by [Codemagic](https://codemagic.io/app/$projectId/build/$buildId) for commit $commit ⬇️
 
 | ${builds[0].platform.platformName} | ${builds[1].platform.platformName} | ${builds[2].platform.platformName} |
 |:-:|:-:|:-:|
-| ![image](https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${Uri.encodeComponent(builds[0].publicUrl)}) <br /> [Download link](${builds[0].publicUrl}) | ![image](https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${Uri.encodeComponent(builds[1].publicUrl)}) <br /> [Download link](${builds[1].publicUrl}) | ![image](https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${Uri.encodeComponent(builds[2].publicUrl)}) <br /> [Download link](${builds[2].publicUrl}) |
+| ![image](https://app-preview-qr.nils.re/?size=150x150&data=${Uri.encodeComponent(builds[0].publicUrl)}&platform=android&groupId=$groupId) <br /> [Download link](${builds[0].publicUrl}) | ![image](https://app-preview-qr.nils.re/?size=150x150&data=${Uri.encodeComponent(builds[1].publicUrl)}&platform=ios&groupId=$groupId) <br /> [Download link](${builds[1].publicUrl}) | ![image](https://app-preview-qr.nils.re/?size=150x150&data=${Uri.encodeComponent(builds[2].publicUrl)}&platform=macos&groupId=$groupId) <br /> [Download link](${builds[2].publicUrl}) |
 
 <!-- Codemagic App Preview; appName: default -->
 """);
