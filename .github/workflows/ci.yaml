@@ -80,7 +80,7 @@ jobs:
           sdk: ${{ matrix.sdk }}
 
       - name: Install Codemagic App Preview CLI
-        run: dart pub global activate --source path packages/codemagic_app_preview_cli
+        run: dart pub global activate --source path packages/codemagic_app_preview
 
       - name: Verify Codemagic App Preview CLI Installation (macOS / Linux)
         if: runner.os != 'Windows'
