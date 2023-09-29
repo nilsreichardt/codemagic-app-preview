@@ -27,8 +27,8 @@ scripts:
     description: Run `dart format .` in all packages
 
   test:
-    run: melos exec --dir-exists=test -- "flutter test"
-    description: Run `flutter test` in all packages
+    run: melos exec --dir-exists=test -- "dart test"
+    description: Run `dart test` in all packages
 
   # Run `export GITHUB_TOKEN=...` before using this command.
   test-e2e:
