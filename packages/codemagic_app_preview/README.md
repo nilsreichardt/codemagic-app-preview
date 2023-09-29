@@ -48,24 +48,26 @@ If you are interested in supporting self-hosted GitLab, Bitbucket or a different
 
 ## Features
 
-- Generates QR codes for Android, iOS, and macOS builds.
-- Provides direct download links along with QR codes in pull request comments.
-- Update existing comments with new builds to avoid cluttering the pull request.
-- Allows custom messages in comments.
-- Support for monorepos with multiple apps
-- Easy setup with minimal configuration.
-- No need for TestFlight, Firebase App Distribution or other third-party services to distribute your app.
+- 📱 **QR Code Generation:** Generates QR codes linked to app builds for Android, iOS, and macOS, enabling easy download and testing in real-world environments.
+- 🔗 **Direct Download Links:** Provides direct download links along with QR codes in pull request comments for quick access to app builds.
+- 🔄 **Comment Updates:** Updates existing comments with new builds to avoid cluttering the pull request with multiple comments.
+- 💬 **Custom Messages:** Allows the addition of custom messages in comments to convey additional information or instructions.
+- 🏢 **Monorepo Support:** Offers support for monorepos with multiple apps, allowing the posting of multiple comments in the same pull request.
+- ⚙️ **Minimal Configuration:** Easy setup with minimal configuration needed, streamlining the integration process.
+- 🚫 **Third-party Service Independence:** Eliminates the need for TestFlight, Firebase App Distribution, or other third-party services to distribute your app, keeping the process in-house.
+- 🌍 **Real-world Testing:** Facilitates testing of the app in real-world environments, making the review process more effective and efficient.
+- ⏰ **Time Efficiency:** Helps teams save valuable time of engineers during the review process, optimizing resource utilization and enhancing productivity.
 
 ## Options
 
-|  Option             | Required or Optional?          | Description                                                                                                                                                                                                                                                       |  Example                                                                                                                                                    |
-| ------------------- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|  `--github_token`   | **Required**, if using GitHub  |  Your personal access token to access the GitHub API.                                                                                                                                                                                                             |  `abc123`                                                                                                                                                   |
-|  `--gitlab_token`   |  **Required**, if using GitLab |  Your personal access token to access the GitLab API.                                                                                                                                                                                                             |  `xyz789`                                                                                                                                                   |
-| `--codemagic_token` | **Required**                   |  Token to access the Codemagic API. Is available at: Teams > Personal Account > Integrations > Codemagic API > Show. See [Codemagic documentation](https://docs.codemagic.io/rest-api/codemagic-rest-api/).                                                       |  `pqr456`                                                                                                                                                   |
-|  `--message`        | Optional                       |  Custom message to include in the comment.                                                                                                                                                                                                                        |  "Only team members are able to install the iOS app.", see [this example](https://github.com/SharezoneApp/sharezone-app/pull/1095#issuecomment-1733715519). |
-|  `--expires_in`     | Optional                       |  Defines the duration for which the URLs to the builds are valid. The maximum duration depends on your account type, see: [Codemagic documentation](https://docs.codemagic.io/billing/pricing/#build-history-and-artifact-storage). The default value is 30 days. |  `2w 5d 23h 59m 59s` or `365d`                                                                                                                              |
-| `--app_name`        | Optional                       |  The name of the app. This is helpful if you have multiple apps in the same repository. Using different names for different apps allows you to post multiple comments in the same pull request.                                                                   |  `sharezone`                                                                                                                                                |
+|  Option             | Required or Optional?         | Description                                                                                                                                                                                                                                                       |  Example                                                                                                                                                    |
+| ------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|  `--github_token`   | **Required** if using GitHub  |  Your personal access token to access the GitHub API.                                                                                                                                                                                                             |  `abc123`                                                                                                                                                   |
+|  `--gitlab_token`   |  **Required** if using GitLab |  Your personal access token to access the GitLab API.                                                                                                                                                                                                             |  `xyz789`                                                                                                                                                   |
+| `--codemagic_token` | **Required**                  |  Token to access the Codemagic API. Is available at: Teams > Personal Account > Integrations > Codemagic API > Show. See [Codemagic documentation](https://docs.codemagic.io/rest-api/codemagic-rest-api/).                                                       |  `pqr456`                                                                                                                                                   |
+|  `--message`        | Optional                      |  Custom message to include in the comment.                                                                                                                                                                                                                        |  "Only team members are able to install the iOS app.", see [this example](https://github.com/SharezoneApp/sharezone-app/pull/1095#issuecomment-1733715519). |
+|  `--expires_in`     | Optional                      |  Defines the duration for which the URLs to the builds are valid. The maximum duration depends on your account type, see: [Codemagic documentation](https://docs.codemagic.io/billing/pricing/#build-history-and-artifact-storage). The default value is 30 days. |  `2w 5d 23h 59m 59s` or `365d`                                                                                                                              |
+| `--app_name`        | Optional                      |  The name of the app. This is helpful if you have multiple apps in the same repository. Using different names for different apps allows you to post multiple comments in the same pull request.                                                                   |  `sharezone`                                                                                                                                                |
 
 ## Quick Start Guide
 
@@ -131,7 +133,7 @@ When you have your Codemagic API token, you need to add it to your Codemagic env
 
 1. Go to your repository on Codemagic.
 2. Navigate to "Environment Variables"
-3. Enter `CODEMAGIC_TOKEN` as variable name
+3. Enter `CODEMAGIC_TOKEN` as the variable name
 4. Paste the token into the variable value field
 5. Select or create new group, such as "codemagic"
 6. Ensure "Secure" is checked
@@ -140,7 +142,7 @@ When you have your Codemagic API token, you need to add it to your Codemagic env
 
 #### Why is a GitHub/GitLab personal access token required?
 
-The Codemagic App Preview tool uses the GitHub/GitLab API to post comments on pull requests. To do so, it needs a personal access token to authenticate with the GitHub/GitLab API. The token is not stored anywhere and is only used to post comments on pull requests.
+The Codemagic App Preview tool uses the GitHub/GitLab API to post comments on pull requests. To do so, it needs a personal access token to authenticate with the GitHub/GitLab API. The token is not stored anywhere; it is only used to post comments on pull requests.
 
 #### GitHub
 
@@ -157,7 +159,7 @@ This documentation uses the new fine-grained tokens to follow security best prac
    a) Go to the organization settings -> Personal access tokens -> Settings. At "Fine-grained personal access tokens" the option "Allow access via fine-grained personal access tokens" needs be selected\
    b) If personal access token require approval by your organization administrator, make sure that your token is approved.
 
-<a href="https://github.com/nilsreichardt/codemagic-app-preview/assets/24459435/a6a4a707-6012-403c-b7c4-55a5b90fa0f9" target="_blank"><img src="https://github.com/nilsreichardt/codemagic-app-preview/assets/24459435/1aed0040-5039-416c-9b4a-f5d972290fda"/></a>
+<a href="https://github.com/nilsreichardt/codemagic-app-preview/assets/24459435/a6a4a707-6012-403c-b7c4-55a5b90fa0f9" target="_blank"><img src="https://github.com/nilsreichardt/codemagic-app-preview/assets/24459435/1aed0040-5039-416c-9b4a-f5d972290fda" alt="Screenshot of creating GitHub personal access token"/></a>
 
 #### GitLab
 
@@ -166,7 +168,7 @@ This documentation uses the new fine-grained tokens to follow security best prac
 3. Expand the "Variables" section
 4. Click on "Add variable"
 
-<a href="https://github.com/nilsreichardt/codemagic-app-preview/assets/24459435/c7186275-b71d-49b2-ada0-01f354bd42f0" target="_blank"><img src="https://github.com/nilsreichardt/codemagic-app-preview/assets/24459435/fb55183d-f450-417a-b061-e35db01c4154"/></a>
+<a href="https://github.com/nilsreichardt/codemagic-app-preview/assets/24459435/c7186275-b71d-49b2-ada0-01f354bd42f0" target="_blank"><img src="https://github.com/nilsreichardt/codemagic-app-preview/assets/24459435/fb55183d-f450-417a-b061-e35db01c4154" alt="Screenshot of creating GitLab personal access token"/></a>
 
 ### 3. Set up the `codemagic.yaml`
 
@@ -209,7 +211,7 @@ workflows:
 
 If you don't want to trigger the workflow on every pull request, you use the option to only trigger the workflow on pull requests with a specific label. For example, you can use the label `build-app-preview` to trigger the workflow only on pull requests with the label `build-app-preview`.
 
-To do so, please check out the "Only trigger the workflow on pull requests with a specific label" section in at the bottom of this README.
+To do so, please check out the ["Only trigger the workflow on pull requests with a specific label" ](#only-trigger-the-workflow-on-pull-requests-with-a-specific-label) section in at the bottom of this README.
 
 #### 3.2. Build the app
 
@@ -300,7 +302,7 @@ publishing:
 
 ## Only trigger the workflow on pull requests with a specific label
 
-The easiest way to use this CLI is to trigger the workflow on every pull request. Especially, if you have the [Codemagic unlimited plan](https://codemagic.io/pricing/), this is the recommended way to use this CLI. However, if you don't have the unlimited plan, you might want to only trigger the workflow on pull requests with a specific label to avoid unnecessary builds.
+The easiest way to use this CLI is to trigger the workflow on every pull request. Especially if you have the [Codemagic unlimited plan](https://codemagic.io/pricing/), this is the recommended way to use this CLI. However, if you don't have the unlimited plan, you might want to only trigger the workflow on pull requests with a specific label to avoid unnecessary builds.
 
 In order to do so, you need to trigger the workflow with the [Codemagic Build API](https://docs.codemagic.io/rest-api/builds/) via [GitHub Actions](https://github.com/features/actions):
 
@@ -356,9 +358,11 @@ Under [this link](https://github.com/SharezoneApp/sharezone-app/blob/main/.githu
 
 If you are not using GitHub, you can create a similar workflow for your Git host. Feel free, to open a pull request to add an example for your Git host.
 
+In case you are interested in triggering Codemagic builds with labels, you can upvote the [feature request](https://github.com/orgs/codemagic-ci-cd/discussions/2080).
+
 ## Monorepos
 
-In case you are using a monorepo, you might have the situation that multiple apps are built in the same pull request. In this case, you can use the `--app_name` option to post multiple comments in the same pull request.
+If you are using a monorepo, you might encounter situations where multiple apps are built in the same pull request. In this case, you can use the `--app_name` option to post multiple comments in the same pull request.
 
 ```yaml
 workflows:
@@ -399,6 +403,10 @@ The iOS app is signed with an ad hoc provisioning profile. This allows you to in
 
 If your repository is open source, it might be helpful, to add a note with the `--message` option to inform users that only team members are able to install the iOS app.
 
+### Where are the builds stored?
+
+The builds are stored on Codemagic. The Codemagic App Preview tool uses the Codemagic API to get the download URLs for the builds. The download URLs are valid for 30 days by default. You can change the duration with the `--expires_in` option. The maximum duration depends on your account type, see [Codemagic documentation](https://docs.codemagic.io/billing/pricing/#build-history-and-artifact-storage).
+
 ## Limits
 
 - To install iOS builds, your device must be registered with a valid Apple Developer account.
@@ -409,3 +417,5 @@ If your repository is open source, it might be helpful, to add a note with the `
 This is an unofficial package for [Codemagic](https://codemagic.io). It's _not_ maintained by Codemagic.
 
 If you have any feedback about the CLI or the documentation, feel free to open an [issue](https://github.com/nilsreichardt/codemagic-app-preview/issues) or a [pull request](https://github.com/nilsreichardt/codemagic-app-preview/pulls).
+
+You like this tool? Feel free to give it a star ⭐️ on [GitHub](https://github.com/nilsreichardt/codemagic-app-preview).
