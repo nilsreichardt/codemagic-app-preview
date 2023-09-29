@@ -2,3 +2,4 @@
 .idea/
 melos_codemagic_app_preview.iml
 secrets.env
+.dart_tool
