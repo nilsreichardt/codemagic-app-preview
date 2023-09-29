@@ -77,7 +77,7 @@ function generateQrCode(data: string, size: number) {
 
 async function logAnalytics(
   platform: string | undefined,
-  groupId: string | undefined
+  groupId: string | undefined,
 ) {
   if (!platform || !groupId) {
     // Don't log analytics if the platform or groupId is not provided.
@@ -110,7 +110,7 @@ async function logAnalytics(
       },
       lastUpdatedAt: now,
     },
-    { merge: true }
+    { merge: true },
   );
 
   await batch.commit();
