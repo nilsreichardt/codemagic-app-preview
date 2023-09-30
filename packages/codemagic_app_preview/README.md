@@ -1,8 +1,10 @@
-Simplify your pull request reviews by automatically generating QR codes linked to your app builds for Android, iOS, and macOS with Codemagic App Preview CLI. This CLI allows code reviewers to easily download and test the app in a real-world environment, making the review process more effective and efficient.
+Simplify your pull request reviews by automatically generating QR codes linked to your app builds for Android, iOS and macOS with Codemagic App Preview CLI. This CLI allows code reviewers to easily download and test the app in a real-world environment, making the review process more effective and efficient.
 
-In other words: It's like the Firebase Hosting GitHub Action [`action-hosting-deploy`](https://github.com/FirebaseExtended/action-hosting-deploy) to create web app preview URLs for pull requests but for Android, iOS, and macOS builds.
+In other words: It's like the Firebase Hosting GitHub Action [`action-hosting-deploy`](https://github.com/FirebaseExtended/action-hosting-deploy) to create web app preview URLs for pull requests but for Android, iOS and macOS apps.
 
-| <img width="920" alt="Demo of the app preview pull request comment" src="https://github.com/nilsreichardt/codemagic-app-preview/assets/24459435/0ea6d53c-fbd0-4742-a1fc-469a05b8d8af"> | <img alt="Demo of scanning the iOS app preview qr code" src="https://user-images.githubusercontent.com/24459435/179368786-c94ce9c2-2129-4c30-8677-b8ebf5633a2e.gif" width=165 /> |
+This CLI is built on top of [Codemagic](https://codemagic.io). Codemagic is a CI/CD provider for mobile dev teams. It supports building, testing, and publishing Flutter, iOS, Android, React Native, Ionic and Unity apps. Codemagic offers 500 minutes macOS M1 per month for individuals. For more information, see the [Codemagic pricing page](https://codemagic.io/pricing/).
+
+| <img width="920" alt="Demo of the app preview pull request comment" src="https://github.com/nilsreichardt/codemagic-app-preview/assets/24459435/91612c03-2d13-4b2c-ba80-6a2070d36862"> | <img alt="Demo of scanning the iOS app preview qr code" src="https://user-images.githubusercontent.com/24459435/179368786-c94ce9c2-2129-4c30-8677-b8ebf5633a2e.gif" width=165 /> |
 | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 
 After building your app, you only need to add the `app_preview post` command to the publishing scripts of your `codemagic.yaml` file.
@@ -37,6 +39,16 @@ Currently, you can generate a preview only for the following platforms.
 |   ✔️    | ✔️  |  ✔️   |     |       |         |
 
 If you are interested in supporting Web, Linux, or Windows, please [upvote the respective issue](https://github.com/nilsreichardt/codemagic-app-preview/issues?q=is%3Aopen+is%3Aissue+label%3Aplatform).
+
+## Supported technologies
+
+Currently, you can generate a preview for the following technologies.
+
+| Flutter | React Native | Ionic | Unity  | iOS | Android | macOS | Web | Linux | Windows |
+| :-----: | :----------: | :---: | :----: | :-: | :-----: | :---: | :-: | :---: | ------- |
+|   ✔️    |      ✔️      |  ✔️   |   ✔️   |  ✔️ |   ✔️    |  ✔️   |     |       |         |
+
+Even this CLI is written in Dart, you can use it with any technology and you don't need to use Flutter. The Dart SDK is already pre-installed on Codemagic machines.
 
 ## Supported Git hosts
 
@@ -94,6 +106,8 @@ workflows:
       events:
         - pull_request
     scripts:
+      # If you are not using Flutter, you need to add the build scripts for your
+      # platform.
       - name: Build APK (Android)
         script: flutter build apk
       - name: Build macOS
@@ -119,7 +133,9 @@ workflows:
 
 ## Step-by-step guide
 
-This is the detailed and step-by-step guide to get you started with Codemagic App Preview tool. Currently, the docs are only using the `codemagic.yaml` file.
+This is the detailed and step-by-step guide to get you started with the Codemagic App Preview CLI. Currently, the docs are only using the `codemagic.yaml` file.
+
+If you use the Workflow Editor and you are interested in a step-by-step guide for the Workflow Editor, please [upvote this issue](https://github.com/nilsreichardt/codemagic-app-preview/issues/93). However, the steps for the Workflow Editor are very similar to the steps for the `codemagic.yaml` file. After building the app, you just need to add the `app_preview post` command to the "Pre-publish script" in the Workflow Editor.
 
 ### 0. Preparation
 
@@ -276,7 +292,7 @@ workflows:
               --codemagic_token $CODEMAGIC_TOKEN
 ```
 
-In this script, we first install the Codemagic App Preview tool. Then, we use the `app_preview post` command to post the app preview comment. The `app_preview post` command requires a few options to work. You can find more information about the options in the [options section](#options).
+In this script, we first install the Codemagic App Preview CLI. Then, we use the `app_preview post` command to post the app preview comment. The `app_preview post` command requires a few options to work. You can find more information about the options in the [options section](#options).
 
 ```yaml
 artifacts:
@@ -304,7 +320,7 @@ publishing:
 
 The easiest way to use this CLI is to trigger the workflow on every pull request. Especially if you have the [Codemagic unlimited plan](https://codemagic.io/pricing/), this is the recommended way to use this CLI. However, if you don't have the unlimited plan, you might want to only trigger the workflow on pull requests with a specific label to avoid unnecessary builds.
 
-In order to do so, you need to trigger the workflow with the [Codemagic Build API](https://docs.codemagic.io/rest-api/builds/) via [GitHub Actions](https://github.com/features/actions):
+In order to do so, you need to trigger the workflow with the [Codemagic Build API](https://docs.codemagic.io/rest-api/builds/) via [GitHub Actions](https://github.com/features/actions). Make sure to also remove the `triggering` section from the `codemagic.yaml` file.
 
 ```yaml
 name: App Preview
