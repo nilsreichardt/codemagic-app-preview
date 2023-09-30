@@ -223,4 +223,74 @@ void main() {
       ).called(1);
     });
   });
+
+  group('parseDuration', () {
+    test('parses duration with all components', () {
+      final result = parseDuration('2w 5d 23h 59m 59s 999ms', separator: ' ');
+      expect(
+        result,
+        Duration(
+          days: 19,
+          hours: 23,
+          minutes: 59,
+          seconds: 59,
+          milliseconds: 999,
+        ),
+      );
+    });
+
+    test('parses duration with single component', () {
+      final result = parseDuration('2w');
+      expect(result, Duration(days: 14));
+    });
+
+    test('throws for invalid format', () {
+      expect(() => parseDuration('2x'), throwsFormatException);
+    });
+
+    test('throws for invalid unit', () {
+      expect(() => parseDuration('5x', separator: ' '), throwsFormatException);
+    });
+
+    test('throws for multiple specifications of the same unit', () {
+      expect(
+          () => parseDuration('2w 3w', separator: ' '), throwsFormatException);
+    });
+
+    test('parses duration with comma separator', () {
+      final result = parseDuration('2w,5d,23h,59m,59s,999ms');
+      expect(
+        result,
+        Duration(
+          days: 19,
+          hours: 23,
+          minutes: 59,
+          seconds: 59,
+          milliseconds: 999,
+        ),
+      );
+    });
+
+    test('parses duration with space separator and min for minutes', () {
+      final result = parseDuration('23h 59min', separator: ' ');
+      expect(
+        result,
+        Duration(
+          hours: 23,
+          minutes: 59,
+        ),
+      );
+    });
+
+    test('parses duration with missing components', () {
+      final result = parseDuration('2w 59m', separator: ' ');
+      expect(
+        result,
+        Duration(
+          days: 14,
+          minutes: 59,
+        ),
+      );
+    });
+  });
 }

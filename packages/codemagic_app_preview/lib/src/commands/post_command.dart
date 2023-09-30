@@ -11,7 +11,6 @@ import 'package:codemagic_app_preview/src/environment_variable/environment_varia
 import 'package:codemagic_app_preview/src/git/git_host_repository.dart';
 import 'package:codemagic_app_preview/src/git/git_repo.dart';
 import 'package:http/http.dart';
-import 'package:duration/duration.dart';
 
 class PostCommand extends Command {
   PostCommand({
@@ -46,7 +45,7 @@ class PostCommand extends Command {
       ..addOption(
         'expires_in',
         help:
-            'Defines the duration for which the URLs to the builds are valid. The maximum duration depends on your account type, see: https://docs.codemagic.io/billing/pricing/#build-history-and-artifact-storage. The default value is 30 days. Example values: "2w 5d 23h 59m 59s 999ms 999us" or "365d"',
+            'Defines the duration for which the URLs to the builds are valid. The maximum duration depends on your account type, see: https://docs.codemagic.io/billing/pricing/#build-history-and-artifact-storage. The default value is 30 days. Example values: "1w 4d 23h 59m 59s 999ms" or "365d"',
         defaultsTo: '30d',
       )
       ..addOption(
@@ -168,4 +167,80 @@ class PostCommand extends Command {
       return null;
     }
   }
+}
+
+/// Parses duration string into [Duration]. [separator] defines the string
+/// that splits duration components in the string.
+///
+/// Example:
+/// ```dart
+/// parseDuration('2w 5d 23h 59m 59s 999ms');
+/// ```
+Duration parseDuration(String input, {String separator = ','}) {
+  final parts = input.split(separator).map((t) => t.trim()).toList();
+
+  int? weeks;
+  int? days;
+  int? hours;
+  int? minutes;
+  int? seconds;
+  int? milliseconds;
+
+  for (String part in parts) {
+    final match = RegExp(r'^(\d+)(w|d|h|min|m|s|ms)$').matchAsPrefix(part);
+    if (match == null) throw FormatException('Invalid duration format');
+
+    int value = int.parse(match.group(1)!);
+    String? unit = match.group(2);
+
+    switch (unit) {
+      case 'w':
+        if (weeks != null) {
+          throw FormatException('Weeks specified multiple times');
+        }
+        weeks = value;
+        break;
+      case 'd':
+        if (days != null) {
+          throw FormatException('Days specified multiple times');
+        }
+        days = value;
+        break;
+      case 'h':
+        if (hours != null) {
+          throw FormatException('Hours specified multiple times');
+        }
+        hours = value;
+        break;
+      case 'min':
+      case 'm':
+        if (minutes != null) {
+          throw FormatException('Minutes specified multiple times');
+        }
+        minutes = value;
+        break;
+      case 's':
+        if (seconds != null) {
+          throw FormatException('Seconds specified multiple times');
+        }
+        seconds = value;
+        break;
+      case 'ms':
+        if (milliseconds != null) {
+          throw FormatException('Milliseconds specified multiple times');
+        }
+        milliseconds = value;
+        break;
+      default:
+        throw FormatException('Invalid duration unit $unit');
+    }
+  }
+
+  return Duration(
+    days: (days ?? 0) + (weeks ?? 0) * 7,
+    hours: hours ?? 0,
+    minutes: minutes ?? 0,
+    seconds: seconds ?? 0,
+    milliseconds: milliseconds ?? 0,
+  );
 }
