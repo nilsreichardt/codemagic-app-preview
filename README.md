@@ -4,7 +4,7 @@ In other words: It's like the Firebase Hosting GitHub Action [`action-hosting-de
 
 This CLI is built on top of [Codemagic](https://codemagic.io). Codemagic is a CI/CD provider for mobile dev teams. It supports building, testing, and publishing Flutter, iOS, Android, React Native, Ionic and Unity apps. Codemagic offers 500 free minutes macOS M1 per month for individuals. For more information, see the [Codemagic pricing page](https://codemagic.io/pricing/).
 
-| <img width="920" alt="Demo of the app preview pull request comment" src="https://github.com/nilsreichardt/codemagic-app-preview/assets/24459435/91612c03-2d13-4b2c-ba80-6a2070d36862"> | <img alt="Demo of scanning the iOS app preview qr code" src="https://user-images.githubusercontent.com/24459435/179368786-c94ce9c2-2129-4c30-8677-b8ebf5633a2e.gif" width=165 /> |
+| <img width="920" alt="Demo of the app preview pull request comment" src="https://github.com/nilsreichardt/codemagic-app-preview/assets/24459435/91612c03-2d13-4b2c-ba80-6a2070d36862"> | <img alt="Demo of scanning the iOS app preview qr code" src="https://user-images.githubusercontent.com/24459435/179368786-c94ce9c2-2129-4c30-8677-b8ebf5633a2e.gif" width=235 /> |
 | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 
 After building your app, you only need to add the `app_preview post` command to the publishing scripts of your `codemagic.yaml` file.
