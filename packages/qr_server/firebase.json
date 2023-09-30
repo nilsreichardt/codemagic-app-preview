@@ -32,13 +32,8 @@
       "target": "codemagic-app-preview",
       "redirects": [
         {
-          "source": "/download-icon-black",
-          "destination": "https://firebasestorage.googleapis.com/v0/b/codemagic-app-preview.appspot.com/o/assets%2Fdownload-icon-black.svg?alt=media&token=befe7d73-0254-4397-a145-3c8baca3fa65",
-          "type": 302
-        },
-        {
-          "source": "/download-icon-white",
-          "destination": "https://firebasestorage.googleapis.com/v0/b/codemagic-app-preview.appspot.com/o/assets%2Fdownload-icon-white.svg?alt=media&token=85a5486f-1928-4b0a-b40c-1a230e616494",
+          "source": "/download-icon",
+          "destination": "https://firebasestorage.googleapis.com/v0/b/codemagic-app-preview.appspot.com/o/assets%2Fdownload-icon.svg?alt=media&token=1efe6ea4-233e-426d-a9c4-5b4f8e6e5733",
           "type": 302
         }
       ]
