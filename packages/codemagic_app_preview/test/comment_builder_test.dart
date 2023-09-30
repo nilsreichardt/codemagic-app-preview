@@ -59,7 +59,7 @@ void main() {
 
 | ${builds[0].platform.platformName} | | ${builds[1].platform.platformName} | | ${builds[2].platform.platformName} |
 |:-:|:-:|:-:|:-:|:-:|
-| ![Android QR code](https://app-preview-qr.nils.re/?size=150x150&data=${Uri.encodeComponent(builds[0].publicUrl)}&platform=android&groupId=$groupId) <br /> [Download link](${builds[0].publicUrl}) | | ![iOS QR code](https://app-preview-qr.nils.re/?size=150x150&data=${Uri.encodeComponent(builds[1].publicUrl)}&platform=ios&groupId=$groupId) <br /> [Download link](${builds[1].publicUrl}) | | <a href="${builds[2].publicUrl}"><img src="https://app-preview.nils.re/download-icon"/ alt="Download Icon"></a> <br /> [Download link](${builds[2].publicUrl}) |
+| ![Android QR code](https://app-preview-qr.nils.re/?size=150x150&data=${Uri.encodeComponent(builds[0].publicUrl)}&platform=android&groupId=$groupId) <br /> [Download link](${builds[0].publicUrl}) | | ![iOS QR code](https://app-preview-qr.nils.re/?size=150x150&data=${Uri.encodeComponent(builds[1].publicUrl)}&platform=ios&groupId=$groupId) <br /> [Download link](${builds[1].publicUrl}) | | <a href="${builds[2].publicUrl}"><img src="https://app-preview.nils.re/download-icon" alt="Download Icon"/></a> <br /> [Download link](${builds[2].publicUrl}) |
 
 <sub>(expires Tue, 24 Jan 2023 11:10:09 GMT)<br/>Codemagic build: [$buildId](https://codemagic.io/app/$projectId/build/$buildId); comment generated with [Codemagic App Preview](https://github.com/nilsreichardt/codemagic-app-preview)</sub>
 

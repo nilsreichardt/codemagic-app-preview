@@ -86,7 +86,7 @@ class CommentBuilder {
         // We use a download icon instead of a qr code for macOS because a qr
         // code doesn't make sense.
         table.write(
-            ' <a href="${build.publicUrl}"><img src="https://app-preview.nils.re/download-icon"/ alt="Download Icon"></a> <br /> [Download link](${build.publicUrl}) |');
+            ' <a href="${build.publicUrl}"><img src="https://app-preview.nils.re/download-icon" alt="Download Icon"/></a> <br /> [Download link](${build.publicUrl}) |');
       } else {
         table.write(
             ' ![${build.platform.platformName} QR code]($qrCodeUrl) <br /> [Download link](${build.publicUrl}) |');
