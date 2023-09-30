@@ -45,7 +45,7 @@ class PostCommand extends Command {
       ..addOption(
         'expires_in',
         help:
-            'Defines the duration for which the URLs to the builds are valid. The maximum duration depends on your account type, see: https://docs.codemagic.io/billing/pricing/#build-history-and-artifact-storage. The default value is 30 days. Example values: "1w 4d 23h 59m 59s 999ms" or "365d"',
+            'Defines the duration for which the URLs to the artifacts are valid. The maximum duration depends on your account type, see https://docs.codemagic.io/billing/pricing/#build-history-and-artifact-storage. The default value is 30 days. Example values: "1w 4d 23h 59m 59s 999ms" or "365d"',
         defaultsTo: '30d',
       )
       ..addOption(
