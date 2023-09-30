@@ -24,4 +24,7 @@ executables:
 
 topics:
   - ci
+  - cicd
   - codemagic
+  - pull-request
+  - code-review
