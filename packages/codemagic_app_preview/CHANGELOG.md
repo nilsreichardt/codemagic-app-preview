@@ -5,7 +5,7 @@
 - **FEAT:** Adds support for mono-repo projects.
 - **FEAT:** Adds expires at date to the PR comment.
 - **FEAT:** Replaces third-party qr code generator with a self-hosted one.
-- **FEAT:** Replaces qr codes for macOS with a download icon (support light and dark mode).
+- **FEAT:** Replaces qr codes for macOS with a download icon.
 - **FEAT:** Adds check if the CLI is executed in a build for a pull request.
 - **FEAT:** Adds check if there are artifacts available for the current build.
 - **CHORE:** Adds pub.dev topics.
