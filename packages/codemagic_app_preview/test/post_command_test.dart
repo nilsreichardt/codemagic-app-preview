@@ -46,8 +46,6 @@ void main() {
 
     test('sets exit code to 1 when not setting the token', () async {
       const pullRequestId = '24';
-      environmentVariableAccessor.environmentVariables['CM_PULL_REQUEST'] =
-          'true';
       environmentVariableAccessor
           .environmentVariables['CM_PULL_REQUEST_NUMBER'] = pullRequestId;
       when(() => gitRepo.getHost()).thenAnswer((_) async => GitHost.github);
@@ -71,10 +69,6 @@ void main() {
           '62877273178d247b70405cb0';
       environmentVariableAccessor.environmentVariables['FCI_COMMIT'] =
           '50b04d910c6b73472f7dfc1fee38a67e7132bf32';
-      environmentVariableAccessor.environmentVariables['CM_PULL_REQUEST'] =
-          'true';
-      environmentVariableAccessor
-          .environmentVariables['CM_PULL_REQUEST_NUMBER'] = pullRequestId;
       environmentVariableAccessor.environmentVariables['CM_ARTIFACT_LINKS'] =
           '[]'; // no artifacts
 
@@ -94,9 +88,6 @@ void main() {
 
     test('sets exit code to 1 when build is not executed in pull request',
         () async {
-      const pullRequestId = '24';
-      environmentVariableAccessor
-          .environmentVariables['CM_PULL_REQUEST_NUMBER'] = pullRequestId;
       when(() => gitRepo.getHost()).thenAnswer((_) async => GitHost.github);
       environmentVariableAccessor.environmentVariables['FCI_PROJECT_ID'] =
           '6274fcfc87c748ce531c7376';
@@ -104,10 +95,8 @@ void main() {
           '62877273178d247b70405cb0';
       environmentVariableAccessor.environmentVariables['FCI_COMMIT'] =
           '50b04d910c6b73472f7dfc1fee38a67e7132bf32';
-      environmentVariableAccessor.environmentVariables['CM_PULL_REQUEST'] =
-          null;
       environmentVariableAccessor
-          .environmentVariables['CM_PULL_REQUEST_NUMBER'] = pullRequestId;
+          .environmentVariables['CM_PULL_REQUEST_NUMBER'] = null;
       environmentVariableAccessor.environmentVariables['CM_ARTIFACT_LINKS'] =
           '[]'; // no artifacts
 

@@ -70,7 +70,7 @@ class PostCommand extends Command {
   Future<void> run({DateTime? now}) async {
     if (!_isPullRequest()) {
       stderr.writeln(
-          '"CM_PULL_REQUEST" is not set to "true". Seems like the current build is not building a pull request. Aborting.');
+          '"CM_PULL_REQUEST_NUMBER" is not set. Seems like the current build is not building a pull request. Aborting.');
       exitCode = 1;
       return;
     }
@@ -133,12 +133,12 @@ class PostCommand extends Command {
   /// Returns `true` if the current build is building a pull request, `false`
   /// otherwise.
   bool _isPullRequest() {
-    // Set to "true" if the current build is building a pull request, "false"
-    // otherwise.
-    //
-    // https://docs.codemagic.io/flutter-configuration/built-in-variables/
-    final isPullRequest = environmentVariableAccessor.get('CM_PULL_REQUEST');
-    return isPullRequest == 'true';
+    // We don't use CM_PULL_REQUEST here because this would require to set
+    // an additional environment variable in the workflow to trigger the
+    // build when using a label.
+    final pullRequestId =
+        environmentVariableAccessor.get('CM_PULL_REQUEST_NUMBER') as String?;
+    return pullRequestId != null && pullRequestId.isNotEmpty;
   }
 
   Future<GitHostRepository?> _getGitHostRepository(GitRepo gitRepo) async {
