@@ -1,4 +1,4 @@
-Run `app_preview post --github_token $GITHUB_PAT` after building your apps.
+Run `app_preview post --github_token $GITHUB_PAT --codemagic $CODEMAGIC_TOKEN` after building your apps.
 
 Here is a full `codemagic.yaml` as an example:
 
@@ -7,43 +7,41 @@ workflows:
   app_preview:
     name: app_preview
     environment:
-      flutter: default
+      ios_signing:
+        distribution_type: ad_hoc
+        bundle_identifier: YOUR_BUNDLE_IDENTIFIER
       groups:
         # Adding environment group "github" which includes the GITHUB_PAT
-        # variable.
+        # variable. GITHUB_PAT is required for posting / editing comments on the pull request
         - "github"
-        # Adding environment group "appstore_credentials" to sign iOS apps.
-        - appstore_credentials
+        # Adding environment group "codemagic" which includes the CODEMAGIC_TOKEN
+        # variable. Required to make the builds accessible for the app preview tool.
+        - "codemagic"
     triggering:
       events:
         - pull_request
-    working_directory: packages/app_preview_example
     scripts:
-      - name: Fetch dependencies
-        script: flutter pub get
+      # If you are not using Flutter, you need to add the build scripts for your
+      # platform.
       - name: Build APK (Android)
         script: flutter build apk
       - name: Build macOS
         script: flutter build macos
-      # Sign with the type "IOS_APP_ADHOC". See more information about code
-      # signing: https://docs.codemagic.io/yaml-code-signing/signing-ios/
-      - name: Sign iOS
-        script: |
-          keychain initialize
-          app-store-connect fetch-signing-files "io.nilsreichardt.codemagicapppreviewexample" --type IOS_APP_ADHOC --create
-          keychain add-certificates
-          xcode-project use-profiles
       - name: Build IPA (iOS)
-        # Don't forget the "export-options" argument.
-        script: flutter build ipa --export-options-plist=/Users/builder/export_options.plist
+        script: |
+          flutter build ipa \
+            --export-options-plist=/Users/builder/export_options.plist
+    # Adding artifacts for Android, iOS, and macOS builds.
     artifacts:
-      - build/**/outputs/apk/**/*.apk # Build output for Android
-      - build/ios/ipa/*.ipa # Build output for iOS
-      - build/macos/Build/Products/Release/*.app # Build output for macOS
+      - build/**/outputs/apk/**/*.apk
+      - build/ios/ipa/*.ipa
+      - build/macos/Build/Products/Release/*.app
     publishing:
       scripts:
         - name: Post App Preview
           script: |
             dart pub global activate codemagic_app_preview
-            app_preview post --github_token $GITHUB_PAT
+            app_preview post \
+              --github_token $GITHUB_PAT \
+              --codemagic_token $CODEMAGIC_TOKEN
 ```
