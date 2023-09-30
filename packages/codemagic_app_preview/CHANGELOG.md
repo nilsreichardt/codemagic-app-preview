@@ -1,6 +1,6 @@
 ## 0.2.1
 
-**FEAT:** Removes the need for `CM_PULL_REQUEST` environment variable to match the `README.md` on triggering builds just by labels.
+- **FEAT:** Removes the need for `CM_PULL_REQUEST` environment variable to match the `README.md` on triggering builds just by labels.
 
 ## 0.2.0
 
