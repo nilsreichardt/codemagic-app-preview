@@ -1,3 +1,7 @@
+## 0.2.1
+
+**FEAT:** Removes the need for `CM_PULL_REQUEST` environment variable to match the `README.md` on triggering builds just by labels.
+
 ## 0.2.0
 
 - **DOCS:** Adds very detailed docs on how to use this CLI.
