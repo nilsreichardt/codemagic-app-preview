@@ -1,3 +1,15 @@
+## 0.2.0
+
+- **DOCS:** Adds very detailed docs on how to use this CLI.
+- **FEAT:** Adds spacing between each platform column in the PR comment to avoid accidentally scanning the wrong qr code.
+- **FEAT:** Adds support for mono-repo projects.
+- **FEAT:** Adds expires at date to the PR comment.
+- **FEAT:** Replaces third-party qr code generator with a self-hosted one.
+- **FEAT:** Replaces qr codes for macOS with a download icon (support light and dark mode).
+- **FEAT:** Adds check if the CLI is executed in a build for a pull request.
+- **FEAT:** Adds check if there are artifacts available for the current build.
+- **CHORE:** Adds pub.dev topics.
+
 ## 0.1.0
 
 - **BREAKING FIX:** Makes build links accessible by using Codemagic Build API.
