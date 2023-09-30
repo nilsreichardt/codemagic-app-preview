@@ -81,8 +81,16 @@ class CommentBuilder {
         groupId: groupId,
         platform: build.platform,
       );
-      table.write(
-          ' ![image]($qrCodeUrl) <br /> [Download link](${build.publicUrl}) |');
+
+      if (build.platform == BuildPlatform.macos) {
+        // We use a download icon instead of a qr code for macOS because a qr
+        // code doesn't make sense.
+        table.write(
+            ' <a href="${build.publicUrl}"><picture><source media="(prefers-color-scheme: dark)" srcset="https://app-preview.nils.re/download-icon-white"><img alt="Download icon" src="https://app-preview.nils.re/download-icon-black"></picture></a> <br /> [Download link](${build.publicUrl}) |');
+      } else {
+        table.write(
+            ' ![image]($qrCodeUrl) <br /> [Download link](${build.publicUrl}) |');
+      }
 
       final isLastBuild = i == builds.length - 1;
       if (!isLastBuild) {
@@ -101,7 +109,7 @@ class CommentBuilder {
         'https://codemagic.io/app/$projectId/build/$buildId';
 
     final earliestBuild = _getEarliestBuild(builds);
-    final formattedDate = formatDateToGMT(earliestBuild.expiresAt);
+    final formattedDate = _formatDateToGMT(earliestBuild.expiresAt);
 
     return '<sub>(expires $formattedDate)<br/>Codemagic build: [$buildId]($codemagicBuildUrl); comment generated with [Codemagic App Preview](https://github.com/nilsreichardt/codemagic-app-preview)</sub>';
   }
@@ -116,7 +124,8 @@ class CommentBuilder {
     });
   }
 
-  String formatDateToGMT(DateTime dateTime) {
+  /// Returns a String like "Thu, 28 Sep 2023 13:18:52 GMT".
+  String _formatDateToGMT(DateTime dateTime) {
     final days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     final months = [
       'Jan',

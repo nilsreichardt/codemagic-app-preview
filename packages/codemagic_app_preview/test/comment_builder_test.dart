@@ -59,7 +59,7 @@ void main() {
 
 | ${builds[0].platform.platformName} | | ${builds[1].platform.platformName} | | ${builds[2].platform.platformName} |
 |:-:|:-:|:-:|:-:|:-:|
-| ![image](https://app-preview-qr.nils.re/?size=150x150&data=${Uri.encodeComponent(builds[0].publicUrl)}&platform=android&groupId=$groupId) <br /> [Download link](${builds[0].publicUrl}) | | ![image](https://app-preview-qr.nils.re/?size=150x150&data=${Uri.encodeComponent(builds[1].publicUrl)}&platform=ios&groupId=$groupId) <br /> [Download link](${builds[1].publicUrl}) | | ![image](https://app-preview-qr.nils.re/?size=150x150&data=${Uri.encodeComponent(builds[2].publicUrl)}&platform=macos&groupId=$groupId) <br /> [Download link](${builds[2].publicUrl}) |
+| ![image](https://app-preview-qr.nils.re/?size=150x150&data=${Uri.encodeComponent(builds[0].publicUrl)}&platform=android&groupId=$groupId) <br /> [Download link](${builds[0].publicUrl}) | | ![image](https://app-preview-qr.nils.re/?size=150x150&data=${Uri.encodeComponent(builds[1].publicUrl)}&platform=ios&groupId=$groupId) <br /> [Download link](${builds[1].publicUrl}) | | <a href="${builds[2].publicUrl}"><picture><source media="(prefers-color-scheme: dark)" srcset="https://app-preview.nils.re/download-icon-white"><img alt="Download icon" src="https://app-preview.nils.re/download-icon-black"></picture></a> <br /> [Download link](${builds[2].publicUrl}) |
 
 <sub>(expires Tue, 24 Jan 2023 11:10:09 GMT)<br/>Codemagic build: [$buildId](https://codemagic.io/app/$projectId/build/$buildId); comment generated with [Codemagic App Preview](https://github.com/nilsreichardt/codemagic-app-preview)</sub>
 
