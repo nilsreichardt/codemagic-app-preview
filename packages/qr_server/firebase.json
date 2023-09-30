@@ -15,17 +15,35 @@
       ]
     }
   ],
-  "hosting": {
-    "rewrites": [
-      {
-        "source": "**",
-        "run": {
-          "serviceId": "createqrcode",
-          "region": "europe-west3"
+  "hosting": [
+    {
+      "target": "codemagic-app-preview-qr",
+      "rewrites": [
+        {
+          "source": "**",
+          "run": {
+            "serviceId": "createqrcode",
+            "region": "europe-west3"
+          }
         }
-      }
-    ]
-  },
+      ]
+    },
+    {
+      "target": "codemagic-app-preview",
+      "redirects": [
+        {
+          "source": "/download-icon-black",
+          "destination": "https://firebasestorage.googleapis.com/v0/b/codemagic-app-preview.appspot.com/o/assets%2Fdownload-icon-black.svg?alt=media&token=befe7d73-0254-4397-a145-3c8baca3fa65",
+          "type": 302
+        },
+        {
+          "source": "/download-icon-white",
+          "destination": "https://firebasestorage.googleapis.com/v0/b/codemagic-app-preview.appspot.com/o/assets%2Fdownload-icon-white.svg?alt=media&token=85a5486f-1928-4b0a-b40c-1a230e616494",
+          "type": 302
+        }
+      ]
+    }
+  ],
   "emulators": {
     "functions": {
       "port": 5001
@@ -41,5 +59,8 @@
   "firestore": {
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
+  },
+  "storage": {
+    "rules": "storage.rules"
   }
 }

@@ -1,5 +1,17 @@
 {
   "projects": {
     "default": "codemagic-app-preview"
+  },
+  "targets": {
+    "codemagic-app-preview": {
+      "hosting": {
+        "codemagic-app-preview": [
+          "codemagic-app-preview"
+        ],
+        "codemagic-app-preview-qr": [
+          "codemagic-app-preview-qr"
+        ]
+      }
+    }
   }
 }
