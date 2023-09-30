@@ -69,6 +69,7 @@ If you are interested in supporting self-hosted GitLab, Bitbucket or a different
 - 🚫 **Third-party Service Independence:** Eliminates the need for TestFlight, Firebase App Distribution, or other third-party services to distribute your app, keeping the process in-house.
 - 🌍 **Real-world Testing:** Facilitates testing of the app in real-world environments, making the review process more effective and efficient.
 - ⏰ **Time Efficiency:** Helps teams save valuable time of engineers during the review process, optimizing resource utilization and enhancing productivity.
+- 🏷️ **Label-based Triggering:** Allows you to restrict the build process to only occur for pull requests with specific labels. By default, the build is triggered for every pull request. This provides flexibility and conserves build minutes.
 
 ## Options
 
