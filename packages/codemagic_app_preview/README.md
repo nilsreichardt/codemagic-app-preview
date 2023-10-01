@@ -140,7 +140,7 @@ If you use the Workflow Editor and you are interested in a step-by-step guide fo
 
 ### 0. Preparation
 
-You need to have a Codemagic account and a repository with a Flutter project. If you don't have a Codemagic account yet, you can create one for free at [codemagic.io](https://codemagic.io). For individuals, there is also a [free plan](https://codemagic.io/pricing/). Make sure that your Git repository is [connected to Codemagic](https://docs.codemagic.io/getting-started/adding-apps/).
+You need to have a Codemagic account. If you don't have a Codemagic account yet, you can create one for free at [codemagic.io](https://codemagic.io). For individuals, there is also a [free plan](https://codemagic.io/pricing/). Make sure that your Git repository is [connected to Codemagic](https://docs.codemagic.io/getting-started/adding-apps/).
 
 ### 1. Add your Codemagic API token to your Codemagic environment variables
 
