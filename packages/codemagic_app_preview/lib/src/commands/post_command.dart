@@ -12,6 +12,11 @@ import 'package:codemagic_app_preview/src/git/git_host_repository.dart';
 import 'package:codemagic_app_preview/src/git/git_repo.dart';
 import 'package:http/http.dart';
 
+/// Command to post the app preview comment on a pull request.
+///
+/// Handles fetching the build artifacts from Codemagic, generating the comment
+/// with QR codes and links, and posting or updating the comment on the pull
+/// request via the Git host API.
 class PostCommand extends Command {
   PostCommand({
     required this.httpClient,
