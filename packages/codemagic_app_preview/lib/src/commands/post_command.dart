@@ -61,8 +61,8 @@ class PostCommand extends Command {
       ..addOption(
         'qr-code-size',
         help:
-            'The size of the QR code in pixels as an integer. The default value is 350. Example values: "100" or "500"',
-        defaultsTo: '350',
+            'The size of the QR code in pixels as an integer. The default value is 200. Example values: "100" or "500"',
+        defaultsTo: '200',
       );
   }
 
