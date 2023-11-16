@@ -1,7 +1,7 @@
 ## 0.2.2
 
 - **FEAT:** Adds the option `--qr-code-size` to specify the size of the QR code in pixels as an integer. The default value is `350`.
-* **FEAT:** Increases the default size of a qr code from 150 to 350 pixels.
+- **FEAT:** Increases the default size of a qr code from 150 to 350 pixels.
 
 ## 0.2.1
 
