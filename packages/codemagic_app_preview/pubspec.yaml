@@ -2,7 +2,7 @@ name: codemagic_app_preview
 description: CLI to publish app previews for your app for every pull request via Codemagic.
 repository: https://github.com/nilsreichardt/codemagic-app-preview/tree/main/packages/codemagic_app_preview
 issue_tracker: https://github.com/nilsreichardt/codemagic-app-preview/issues
-version: 0.2.1
+version: 0.2.2
 
 environment:
   sdk: ">=2.14.0 <4.0.0"

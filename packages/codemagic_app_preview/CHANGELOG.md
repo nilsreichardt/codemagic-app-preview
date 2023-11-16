@@ -1,3 +1,8 @@
+## 0.2.2
+
+- **FEAT:** Adds the option `--qr-code-size` to specify the size of the QR code in pixels as an integer. The default value is 200.
+- **FEAT:** Increases the default size of a qr code from 150 to 200 pixels.
+
 ## 0.2.1
 
 - **FEAT:** Removes the need for `CM_PULL_REQUEST` environment variable to match the `README.md` on triggering builds just by labels.
