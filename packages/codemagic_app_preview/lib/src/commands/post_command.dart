@@ -57,6 +57,12 @@ class PostCommand extends Command {
         'app-name',
         help:
             'The name of the app. This is helpful if you have multiple apps in the same repository. If not provided, the name "default" is used. Using different names for different apps allows you to post multiple comments in the same pull request.',
+      )
+      ..addOption(
+        'qr-code-size',
+        help:
+            'The size of the QR code in pixels as an integer. The default value is 200. Example values: "100" or "500"',
+        defaultsTo: '200',
       );
   }
 
@@ -89,6 +95,7 @@ class PostCommand extends Command {
     final comment = CommentBuilder(environmentVariableAccessor).build(
       builds,
       message: argResults?['message'],
+      qrCodeSize: int.parse(argResults?['qr-code-size']!),
     );
 
     final gitHostRepository = await _getGitHostRepository(gitRepo);
