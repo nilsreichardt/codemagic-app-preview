@@ -17,10 +17,11 @@ workflows:
         - appstore_credentials
     triggering:
       events:
-        - pull_request
+        - pull_request_labeled
       cancel_previous_builds: true
     working_directory: packages/app_preview_example
     when:
+      condition: event.pull_request.labels[0].name == "build-app-preview"
       changeset:
         includes:
           - "codemagic.yaml"
