@@ -12,3 +12,11 @@ https://createqrcode-rdchost62q-ey.a.run.app/?data=DATA&size=200&platform=PLATFO
 ```
 
 See `src/index.ts` for documentation of the parameters.
+
+## Export to BigQuery
+
+```sh
+gcloud firestore export gs://codemagic-app-preview.appspot.com/exports/2024-01-04 \
+  --collection-ids=QrActivities \
+  --project codemagic-app-preview
+```
