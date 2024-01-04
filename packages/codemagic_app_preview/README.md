@@ -370,54 +370,14 @@ workflows:
 
 The easiest way to use this CLI is to trigger the workflow on every pull request. Especially if you have the [Codemagic unlimited plan](https://codemagic.io/pricing/), this is the recommended way to use this CLI. However, if you don't have the unlimited plan, you might want to only trigger the workflow on pull requests with a specific label to avoid unnecessary builds.
 
-In order to do so, you need to trigger the workflow with the [Codemagic Build API](https://docs.codemagic.io/rest-api/builds/) via [GitHub Actions](https://github.com/features/actions). Make sure to also remove the `triggering` section from the `codemagic.yaml` file and you created the "build-app-preview" (you can also use a different label) label.
+In order to do so, you can use the [`pull_request_labeled`](https://docs.codemagic.io/yaml-running-builds/starting-builds-automatically/#using-condition-inside-when) trigger:
 
 ```yaml
-name: App Preview
-
-on:
-  pull_request:
-    types:
-      # Trigger the workflow when a label is added or removed.
-      - labeled
-      # Trigger the workflow when a pull request is opened or synchronized.
-      - synchronize
-
-jobs:
-  label_app_preview:
-    # Only run this job if the PR is labeled with "build-app-preview".
-    #
-    # Keep in mind that a new build will be triggered when the PR is labeled
-    # with any lable as long as the label "build-app-preview" is included in the
-    # list of labels. For example, if the PR is labeled with "build-app-preview"
-    # and "bug", the job will be triggered when the label "bug" is removed.
-    if: contains(github.event.pull_request.labels.*.name, 'build-app-preview')
-    runs-on: ubuntu-22.04
-    env:
-      CODEMAGIC_TOKEN: ${{ secrets.CODEMAGIC_TOKEN }}
-      CODEMAGIC_APP_ID: ${{ secrets.CODEMAGIC_APP_ID }}
-      # From "codemagic.yaml"
-      CODEMAGIC_WORKFLOW_ID: "app_preview"
-    steps:
-      - name: Start Codemagic Build
-        run: |
-          # Get the pull request number from the GITHUB_REF.
-          PULL_REQUEST_NUMBER=$(echo $GITHUB_REF | cut -d / -f 3)
-
-          curl --request POST 'https://api.codemagic.io/builds' \
-            -f \
-            --header 'x-auth-token: '"$CODEMAGIC_TOKEN" \
-            --header 'Content-Type: application/json' \
-            --data-raw "{
-                \"appId\": \"$CODEMAGIC_APP_ID\",
-                \"branch\": \"$GITHUB_HEAD_REF\",
-                \"workflowId\": \"$CODEMAGIC_WORKFLOW_ID\",
-                \"environment\": {
-                    \"variables\": {
-                        \"CM_PULL_REQUEST_NUMBER\": $PULL_REQUEST_NUMBER
-                    }
-                }
-            }"
+triggering:
+  events:
+    - pull_request_labeled
+when:
+  condition: event.pull_request.labels[0].name == "build-app-preview"
 ```
 
 Under [this link](https://github.com/SharezoneApp/sharezone-app/blob/main/.github/workflows/label_app_preview.yaml), you can find an example repository with the GitHub Action. If you need an example pull request, checkout [this pull request](https://github.com/SharezoneApp/sharezone-app/pull/1095) where the GitHub Action and the label `build-app-preview` has been used.
