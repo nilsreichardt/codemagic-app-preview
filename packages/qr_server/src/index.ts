@@ -2,7 +2,6 @@ import * as admin from "firebase-admin";
 import * as functions from "firebase-functions/v2";
 import * as QRCode from "qrcode";
 // Using the import because of https://stackoverflow.com/q/73079648/8358501.
-import { FieldValue } from "firebase-admin/firestore";
 import { logger } from "firebase-functions/v2";
 
 admin.initializeApp();
@@ -84,34 +83,9 @@ async function logAnalytics(
     return;
   }
 
-  const firestore = admin.firestore();
-  const now = new Date();
-
-  // Using a WriteBatch to ensure that the analytics data is consistent and it
-  // might be faster because it's a single round trip to Firestore.
-  const batch = firestore.batch();
-
-  const qrActivitiesRef = firestore.collection("QrActivities").doc();
-  batch.set(qrActivitiesRef, {
-    createdAt: now,
+  await admin.firestore().collection("QrActivities").doc().set({
+    createdAt: new Date(),
     platform: platform,
     groupId: groupId,
   });
-
-  const summaryRef = firestore.collection("Analytics").doc("summary");
-  batch.set(
-    summaryRef,
-    {
-      qrAnalytics: {
-        platform: {
-          [platform]: FieldValue.increment(1),
-        },
-        total: FieldValue.increment(1),
-      },
-      lastUpdatedAt: now,
-    },
-    { merge: true },
-  );
-
-  await batch.commit();
 }
