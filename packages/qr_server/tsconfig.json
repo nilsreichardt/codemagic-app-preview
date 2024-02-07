@@ -5,8 +5,8 @@
     "sourceMap": true,
     "strict": true,
     "target": "es2021",
-    "resolveJsonModule": true,
+    "resolveJsonModule": true
   },
   "compileOnSave": true,
-  "include": ["src"],
+  "include": ["src"]
 }
