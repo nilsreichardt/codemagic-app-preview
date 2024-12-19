@@ -38,9 +38,10 @@ class GitLabApiRepository implements GitHostRepository {
   Future<PostedComment> postComment(
     String comment,
   ) async {
+    final encodedComment = Uri.encodeComponent(comment);
     final response = await httpClient.post(
       Uri.parse(
-        '$_baseUrl/api/v4/projects/$projectId/merge_requests/$mergeRequestId/notes?body=$comment',
+        '$_baseUrl/api/v4/projects/$projectId/merge_requests/$mergeRequestId/notes?body=$encodedComment',
       ),
       headers: {
         'Authorization': 'Bearer $token',
