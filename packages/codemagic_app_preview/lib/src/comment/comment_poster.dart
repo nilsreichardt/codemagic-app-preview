@@ -20,7 +20,7 @@ class CommentPoster {
     final shouldEdit = previousComment != null;
 
     if (shouldEdit) {
-      await _gitHubApi.editComment(previousComment!.id, comment);
+      await _gitHubApi.editComment(previousComment.id, comment);
     } else {
       await _gitHubApi.postComment(comment);
     }
