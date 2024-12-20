@@ -72,7 +72,7 @@ void main() {
 
   group('.postComment()', () {
     // Posts a comment to
-    // https://github.com/nilsreichardt/codemagic-app-preview/pull/16
+    // https://gitlab.com/nilsreichardt/codemagic-app-preview-test/-/merge_requests/3
     test('should post an comment to a PR', () async {
       const pullRequestId = '3';
       final gitLabApiRepository = GitLabApiRepository(
