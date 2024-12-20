@@ -1,3 +1,8 @@
+## 0.2.3
+
+- **FEAT:** Fixes posting a broken comment on GitLab. Thanks to [@actranito](https://github.com/actranito) <3
+- **FEAT:** Increases Dart SDK minimum to 3.0.6.
+
 ## 0.2.2
 
 - **FEAT:** Adds the option `--qr-code-size` to specify the size of the QR code in pixels as an integer. The default value is 200.
