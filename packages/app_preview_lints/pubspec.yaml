@@ -2,7 +2,7 @@ name: app_preview_lints
 description: Set of lint rules for for the app preview CLI.
 
 environment:
-  sdk: ">=2.18.0 <3.0.0"
+  sdk: ">=3.0.6 <4.0.0"
 
 dependencies:
   lints: ^1.0.1
