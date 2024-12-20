@@ -81,7 +81,10 @@ void main() {
         projectId: projectId,
         mergeRequestId: pullRequestId,
       );
-      final randomText = DateTime.now().toIso8601String();
+
+      // The comment body should also contain special characters to avoid
+      // https://github.com/nilsreichardt/codemagic-app-preview/pull/111 again.
+      final randomText = '${DateTime.now().toIso8601String()};&?#=';
 
       final comment = await gitLabApiRepository.postComment(
         randomText,
@@ -98,6 +101,7 @@ void main() {
         allComments.contains(comment),
         true,
       );
+      expect(comment.body, randomText);
     });
   });
 
@@ -113,7 +117,10 @@ void main() {
         mergeRequestId: pullRequestId,
       );
       const commentId = 1230789237;
-      final randomText = DateTime.now().toIso8601String();
+
+      // The comment body should also contain special characters to avoid
+      // https://github.com/nilsreichardt/codemagic-app-preview/pull/111 again.
+      final randomText = '${DateTime.now().toIso8601String()};&?#=';
 
       await gitLabApiRepository.editComment(commentId, randomText);
 
