@@ -6,7 +6,5 @@
   "files.watcherExclude": {
     "**/.fvm": true
   },
-  "eslint.workingDirectories": [
-    "packages/qr_server"
-  ]
+  "eslint.workingDirectories": ["packages/qr_server"]
 }
