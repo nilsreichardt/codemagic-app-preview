@@ -60,9 +60,10 @@ class GitLabApiRepository implements GitHostRepository {
   /// Edits an existing comment.
   @override
   Future<void> editComment(int commentId, String comment) async {
+    final encodedComment = Uri.encodeComponent(comment);
     final response = await httpClient.put(
       Uri.parse(
-        '$_baseUrl/api/v4/projects/$projectId/merge_requests/$mergeRequestId/notes/$commentId?body=$comment',
+        '$_baseUrl/api/v4/projects/$projectId/merge_requests/$mergeRequestId/notes/$commentId?body=$encodedComment',
       ),
       headers: {
         'Authorization': 'Bearer $token',
