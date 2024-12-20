@@ -19,13 +19,13 @@ concurrency:
 env:
   # The minimum Flutter version that is supported by the packages.
   #
-  # Uses Dart SDK v2.18.0 because it is the minimum version that supports
-  MIN_FLUTTER_VERSION: 3.3.0
+  # Uses Dart SDK v3.0.6 because it is the minimum version that supports
+  MIN_FLUTTER_VERSION: 3.10.6
   # The minimum Dart version that is supported by the packages.
   #
   # Is also used in the Dart SDK matrix (needs to be updated there too, can't
   # use env var - see: https://stackoverflow.com/a/74073435/8358501)
-  MIN_DART_VERSION: 2.18.0
+  MIN_DART_VERSION: 3.0.6
 
 jobs:
   test:
@@ -74,7 +74,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        sdk: [stable, beta, 2.18.0]
+        sdk: [stable, beta, 3.0.6]
       fail-fast: false
     steps:
       - uses: actions/checkout@v3
@@ -138,7 +138,7 @@ jobs:
         with:
           # We need to use Dart SDK 2.18 to be able to get Melos v3 which is
           # need to run "melos run analyze:dart --no-select".
-          sdk: 2.18.0
+          sdk: 3.0.6
 
       - name: Install Melos
         run: dart pub global activate melos
