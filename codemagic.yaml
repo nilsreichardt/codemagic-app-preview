@@ -16,8 +16,6 @@ workflows:
         # Adding environment group "appstore_credentials" to sign iOS apps.
         - appstore_credentials
     triggering:
-      events:
-        - pull_request
       cancel_previous_builds: true
     working_directory: packages/app_preview_example
     when:
